@@ -90,7 +90,7 @@ def test_semantic_clarity(engine):
 
 
 def test_semantic_analyzer_cluster(engine):
-    """Tests the semantic analyzer's ability to find the centroid of a concept cluster."""
+    """Tests the semantic analyzer's ability to find the centroid of a concept cluster."""  # noqa: E501
     concepts = ["love", "justice"]
     result = engine.perform_semantic_harmony_analysis(concepts)
 
@@ -109,7 +109,7 @@ def test_ice_analysis_highly_coherent(engine):
     """
     Tests the ICE analysis for a highly coherent case where all concepts
     belong to the same dimension (Wisdom).
-    """
+    """  # noqa: E501
     result = engine.perform_ice_analysis(
         intent_words=["wisdom", "knowledge"],
         context_words=["science", "research"],

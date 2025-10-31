@@ -584,7 +584,7 @@ class ICEAnalyzer:
 
     def _calculate_ice_coordinate(
         self, intent: SemanticResult, context: SemanticResult, execution: SemanticResult
-    ) -> Coordinates:
+    ) -> Coordinates:  # noqa: E501
         """Calculate ICE coordinate from components"""
         return Coordinates(
             love=(
