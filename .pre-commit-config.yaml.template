@@ -1,0 +1,51 @@
+# Python Code Harmonizer - Pre-commit Hook Template
+#
+# Copy this file to .pre-commit-config.yaml in your project root
+# Install pre-commit: pip install pre-commit
+# Install hooks: pre-commit install
+# Run manually: pre-commit run --all-files
+
+repos:
+  # Standard pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-python-syntax
+
+  # Python Code Formatting
+  - repo: https://github.com/psf/black
+    rev: 24.1.1
+    hooks:
+      - id: black
+        language_version: python3
+
+  # Python Linting
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+
+  # Python Code Harmonizer (Semantic Analysis)
+  - repo: local
+    hooks:
+      - id: harmonizer
+        name: Python Code Harmonizer
+        entry: harmonizer
+        language: system
+        types: [python]
+        pass_filenames: true
+        # Note: Install harmonizer first: pip install /path/to/Python-Code-Harmonizer
+
+# Usage Notes:
+# - This checks code harmony before every commit
+# - To skip temporarily: git commit --no-verify
+# - To run manually: pre-commit run harmonizer --all-files
+#
+# Customization:
+# - Adjust 'pass_filenames: false' to check all files every time
+# - Add 'args: ["--threshold", "0.8"]' when threshold support is added
