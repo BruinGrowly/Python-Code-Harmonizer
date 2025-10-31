@@ -5,11 +5,11 @@ Optimized Production-Ready Divine Invitation Semantic Substrate Engine (DIVE-V2)
 Implements all discovered frameworks with enhanced performance and reliability.
 """
 
-import re
 import math
+import re
 from dataclasses import dataclass
-from typing import List, Dict, Tuple, Optional, Set
 from enum import Enum
+from typing import Dict, List, Optional, Set, Tuple
 
 
 class Dimension(Enum):

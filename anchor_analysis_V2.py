@@ -10,8 +10,8 @@ mathematical representation of Perfect Harmony, using the
 production-ready V2 engine.
 """
 
-import sys
 import math
+import sys
 
 # --- V2 ENGINE IMPORT ---
 # This now imports your production-ready V2 engine

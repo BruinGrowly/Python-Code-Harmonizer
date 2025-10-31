@@ -17,8 +17,8 @@ referencing 'self.engine.vocabulary.all_keywords' from the
 """
 
 import ast
-import sys
 import os
+import sys
 from typing import Dict
 
 # --- COMPONENT IMPORTS ---

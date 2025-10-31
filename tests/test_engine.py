@@ -1,10 +1,8 @@
 # tests/test_engine.py
 
 import pytest
-from src.divine_invitation_engine_V2 import (
-    DivineInvitationSemanticEngine,
-    Coordinates,
-)
+
+from src.divine_invitation_engine_V2 import Coordinates, DivineInvitationSemanticEngine
 
 
 @pytest.fixture(scope="module")

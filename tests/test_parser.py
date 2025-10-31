@@ -1,6 +1,7 @@
 # tests/test_parser.py
 
 import pytest
+
 from src.ast_semantic_parser import AST_Semantic_Parser
 from src.divine_invitation_engine_V2 import DivineInvitationSemanticEngine
 

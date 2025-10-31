@@ -1,9 +1,11 @@
 # tests/test_harmonizer.py
 
-import pytest
-from src.harmonizer.main import PythonCodeHarmonizer
-import tempfile
 import os
+import tempfile
+
+import pytest
+
+from src.harmonizer.main import PythonCodeHarmonizer
 
 # A self-contained Python script to be used for testing.
 # It contains one harmonious function and one disharmonious one.
@@ -68,3 +70,31 @@ def test_harmonizer_end_to_end_analysis(harmonizer, temp_python_file):
     # The 'check_permissions' function should be disharmonious (high score).
     # Intent: check, truth. Execution: delete, force.
     assert report["check_permissions"] > harmonizer.disharmony_threshold
+
+
+def test_harmonizer_on_empty_file(harmonizer, temp_python_file):
+    """Tests that the harmonizer handles an empty file gracefully."""
+    # Overwrite the temp file to be empty
+    with open(temp_python_file, "w") as f:
+        f.write("")
+
+    report = harmonizer.analyze_file(temp_python_file)
+    assert report == {}
+
+
+def test_harmonizer_on_file_with_only_comments(harmonizer, temp_python_file):
+    """Tests that the harmonizer handles a file with only comments."""
+    with open(temp_python_file, "w") as f:
+        f.write("# This is a comment\\n# And another one")
+
+    report = harmonizer.analyze_file(temp_python_file)
+    assert report == {}
+
+
+def test_harmonizer_on_syntax_error(harmonizer, temp_python_file):
+    """Tests that the harmonizer catches SyntaxError and returns an empty report."""
+    with open(temp_python_file, "w") as f:
+        f.write("def invalid_syntax:")
+
+    report = harmonizer.analyze_file(temp_python_file)
+    assert report == {}
