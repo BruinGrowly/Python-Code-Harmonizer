@@ -193,6 +193,11 @@ class VocabularyManager:
         self._word_cache[cache_key] = result
         return result
 
+    @property
+    def all_keywords(self) -> Set[str]:
+        """Returns all unique keywords from the vocabulary."""
+        return set(self._keyword_map.keys())
+
     @staticmethod
     def get_distance(c1: Coordinates, c2: Coordinates) -> float:
         """Optimized Euclidean distance calculation"""
