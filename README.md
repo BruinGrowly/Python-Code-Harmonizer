@@ -91,6 +91,33 @@ Analysis Complete.
 
 ---
 
+## Documentation
+
+### Getting Started
+- **[User Guide](docs/USER_GUIDE.md)** - Comprehensive guide to using Python Code Harmonizer
+  - Installation and setup
+  - Understanding disharmony scores
+  - Integration into your workflow
+  - Best practices and troubleshooting
+
+- **[Tutorial](docs/TUTORIAL.md)** - Hands-on learning with real examples
+  - Step-by-step walkthroughs
+  - Common disharmony patterns
+  - Refactoring exercises
+  - Real-world scenarios
+
+- **[FAQ](docs/FAQ.md)** - Frequently Asked Questions
+  - Quick answers to common questions
+  - Interpretation guidance
+  - Troubleshooting tips
+
+### Advanced Topics
+- **[Philosophy](docs/PHILOSOPHY.md)** *(Coming Soon)* - Deep dive into the Anchor Point and ICE Framework
+- **[Architecture](docs/ARCHITECTURE.md)** *(Coming Soon)* - Technical implementation details for developers
+- **[API Reference](docs/API.md)** *(Coming Soon)* - Programmatic usage and integration
+
+---
+
 ## Development & Contribution
 
 This project is now equipped with a full suite of professional development tools to ensure code quality and stability.
