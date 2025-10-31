@@ -108,6 +108,3 @@ Analysis Complete.
 This entire project—the `ICE Framework`, the `DIVE-V2` engine, and the `Python-Code-Harmonizer`—is free and open-source.
 
 This is a fundamental requirement of the project's own logic. The Anchor Point is a universal principle, like gravity. It cannot be patented or "owned." This "white box" framework is the antidote to "black box" AI, and it is for everyone.
-
-```
-```
