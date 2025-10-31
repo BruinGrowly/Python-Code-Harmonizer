@@ -1,0 +1,125 @@
+# Python Code Harmonizer Configuration Template
+#
+# NOTE: Configuration file support is planned for future release
+# This template shows what configuration will look like when implemented
+#
+# Copy this file to .harmonizer.yml in your project root
+# The harmonizer will read this configuration automatically
+
+# Disharmony threshold (functions above this are flagged)
+# Default: 0.5
+# Range: 0.0 (very strict) to 2.0 (very lenient)
+threshold: 0.5
+
+# Output format
+# Options: table, json, csv
+# Default: table
+output_format: table
+
+# Severity level definitions
+severity_levels:
+  critical: 1.2    # Score >= 1.2
+  high: 0.8        # Score >= 0.8
+  medium: 0.5      # Score >= 0.5
+  low: 0.3         # Score >= 0.3
+  excellent: 0.0   # Score < 0.3
+
+# Files and patterns to ignore
+ignore_patterns:
+  - "**/test_*.py"           # Test files
+  - "**/tests/*.py"          # Test directories
+  - "**/migrations/*.py"     # Database migrations
+  - "**/*_test.py"           # Alternative test naming
+  - "**/conftest.py"         # Pytest configuration
+  - "**/__pycache__/**"      # Python cache
+  - "**/.venv/**"            # Virtual environments
+
+# Files and patterns to include (overrides ignore if specified)
+include_patterns:
+  - "src/**/*.py"            # Source files
+  - "app/**/*.py"            # Application files
+  # - "scripts/**/*.py"      # Uncomment to include scripts
+
+# Fail build in CI/CD if any function exceeds this threshold
+# Set to null to never fail builds
+# Default: null (warnings only)
+fail_threshold: null
+# fail_threshold: 1.0       # Uncomment to fail on critical disharmony
+
+# Enable verbose output
+# Default: false
+verbose: false
+
+# Show function details in output
+# Default: true
+show_function_details: true
+
+# Sort results by score (descending)
+# Default: true
+sort_by_score: true
+
+# Color output (for terminal)
+# Default: true
+color_output: true
+
+# Custom vocabulary extensions
+# Add domain-specific semantic mappings
+# (Advanced: requires understanding of DIVE-V2 engine)
+custom_vocabulary:
+  # Example: Map domain-specific terms
+  # "authenticate": "justice"
+  # "authorize": "power"
+  # "notify": "love"
+
+# Report options
+report:
+  # Show summary statistics
+  show_summary: true
+
+  # Show only disharmonious functions
+  only_show_disharmony: false
+
+  # Include harmonious functions in output
+  include_harmonious: true
+
+  # Maximum functions to display (0 = unlimited)
+  max_display: 0
+
+# Future enhancement placeholders
+# These will be implemented in upcoming versions
+
+# auto_fix:
+#   enabled: false
+#   suggestions: true
+
+# metrics:
+#   track_over_time: false
+#   output_file: "harmony_metrics.json"
+
+# integrations:
+#   github:
+#     create_review_comments: false
+#   jira:
+#     create_tickets_for_critical: false
+
+---
+
+# Example configurations for different use cases:
+
+# STRICT MODE (for new projects)
+# threshold: 0.3
+# fail_threshold: 0.5
+
+# LENIENT MODE (for legacy code cleanup)
+# threshold: 0.8
+# fail_threshold: 1.2
+
+# CI/CD MODE (fail on critical only)
+# threshold: 0.5
+# fail_threshold: 1.0
+# only_show_disharmony: true
+
+# DEVELOPMENT MODE (show everything)
+# threshold: 0.5
+# verbose: true
+# show_function_details: true

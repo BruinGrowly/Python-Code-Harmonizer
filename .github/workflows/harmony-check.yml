@@ -1,0 +1,60 @@
+name: Code Harmony Check
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  harmony-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.8'
+
+      - name: Install Python Code Harmonizer
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+
+      - name: Run Harmony Analysis
+        run: |
+          echo "========================================"
+          echo "Python Code Harmonizer - CI/CD Check"
+          echo "========================================"
+
+          # Analyze all Python files in src/ directory
+          harmonizer src/**/*.py || true
+
+          # Note: Currently harmonizer doesn't set exit codes based on scores
+          # Future enhancement: fail build if critical disharmony detected
+
+          echo ""
+          echo "✅ Harmony check completed"
+          echo "Review output above for any disharmony warnings"
+
+      - name: Analyze specific modules (optional)
+        run: |
+          # Example: Analyze specific critical modules with comments
+          echo ""
+          echo "Analyzing critical modules..."
+
+          # Add your critical files here
+          # harmonizer src/core/important.py
+          # harmonizer src/api/endpoints.py
+        continue-on-error: true
+
+# Note: To make this workflow fail on high disharmony scores,
+# you'll need to wrap harmonizer in a script that checks scores
+# and exits with non-zero code if threshold exceeded.
+#
+# Example future enhancement:
+# - name: Check harmony with threshold
+#   run: python scripts/ci_harmony_check.py --threshold 0.8 --fail-on-high
