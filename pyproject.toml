@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "PythonCodeHarmonizer"
+version = "1.1.0"
+description = "A semantic code debugger."
+readme = "README.md"
+license = { file="LICENSE" }
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+
+[project.scripts]
+harmonizer = "src.harmonizer.main:run_cli"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]
