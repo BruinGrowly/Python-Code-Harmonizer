@@ -112,9 +112,22 @@ Analysis Complete.
   - Troubleshooting tips
 
 ### Advanced Topics
-- **[Philosophy](docs/PHILOSOPHY.md)** *(Coming Soon)* - Deep dive into the Anchor Point and ICE Framework
-- **[Architecture](docs/ARCHITECTURE.md)** *(Coming Soon)* - Technical implementation details for developers
-- **[API Reference](docs/API.md)** *(Coming Soon)* - Programmatic usage and integration
+- **[Philosophy](docs/PHILOSOPHY.md)** - Deep dive into the Anchor Point and ICE Framework
+  - The four dimensions (Love, Justice, Power, Wisdom)
+  - ICE Framework explained
+  - Semantic harmony theory
+  - Why semantic debugging matters
+
+- **[Architecture](docs/ARCHITECTURE.md)** - Technical implementation details for developers
+  - System architecture and data flow
+  - Component design
+  - Performance considerations
+  - Extension guide
+
+- **[API Reference](docs/API.md)** - Programmatic usage and integration
+  - Complete API documentation
+  - Integration examples
+  - Best practices
 
 ---
 
