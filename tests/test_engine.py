@@ -4,13 +4,14 @@ import pytest
 from src.divine_invitation_engine_V2 import (
     DivineInvitationSemanticEngine,
     Coordinates,
-    Dimension,
 )
+
 
 @pytest.fixture(scope="module")
 def engine():
     """Provides a single instance of the engine for all tests in this module."""
     return DivineInvitationSemanticEngine()
+
 
 def test_engine_initialization(engine):
     """Tests that the engine and its components are initialized correctly."""
@@ -21,6 +22,7 @@ def test_engine_initialization(engine):
     assert engine.semantic_analyzer is not None
     assert len(engine.vocabulary.all_keywords) > 0
 
+
 def test_vocabulary_manager_all_keywords(engine):
     """Tests that the all_keywords property returns a comprehensive set of strings."""
     keywords = engine.vocabulary.all_keywords
@@ -29,7 +31,8 @@ def test_vocabulary_manager_all_keywords(engine):
     assert "justice" in keywords
     assert "power" in keywords
     assert "wisdom" in keywords
-    assert len(keywords) > 50 # Ensure it's not a trivial set
+    assert len(keywords) > 50  # Ensure it's not a trivial set
+
 
 def test_analyze_text_single_concept(engine):
     """Tests the analysis of a single, clear concept."""
@@ -40,6 +43,7 @@ def test_analyze_text_single_concept(engine):
     assert coords.power == 0.0
     assert coords.wisdom == 0.0
 
+
 def test_analyze_text_mixed_concepts(engine):
     """Tests the analysis of a text with multiple concepts, expecting a blend."""
     coords, count = engine.vocabulary.analyze_text("love justice power wisdom")
@@ -49,11 +53,13 @@ def test_analyze_text_mixed_concepts(engine):
     assert coords.power == pytest.approx(0.25)
     assert coords.wisdom == pytest.approx(0.25)
 
+
 def test_analyze_text_no_concepts(engine):
     """Tests that text with no known concepts returns zero coordinates."""
     coords, count = engine.vocabulary.analyze_text("xyz qwerty")
     assert count == 0
     assert coords == Coordinates(0.0, 0.0, 0.0, 0.0)
+
 
 def test_get_distance_calculation(engine):
     """Tests the static distance calculation method."""
@@ -61,15 +67,18 @@ def test_get_distance_calculation(engine):
     c2 = Coordinates(1.0, 0.0, 0.0, 0.0)
     assert engine.get_distance(c1, c2) == pytest.approx(1.0)
 
-    c3 = Coordinates(1.0, 1.0, 1.0, 1.0) # Anchor Point
+    c3 = Coordinates(1.0, 1.0, 1.0, 1.0)  # Anchor Point
     assert engine.get_distance(c1, c3) == pytest.approx(2.0)
+
 
 def test_semantic_clarity(engine):
     """Tests the semantic clarity calculation."""
     # A specialized, "spiky" concept has high standard deviation, and thus low clarity.
     # The engine defines clarity as dimensional balance.
     specialized_concept = Coordinates(1.0, 0.0, 0.0, 0.0)
-    assert engine.get_semantic_clarity(specialized_concept) == pytest.approx(0.13397, abs=1e-5)
+    assert engine.get_semantic_clarity(specialized_concept) == pytest.approx(
+        0.13397, abs=1e-5
+    )
 
     # A perfectly balanced concept has zero standard deviation, and thus perfect clarity.
     perfectly_balanced = Coordinates(0.25, 0.25, 0.25, 0.25)
@@ -78,6 +87,7 @@ def test_semantic_clarity(engine):
     # An unbalanced concept, should have lower clarity than a perfectly balanced one.
     unbalanced = Coordinates(0.8, 0.2, 0.0, 0.0)
     assert engine.get_semantic_clarity(unbalanced) < 1.0
+
 
 def test_semantic_analyzer_cluster(engine):
     """Tests the semantic analyzer's ability to find the centroid of a concept cluster."""
@@ -94,6 +104,7 @@ def test_semantic_analyzer_cluster(engine):
     # Cohesion should be high for closely related concepts
     assert result.harmonic_cohesion > 0.5
 
+
 def test_ice_analysis_highly_coherent(engine):
     """
     Tests the ICE analysis for a highly coherent case where all concepts
@@ -102,7 +113,7 @@ def test_ice_analysis_highly_coherent(engine):
     result = engine.perform_ice_analysis(
         intent_words=["wisdom", "knowledge"],
         context_words=["science", "research"],
-        execution_words=["analysis", "logic"]
+        execution_words=["analysis", "logic"],
     )
 
     assert "ice_metrics" in result

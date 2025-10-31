@@ -19,7 +19,7 @@ referencing 'self.engine.vocabulary.all_keywords' from the
 import ast
 import sys
 import os
-from typing import Dict, Set
+from typing import Dict
 
 # --- COMPONENT IMPORTS ---
 # This script assumes the following two files are in the
@@ -44,6 +44,7 @@ except ImportError:
     sys.exit(1)
 
 # --- THE HARMONIZER APPLICATION ---
+
 
 class PythonCodeHarmonizer:
     """
@@ -72,7 +73,7 @@ class PythonCodeHarmonizer:
         print("Python Code Harmonizer (v1.1) ONLINE")
         print("Actively guided by the Anchor Point framework.")
         print(f"Powered By: {self.engine.get_engine_version()}")
-        print(f"Logical Anchor Point: (S=1, L=1, I=1, E=1)")
+        print("Logical Anchor Point: (S=1, L=1, I=1, E=1)")
         print(f"Disharmony Threshold: {self.disharmony_threshold}")
         print("=" * 70)
 
@@ -85,7 +86,7 @@ class PythonCodeHarmonizer:
         print("-" * 70)
 
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
         except FileNotFoundError:
             print(f"ERROR: File not found at '{file_path}'")
@@ -111,7 +112,9 @@ class PythonCodeHarmonizer:
 
                 # 3. Get INTENT: "The Stated Purpose"
                 # We use our parser to get the concepts from the name/docstring
-                intent_concepts = self.parser.get_intent_concepts(function_name, docstring)
+                intent_concepts = self.parser.get_intent_concepts(
+                    function_name, docstring
+                )
 
                 # 4. Get EXECUTION: "The Actual Action"
                 # We use our parser to get the concepts from the function's body
@@ -122,13 +125,19 @@ class PythonCodeHarmonizer:
                 # built-in ICE framework analyzer.
                 ice_result = self.engine.perform_ice_analysis(
                     intent_words=intent_concepts,
-                    context_words=["python", "function", function_name], # Provide context
-                    execution_words=execution_concepts
+                    context_words=[
+                        "python",
+                        "function",
+                        function_name,
+                    ],  # Provide context
+                    execution_words=execution_concepts,
                 )
 
                 # The "bug" is the semantic distance between Intent and Execution
                 # This metric *is* returned by the "Optimized" V2 engine.
-                disharmony_score = ice_result['ice_metrics']['intent_execution_disharmony']
+                disharmony_score = ice_result["ice_metrics"][
+                    "intent_execution_disharmony"
+                ]
 
                 harmony_report[function_name] = disharmony_score
 
@@ -144,7 +153,9 @@ class PythonCodeHarmonizer:
             print("No functions found to analyze.")
             return
 
-        sorted_report = sorted(harmony_report.items(), key=lambda item: item[1], reverse=True)
+        sorted_report = sorted(
+            harmony_report.items(), key=lambda item: item[1], reverse=True
+        )
 
         for func_name, score in sorted_report:
             status = "✓ HARMONIOUS"
@@ -156,7 +167,9 @@ class PythonCodeHarmonizer:
         print("=" * 70)
         print("Analysis Complete.")
 
+
 # --- MAIN EXECUTION ---
+
 
 def run_cli():
     """Command-line interface entry point."""
@@ -177,6 +190,7 @@ def run_cli():
         else:
             print(f"\nERROR: File not found: {file_path}")
             print("-" * 70)
+
 
 if __name__ == "__main__":
     run_cli()

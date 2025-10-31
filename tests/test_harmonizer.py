@@ -21,10 +21,12 @@ def check_permissions():
     return False
 """
 
+
 @pytest.fixture
 def harmonizer():
     """Provides a standard instance of the Harmonizer."""
     return PythonCodeHarmonizer()
+
 
 @pytest.fixture
 def temp_python_file():
@@ -34,7 +36,7 @@ def temp_python_file():
     """
     # tempfile.NamedTemporaryFile creates a file and returns a file-like object.
     # We use 'delete=False' to be able to close it and still use its name.
-    with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as fp:
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as fp:
         fp.write(TEST_CODE_CONTENT)
         filepath = fp.name
 
