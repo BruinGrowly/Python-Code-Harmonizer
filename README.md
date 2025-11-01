@@ -94,6 +94,12 @@ Analysis Complete.
 ## Documentation
 
 ### Getting Started
+- **[Quick Reference](docs/QUICK_REFERENCE.md)** - One-page cheat sheet
+  - Quick installation
+  - Score interpretation table
+  - Common semantic patterns
+  - Fast integration examples
+
 - **[User Guide](docs/USER_GUIDE.md)** - Comprehensive guide to using Python Code Harmonizer
   - Installation and setup
   - Understanding disharmony scores
@@ -110,6 +116,12 @@ Analysis Complete.
   - Quick answers to common questions
   - Interpretation guidance
   - Troubleshooting tips
+
+- **[Troubleshooting](docs/TROUBLESHOOTING.md)** - Common issues and solutions
+  - Installation problems
+  - Import errors
+  - Platform-specific issues
+  - Integration debugging
 
 ### Advanced Topics
 - **[Philosophy](docs/PHILOSOPHY.md)** - Deep dive into the Anchor Point and ICE Framework
@@ -128,6 +140,45 @@ Analysis Complete.
   - Complete API documentation
   - Integration examples
   - Best practices
+
+- **[Comparison Guide](docs/COMPARISON.md)** - How Harmonizer fits with other tools
+  - vs Pylint, MyPy, Pytest, Black, Bandit, Radon
+  - Unique value proposition
+  - Recommended tool stacks
+  - Complementary usage
+
+### Examples & Integration
+- **[Real-World Bugs](examples/real_world_bugs.py)** - Semantic bugs other tools miss
+  - 7 actual bugs Harmonizer catches
+  - Validation functions that modify
+  - Get functions that delete
+  - Before/after fixes
+
+- **[Refactoring Journey](examples/refactoring_journey.py)** - Before & after refactoring
+  - 5 complete refactoring examples
+  - Score improvements demonstrated
+  - Common patterns identified
+  - Best practices shown
+
+- **[Severity Levels](examples/severity_levels.py)** - Functions at each score range
+  - Excellent (0.0-0.3)
+  - Low concern (0.3-0.5)
+  - Medium concern (0.5-0.8)
+  - High concern (0.8-1.0)
+  - Critical (1.0+)
+
+- **[Integration Templates](.)** - Ready-to-use configurations
+  - [GitHub Actions workflow](.github/workflows/harmony-check.yml) - CI/CD integration
+  - [Pre-commit hook template](.pre-commit-config.yaml.template) - Local development
+  - [VS Code tasks](.vscode/tasks.json) - IDE integration
+  - [Config template](.harmonizer.yml.template) - Future configuration support
+
+### Project Documentation
+- **[Changelog](CHANGELOG.md)** - Version history and roadmap
+  - Release notes
+  - Feature additions
+  - Future plans
+  - Upgrade guides
 
 ---
 
