@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Python Code Harmonizer (Version 1.2)
+Python Code Harmonizer (Version 1.3)
 
 This is the main application that integrates the Divine Invitation
 Semantic Engine (DIVE-V2) with the AST Semantic Parser.
@@ -11,7 +11,13 @@ It is guided by the principle of the "Logical Anchor Point" (S,L,I,E)
 and uses the ICE (Intent, Context, Execution) framework to analyze
 the "semantic harmony" of Python code.
 
-New in v1.2:
+New in v1.3:
+- Semantic trajectory maps showing WHERE in 4D space disharmony occurs
+- Dimensional delta analysis (Love, Justice, Power, Wisdom)
+- Actionable recommendations based on semantic drift
+- Enhanced JSON output with complete semantic maps
+
+Previous (v1.2):
 - Exit codes for CI/CD integration (0=harmonious, 1=medium, 2=high, 3=critical)
 - JSON output format for tool integration
 - Command-line argument parsing with argparse
@@ -46,6 +52,14 @@ except ImportError:
     print("Please place the parser file in the same directory.")
     sys.exit(1)
 
+try:
+    # 3. Import the Semantic Map Generator (v1.3 feature)
+    from src.harmonizer.semantic_map import SemanticMapGenerator
+except ImportError:
+    print("FATAL ERROR: 'semantic_map.py' not found.")
+    print("Please place the semantic map file in the harmonizer directory.")
+    sys.exit(1)
+
 # --- THE HARMONIZER APPLICATION ---
 
 
@@ -61,7 +75,12 @@ class PythonCodeHarmonizer:
     THRESHOLD_MEDIUM = 0.8
     THRESHOLD_HIGH = 1.2
 
-    def __init__(self, disharmony_threshold: float = 0.5, quiet: bool = False):
+    def __init__(
+        self,
+        disharmony_threshold: float = 0.5,
+        quiet: bool = False,
+        show_semantic_maps: bool = True,
+    ):
         # 1. Initialize your V2 engine. This is our "compass."
         self.engine = dive.DivineInvitationSemanticEngine()
 
@@ -75,25 +94,36 @@ class PythonCodeHarmonizer:
             vocabulary=self.engine.vocabulary.all_keywords
         )
 
-        # 3. Set the threshold for flagging disharmony.
+        # 3. Initialize the Semantic Map Generator (v1.3)
+        self.map_generator = SemanticMapGenerator()
+
+        # 4. Set the threshold for flagging disharmony.
         self.disharmony_threshold = disharmony_threshold
 
-        # 4. Quiet mode for JSON output
+        # 5. Quiet mode for JSON output
         self.quiet = quiet
+
+        # 6. Show semantic maps (v1.3 feature)
+        self.show_semantic_maps = show_semantic_maps
 
         if not quiet:
             print("=" * 70)
-            print("Python Code Harmonizer (v1.2) ONLINE")
+            print("Python Code Harmonizer (v1.3) ONLINE")
             print("Actively guided by the Anchor Point framework.")
             print(f"Powered By: {self.engine.get_engine_version()}")
             print("Logical Anchor Point: (S=1, L=1, I=1, E=1)")
             print(f"Disharmony Threshold: {self.disharmony_threshold}")
             print("=" * 70)
 
-    def analyze_file(self, file_path: str) -> Dict[str, float]:
+    def analyze_file(self, file_path: str) -> Dict[str, Dict]:
         """
         Analyzes a single Python file for Intent-Execution-Disharmony.
-        Returns a dictionary of {function_name: disharmony_score}
+        Returns a dictionary of {function_name: analysis_data}
+        where analysis_data contains: {
+            'score': float,
+            'ice_result': Dict (from DIVE-V2),
+            'semantic_map': Dict (from SemanticMapGenerator)
+        }
         """
         if not self.quiet:
             print(f"\nAnalyzing file: {file_path}")
@@ -156,7 +186,18 @@ class PythonCodeHarmonizer:
                     "intent_execution_disharmony"
                 ]
 
-                harmony_report[function_name] = disharmony_score
+                # 6. Generate Semantic Map (v1.3)
+                # This shows WHERE in the 4D semantic space the disharmony occurs
+                semantic_map = self.map_generator.generate_map(
+                    ice_result, function_name
+                )
+
+                # Store complete analysis data
+                harmony_report[function_name] = {
+                    "score": disharmony_score,
+                    "ice_result": ice_result,
+                    "semantic_map": semantic_map,
+                }
 
         return harmony_report
 
@@ -186,7 +227,9 @@ class PythonCodeHarmonizer:
         if not harmony_report:
             return 0
 
-        max_score = max(harmony_report.values())
+        # Extract scores from the new data structure
+        scores = [data["score"] for data in harmony_report.values()]
+        max_score = max(scores) if scores else 0
 
         if max_score >= self.THRESHOLD_HIGH:
             return 3  # Critical
@@ -197,7 +240,7 @@ class PythonCodeHarmonizer:
         else:
             return 0  # Excellent/Low
 
-    def print_report(self, harmony_report: Dict[str, float]):
+    def print_report(self, harmony_report: Dict[str, Dict]):
         """Prints the final harmony report to the console."""
 
         print("FUNCTION NAME                | INTENT-EXECUTION DISHARMONY")
@@ -207,24 +250,32 @@ class PythonCodeHarmonizer:
             print("No functions found to analyze.")
             return
 
+        # Sort by score (now nested in the dict)
         sorted_report = sorted(
-            harmony_report.items(), key=lambda item: item[1], reverse=True
+            harmony_report.items(), key=lambda item: item[1]["score"], reverse=True
         )
 
-        for func_name, score in sorted_report:
+        for func_name, data in sorted_report:
+            score = data["score"]
             status = "✓ HARMONIOUS"
             if score > self.disharmony_threshold:
                 status = f"!! DISHARMONY (Score: {score:.2f})"
 
             print(f"{func_name:<28} | {status}")
 
+            # Show semantic map for disharmonious functions (v1.3)
+            if self.show_semantic_maps and score > self.disharmony_threshold:
+                semantic_map = data["semantic_map"]
+                map_text = self.map_generator.format_text_map(semantic_map, score)
+                print(map_text)
+
         print("=" * 70)
         print("Analysis Complete.")
 
-    def print_json_report(self, all_reports: Dict[str, Dict[str, float]]):
+    def print_json_report(self, all_reports: Dict[str, Dict[str, Dict]]):
         """Prints the harmony report in JSON format."""
         output = {
-            "version": "1.2",
+            "version": "1.3",  # Updated for semantic maps
             "threshold": self.disharmony_threshold,
             "severity_thresholds": {
                 "excellent": self.THRESHOLD_EXCELLENT,
@@ -247,7 +298,8 @@ class PythonCodeHarmonizer:
         for file_path, harmony_report in all_reports.items():
             file_data = {"file": file_path, "functions": []}
 
-            for func_name, score in harmony_report.items():
+            for func_name, data in harmony_report.items():
+                score = data["score"]
                 severity = self.get_severity(score)
                 severity_counts[severity] += 1
                 total_functions += 1
@@ -258,6 +310,11 @@ class PythonCodeHarmonizer:
                     "severity": severity,
                     "disharmonious": score > self.disharmony_threshold,
                 }
+
+                # Include semantic map if showing maps (v1.3)
+                if self.show_semantic_maps:
+                    function_data["semantic_map"] = data["semantic_map"]
+
                 file_data["functions"].append(function_data)
 
             # Sort by score (highest first)

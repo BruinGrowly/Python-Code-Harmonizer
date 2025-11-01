@@ -65,11 +65,12 @@ def test_harmonizer_end_to_end_analysis(harmonizer, temp_python_file):
     # 3. Check the harmony scores.
     # The 'get_user_data' function should be harmonious (low score).
     # Intent: get, information. Execution: query, information.
-    assert report["get_user_data"] < harmonizer.disharmony_threshold
+    # Note: v1.3 returns Dict with 'score' key instead of float directly
+    assert report["get_user_data"]["score"] < harmonizer.disharmony_threshold
 
     # The 'check_permissions' function should be disharmonious (high score).
     # Intent: check, truth. Execution: delete, force.
-    assert report["check_permissions"] > harmonizer.disharmony_threshold
+    assert report["check_permissions"]["score"] > harmonizer.disharmony_threshold
 
 
 def test_harmonizer_on_empty_file(harmonizer, temp_python_file):
