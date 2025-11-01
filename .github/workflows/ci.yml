@@ -39,3 +39,9 @@ jobs:
       - name: Test with pytest
         run: |
           pytest
+
+      - name: Check Code Harmony
+        run: |
+          # v1.2+: Harmony check with automatic exit codes
+          # Fails build if critical disharmony detected
+          harmonizer src/**/*.py

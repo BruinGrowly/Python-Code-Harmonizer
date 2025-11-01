@@ -7,6 +7,7 @@ on:
     branches: [ main, develop ]
 
 jobs:
+  # Job 1: Standard Harmony Check (fails on high/critical)
   harmony-check:
     runs-on: ubuntu-latest
 
@@ -17,44 +18,178 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: '3.11'
 
       - name: Install Python Code Harmonizer
         run: |
           python -m pip install --upgrade pip
           pip install .
 
-      - name: Run Harmony Analysis
+      - name: Run Harmony Analysis on Source Code
         run: |
-          echo "========================================"
-          echo "Python Code Harmonizer - CI/CD Check"
-          echo "========================================"
+          echo "🔍 Checking Code Harmony..."
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-          # Analyze all Python files in src/ directory
-          harmonizer src/**/*.py || true
+          # v1.2+ automatically fails on high/critical disharmony
+          # Exit codes: 0=harmonious, 1=medium, 2=high, 3=critical
+          harmonizer src/**/*.py
 
-          # Note: Currently harmonizer doesn't set exit codes based on scores
-          # Future enhancement: fail build if critical disharmony detected
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "✅ Harmony check passed - no critical issues found!"
 
-          echo ""
-          echo "✅ Harmony check completed"
-          echo "Review output above for any disharmony warnings"
-
-      - name: Analyze specific modules (optional)
+      - name: Run Harmony Analysis on Tests (informational)
         run: |
-          # Example: Analyze specific critical modules with comments
           echo ""
-          echo "Analyzing critical modules..."
+          echo "📊 Checking Test Code Harmony (informational only)..."
 
-          # Add your critical files here
-          # harmonizer src/core/important.py
-          # harmonizer src/api/endpoints.py
+          # For tests, we allow higher disharmony (don't fail the build)
+          harmonizer tests/**/*.py || echo "⚠️ Test code has some disharmony (acceptable)"
         continue-on-error: true
 
-# Note: To make this workflow fail on high disharmony scores,
-# you'll need to wrap harmonizer in a script that checks scores
-# and exits with non-zero code if threshold exceeded.
-#
-# Example future enhancement:
-# - name: Check harmony with threshold
-#   run: python scripts/ci_harmony_check.py --threshold 0.8 --fail-on-high
+  # Job 2: Detailed JSON Report with Artifact
+  harmony-json-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Python Code Harmonizer
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+
+      - name: Generate JSON Harmony Report
+        run: |
+          echo "📋 Generating detailed JSON harmony report..."
+
+          # Generate JSON report for all Python files
+          harmonizer --format json src/**/*.py examples/**/*.py tests/**/*.py > harmony-report.json || true
+
+          # Pretty-print the summary
+          echo ""
+          echo "📊 Harmony Summary:"
+          cat harmony-report.json | python -c "
+          import json, sys
+          data = json.load(sys.stdin)
+          summary = data['summary']
+          print(f\"  Total files: {summary['total_files']}\")
+          print(f\"  Total functions: {summary['total_functions']}\")
+          print(f\"  Severity breakdown:\")
+          for sev, count in summary['severity_counts'].items():
+              if count > 0:
+                  emoji = {'critical': '🔴', 'high': '🟠', 'medium': '🟡', 'low': '🔵', 'excellent': '🟢'}.get(sev, '⚪')
+                  print(f\"    {emoji} {sev.capitalize()}: {count}\")
+          print(f\"  Highest severity: {summary['highest_severity']}\")
+          "
+
+      - name: Upload JSON Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: harmony-report
+          path: harmony-report.json
+          retention-days: 30
+
+      - name: Display Top 5 Disharmonious Functions
+        run: |
+          echo ""
+          echo "🎯 Top 5 Functions to Refactor:"
+          cat harmony-report.json | python -c "
+          import json, sys
+          data = json.load(sys.stdin)
+          funcs = []
+          for file in data['files']:
+              for func in file['functions']:
+                  if func['disharmonious']:
+                      funcs.append((func['score'], func['name'], file['file'], func['severity']))
+          funcs.sort(reverse=True)
+          for i, (score, name, file, sev) in enumerate(funcs[:5], 1):
+              emoji = {'critical': '🔴', 'high': '🟠', 'medium': '🟡'}.get(sev, '⚪')
+              print(f\"  {i}. {emoji} {name} ({score:.2f}) in {file}\")
+          if not funcs:
+              print('  🎉 No disharmonious functions found!')
+          "
+
+  # Job 3: Custom Threshold Example
+  harmony-strict-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Python Code Harmonizer
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+
+      - name: Strict Harmony Check (threshold 0.3)
+        run: |
+          echo "🔒 Running STRICT harmony check (threshold: 0.3)..."
+          echo "This enforces excellent code harmony standards."
+          echo ""
+
+          # Use stricter threshold (0.3 instead of default 0.5)
+          # This catches even minor semantic drift
+          harmonizer --threshold 0.3 src/**/*.py || {
+            echo ""
+            echo "⚠️ STRICT CHECK: Code doesn't meet excellent harmony standards"
+            echo "This is OK - default threshold (0.5) is more permissive"
+            exit 0
+          }
+        continue-on-error: true
+
+  # Job 4: Demonstrate all exit codes
+  harmony-exit-codes-demo:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Python Code Harmonizer
+        run: |
+          python -m pip install --upgrade pip
+          pip install .
+
+      - name: Test Exit Code Handling
+        run: |
+          echo "🧪 Testing Exit Code Behavior..."
+          echo ""
+
+          # Test with examples/test_code.py (has critical disharmony)
+          echo "Testing with examples/test_code.py (expect exit code 3):"
+          if harmonizer examples/test_code.py; then
+            echo "❌ Unexpected: Got exit code 0 (should be 3 for critical)"
+            exit 1
+          else
+            EXIT_CODE=$?
+            echo "✅ Got exit code: $EXIT_CODE"
+            if [ $EXIT_CODE -eq 3 ]; then
+              echo "✅ Correct: Exit code 3 indicates critical disharmony"
+            else
+              echo "⚠️ Unexpected exit code (expected 3)"
+            fi
+          fi
+
+          echo ""
+          echo "Exit Code Reference:"
+          echo "  0 = Harmonious (excellent/low)"
+          echo "  1 = Medium severity (0.5-0.8)"
+          echo "  2 = High severity (0.8-1.2)"
+          echo "  3 = Critical severity (≥1.2)"

@@ -255,8 +255,11 @@ class VocabularyManager:
                     first_concept, Dimension.WISDOM
                 )
 
+        # Print to stderr to avoid breaking JSON output on stdout
+        import sys
         print(
-            f"VocabularyManager: Initialized with {len(self._keyword_map)} unique keywords."
+            f"VocabularyManager: Initialized with {len(self._keyword_map)} unique keywords.",
+            file=sys.stderr
         )
 
     def analyze_text(self, text: str) -> Tuple[Coordinates, int]:
