@@ -33,6 +33,63 @@ find src/ -name "*.py" -exec harmonizer {} \;
 
 ---
 
+## Advanced Options (v1.2+)
+
+```bash
+# JSON output format (for tools/CI/CD)
+harmonizer --format json myfile.py
+
+# Custom threshold
+harmonizer --threshold 0.7 myfile.py
+
+# Check version
+harmonizer --version
+
+# Get help
+harmonizer --help
+```
+
+### Exit Codes for CI/CD
+
+Harmonizer returns meaningful exit codes:
+
+| Exit Code | Severity | Score Range |
+|-----------|----------|-------------|
+| `0` | Excellent/Low | < 0.5 |
+| `1` | Medium | 0.5 - 0.8 |
+| `2` | High | 0.8 - 1.2 |
+| `3` | Critical | ≥ 1.2 |
+
+**Use in CI/CD:**
+```yaml
+- name: Check Code Harmony
+  run: harmonizer src/**/*.py  # Will fail build if critical
+```
+
+### JSON Output Example
+
+```json
+{
+  "version": "1.2",
+  "threshold": 0.5,
+  "files": [{
+    "file": "myfile.py",
+    "functions": [{
+      "name": "get_user",
+      "score": 0.95,
+      "severity": "high",
+      "disharmonious": true
+    }]
+  }],
+  "summary": {
+    "total_functions": 10,
+    "severity_counts": { "critical": 1, "high": 2 }
+  }
+}
+```
+
+---
+
 ## Score Interpretation
 
 | Score | Status | Meaning | Action |
