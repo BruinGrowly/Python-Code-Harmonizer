@@ -1,0 +1,113 @@
+=== FOR REDDIT/HACKER NEWS ===
+
+Title: Python Code Harmonizer v1.3 - Semantic Trajectory Maps Show WHERE Your Code Drifts
+
+Body:
+
+I've just released v1.3 of Python Code Harmonizer - the semantic code debugger that finds bugs other tools miss.
+
+**What's New:** Semantic trajectory maps that show exactly WHERE in 4D semantic space your code drifts from its intent.
+
+**Before (v1.2):**
+```
+delete_user: DISHARMONY (Score: 1.41)
+```
+
+**Now (v1.3):**
+```
+delete_user: DISHARMONY (Score: 1.41)
+
+📍 SEMANTIC TRAJECTORY MAP:
+Power (1.00) → Wisdom (1.00)  [-1.00 Power, +1.00 Wisdom]
+
+💡 Function name suggests Power domain (transformation, control)
+   but execution operates in Wisdom domain (analysis, understanding)
+
+🔧 RECOMMENDATIONS:
+   • Rename to reflect Wisdom domain operations
+   • Expected: execute, transform, control
+   • Actual: analyze, understand, calculate
+   • Or split into separate functions
+```
+
+**Why this matters:**
+
+It transforms the tool from "you have a bug" to "here's exactly where, why, and how to fix it." It teaches semantic thinking by showing the dimensional drift across Love, Justice, Power, and Wisdom.
+
+**Quick start:**
+```bash
+pip install git+https://github.com/BruinGrowly/Python-Code-Harmonizer.git
+harmonizer myfile.py
+```
+
+**Features:**
+- Detects when functions lie about what they do
+- Maps code to 4D semantic space (Love, Justice, Power, Wisdom)
+- Shows dimensional trajectories with visual indicators
+- Provides actionable refactoring recommendations
+- CI/CD integration with exit codes
+- JSON output for tooling
+
+The semantic maps use a novel 4D semantic coordinate system based on the ICE framework (Intent, Context, Execution). All open source, MIT licensed.
+
+Feedback welcome! What would make this indispensable for your workflow?
+
+GitHub: https://github.com/BruinGrowly/Python-Code-Harmonizer
+
+---
+
+=== FOR TWITTER/X ===
+
+🚀 Python Code Harmonizer v1.3 is out!
+
+New: Semantic trajectory maps that show WHERE your code drifts in 4D space
+
+Not just "you have a bug"
+But "here's the dimensional drift: Power → Wisdom"
+"Here's why it matters"
+"Here's how to fix it"
+
+Transforms detector → teacher
+
+Try it: https://github.com/BruinGrowly/Python-Code-Harmonizer
+
+#Python #CodeQuality #SemanticAnalysis
+
+---
+
+=== FOR DEV.TO ===
+
+Title: I Built Semantic Trajectory Maps for Python - Here's What They Caught
+
+Intro:
+
+A week ago I released Python Code Harmonizer v1.2 - a tool that detects when Python functions lie about what they do. Today I'm releasing v1.3 with semantic trajectory maps that show exactly WHERE your code drifts from its intent.
+
+This post shows what semantic maps look like, why they're useful, and what they've caught in real code.
+
+[Full blog post structure - can expand with examples, technical details, etc.]
+
+---
+
+=== FOR LINKEDIN ===
+
+I'm excited to announce Python Code Harmonizer v1.3 🎉
+
+The key innovation: Semantic Trajectory Maps that visualize code quality in 4D semantic space.
+
+Instead of just telling developers "your code has issues," it shows:
+✅ Exact dimensional drift (Power → Wisdom, etc.)
+✅ Per-dimension deltas with visual indicators
+✅ Human-readable interpretations
+✅ Actionable refactoring recommendations
+
+This transforms static analysis from detection to education.
+
+Built on a novel 4D semantic framework (Love, Justice, Power, Wisdom) that maps code operations to fundamental dimensions.
+
+100% open source, MIT licensed.
+Try it: https://github.com/BruinGrowly/Python-Code-Harmonizer
+
+What semantic analysis features would be most valuable for your team?
+
+#SoftwareEngineering #Python #CodeQuality #TechnicalDebt #OpenSource
