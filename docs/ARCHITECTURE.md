@@ -107,9 +107,9 @@
 ### End-to-End Analysis Flow
 
 ```
-Python File
-    │
-    ▼
+        Python File
+             │
+             ▼
 ┌─────────────────────────────────┐
 │  1. File Read                   │
 │     Read Python source code     │
