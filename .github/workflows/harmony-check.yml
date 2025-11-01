@@ -82,23 +82,23 @@ jobs:
           if [ -f harmony-report.json ] && [ -s harmony-report.json ]; then
             echo ""
             echo "📊 Harmony Summary:"
-            python3 << 'PYTHON_SCRIPT'
-import json
-try:
-    with open('harmony-report.json') as f:
-        data = json.load(f)
-    summary = data.get('summary', {})
-    print(f"  Total files: {summary.get('total_files', 0)}")
-    print(f"  Total functions: {summary.get('total_functions', 0)}")
-    print("  Severity breakdown:")
-    for sev, count in summary.get('severity_counts', {}).items():
-        if count > 0:
-            emoji = {'critical': '🔴', 'high': '🟠', 'medium': '🟡', 'low': '🔵', 'excellent': '🟢'}.get(sev, '⚪')
-            print(f"    {emoji} {sev.capitalize()}: {count}")
-    print(f"  Highest severity: {summary.get('highest_severity', 'unknown')}")
-except Exception as e:
-    print(f"Error parsing report: {e}")
-PYTHON_SCRIPT
+            python3 <<'PYTHON_SCRIPT'
+          import json
+          try:
+              with open('harmony-report.json') as f:
+                  data = json.load(f)
+              summary = data.get('summary', {})
+              print(f"  Total files: {summary.get('total_files', 0)}")
+              print(f"  Total functions: {summary.get('total_functions', 0)}")
+              print("  Severity breakdown:")
+              for sev, count in summary.get('severity_counts', {}).items():
+                  if count > 0:
+                      emoji = {'critical': '🔴', 'high': '🟠', 'medium': '🟡', 'low': '🔵', 'excellent': '🟢'}.get(sev, '⚪')
+                      print(f"    {emoji} {sev.capitalize()}: {count}")
+              print(f"  Highest severity: {summary.get('highest_severity', 'unknown')}")
+          except Exception as e:
+              print(f"Error parsing report: {e}")
+          PYTHON_SCRIPT
           else
             echo "⚠️ No harmony report generated"
           fi
@@ -116,31 +116,31 @@ PYTHON_SCRIPT
           if [ -f harmony-report.json ] && [ -s harmony-report.json ]; then
             echo ""
             echo "🎯 Top 5 Functions to Refactor:"
-            python3 << 'PYTHON_SCRIPT'
-import json
-try:
-    with open('harmony-report.json') as f:
-        data = json.load(f)
-    funcs = []
-    for file_data in data.get('files', []):
-        for func in file_data.get('functions', []):
-            if func.get('disharmonious'):
-                funcs.append((
-                    func.get('score', 0),
-                    func.get('name', 'unknown'),
-                    file_data.get('file', 'unknown'),
-                    func.get('severity', 'unknown')
-                ))
-    funcs.sort(reverse=True)
-    if funcs:
-        for i, (score, name, filepath, sev) in enumerate(funcs[:5], 1):
-            emoji = {'critical': '🔴', 'high': '🟠', 'medium': '🟡'}.get(sev, '⚪')
-            print(f"  {i}. {emoji} {name} ({score:.2f}) in {filepath}")
-    else:
-        print('  🎉 No disharmonious functions found!')
-except Exception as e:
-    print(f"Error parsing report: {e}")
-PYTHON_SCRIPT
+            python3 <<'PYTHON_SCRIPT'
+          import json
+          try:
+              with open('harmony-report.json') as f:
+                  data = json.load(f)
+              funcs = []
+              for file_data in data.get('files', []):
+                  for func in file_data.get('functions', []):
+                      if func.get('disharmonious'):
+                          funcs.append((
+                              func.get('score', 0),
+                              func.get('name', 'unknown'),
+                              file_data.get('file', 'unknown'),
+                              func.get('severity', 'unknown')
+                          ))
+              funcs.sort(reverse=True)
+              if funcs:
+                  for i, (score, name, filepath, sev) in enumerate(funcs[:5], 1):
+                      emoji = {'critical': '🔴', 'high': '🟠', 'medium': '🟡'}.get(sev, '⚪')
+                      print(f"  {i}. {emoji} {name} ({score:.2f}) in {filepath}")
+              else:
+                  print('  🎉 No disharmonious functions found!')
+          except Exception as e:
+              print(f"Error parsing report: {e}")
+          PYTHON_SCRIPT
           fi
         if: success() || failure()
 
