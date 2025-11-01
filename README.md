@@ -1,7 +1,7 @@
 # Python Code Harmonizer
 
 [![CI Status](https://github.com/BruinGrowly/Python-Code-Harmonizer/workflows/Python%20Code%20Harmonizer%20CI/badge.svg)](https://github.com/BruinGrowly/Python-Code-Harmonizer/actions)
-[![Version](https://img.shields.io/badge/version-1.2-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.3-blue.svg)](CHANGELOG.md)
 [![Python Versions](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -33,6 +33,38 @@ def get_user_by_id(user_id):
 **Harmonizer says:** ⚠️ **DISHARMONY DETECTED** - Function promises to "get" but actually "deletes"
 
 This is a **semantic bug** - code that works syntactically but does the wrong thing. These are the hardest bugs to find, and they slip past linters, type checkers, and even tests.
+
+---
+
+## ✨ What's New in v1.3
+
+**Semantic Trajectory Maps** - See exactly WHERE in 4D space your code drifts from its intent:
+
+```
+delete_user: !! DISHARMONY (Score: 1.41)
+
+📍 SEMANTIC TRAJECTORY MAP:
+┌────────────────────────────────────────────────┐
+│ Dimension    Intent   Execution   Δ           │
+├────────────────────────────────────────────────┤
+│ Power (P)    1.00  →  0.00     -1.00  ⚠️      │
+│ Wisdom (W)   0.00  →  1.00     +1.00  ⚠️      │
+└────────────────────────────────────────────────┘
+
+🧭 DISHARMONY VECTOR: Power → Wisdom
+
+💡 INTERPRETATION:
+   Function name suggests Power domain (transformation, control)
+   but execution operates in Wisdom domain (analysis, understanding)
+
+🔧 RECOMMENDATIONS:
+   • Consider renaming to reflect Wisdom domain operations
+   • Expected behaviors: execute, transform, control
+   • Actual behaviors: analyze, understand, calculate
+   • Or split into separate functions
+```
+
+**Transforms the tool from detector to teacher** - Not just "you have a bug" but "here's exactly where, why, and how to fix it."
 
 ---
 
@@ -76,7 +108,7 @@ harmonizer myfile.py
 
 ```
 ======================================================================
-Python Code Harmonizer (v1.1) ONLINE
+Python Code Harmonizer (v1.3) ONLINE
 Actively guided by the Anchor Point framework.
 Powered By: DIVE-V2 (Optimized Production)
 Logical Anchor Point: (S=1, L=1, I=1, E=1)
