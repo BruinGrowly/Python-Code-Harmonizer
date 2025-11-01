@@ -11,6 +11,82 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.3.0] - 2025-11-01
+
+### Added
+- **Semantic Trajectory Maps** 🗺️ **(Major Feature)**
+  - Visual maps showing WHERE in 4D semantic space disharmony occurs
+  - Dimensional delta analysis across Love, Justice, Power, Wisdom axes
+  - Trajectory visualization: "Power → Wisdom" shows semantic drift
+  - Per-dimension change indicators (⚠️ Major shift, ⚡ Notable drift, ✓ Aligned)
+  - Transforms tool from detector to teacher
+
+- **Human-Readable Interpretations** 💡
+  - Explains what semantic drift means in plain language
+  - "Function name suggests Power domain but execution operates in Wisdom domain"
+  - Context-aware explanations based on dimension meanings
+
+- **Actionable Recommendations** 🔧
+  - Specific renaming suggestions based on execution domain
+  - Expected vs actual behavior comparisons
+  - Function splitting suggestions for mixed concerns
+  - Guided refactoring based on semantic analysis
+
+- **Enhanced JSON Output**
+  - Complete semantic map data in JSON format
+  - Trajectory vectors and dimensional deltas
+  - Programmatic access to all trajectory information
+  - Perfect for IDE integrations and tooling
+
+- **New SemanticMapGenerator Class**
+  - 344 lines of semantic mapping logic
+  - Dimensional delta calculations
+  - Dominant dimension identification
+  - Human-readable formatting (text and JSON)
+
+### Changed
+- Version bumped to 1.3
+- `analyze_file()` now returns `Dict[str, Dict]` with:
+  - `score`: Disharmony score (float)
+  - `ice_result`: Complete DIVE-V2 analysis data
+  - `semantic_map`: Trajectory and recommendation data
+- Enhanced text output shows maps for disharmonious functions
+- JSON output includes full semantic trajectory data
+- Added `show_semantic_maps` parameter (default: True)
+
+### Technical Details
+- New file: `src/harmonizer/semantic_map.py`
+- Modified: `src/harmonizer/main.py` (integrated semantic maps)
+- Updated: `tests/test_harmonizer.py` (new data structure)
+- All 20 tests passing
+- Black formatting maintained
+- Backward compatible
+
+### What This Means
+**Before (v1.2):**
+```
+delete_user: !! DISHARMONY (Score: 1.41)
+```
+
+**Now (v1.3):**
+```
+delete_user: !! DISHARMONY (Score: 1.41)
+
+📍 SEMANTIC TRAJECTORY MAP:
+Power (1.00) → Wisdom (1.00)  [Major shift: -1.00 Power, +1.00 Wisdom]
+
+💡 Function name suggests Power domain (transformation, control)
+   but execution operates in Wisdom domain (analysis, understanding)
+
+🔧 RECOMMENDATIONS:
+   • Consider renaming to reflect Wisdom domain operations
+   • Expected behaviors: execute, transform, control
+   • Actual behaviors: analyze, understand, calculate
+   • Or split into separate functions
+```
+
+---
+
 ## [1.2.0] - 2025-11-01
 
 ### Added

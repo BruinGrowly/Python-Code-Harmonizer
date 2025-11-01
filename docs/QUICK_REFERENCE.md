@@ -35,6 +35,35 @@ find src/ -name "*.py" -exec harmonizer {} \;
 
 ## Advanced Options (v1.2+)
 
+### Semantic Maps (v1.3+)
+
+View dimensional trajectories showing WHERE disharmony occurs:
+
+```bash
+# Semantic maps are shown by default for disharmonious functions
+harmonizer myfile.py
+
+# Disable semantic maps
+# (Use programmatically: PythonCodeHarmonizer(show_semantic_maps=False))
+```
+
+**Example Output:**
+```
+📍 SEMANTIC TRAJECTORY MAP:
+┌────────────────────────────────────────────────┐
+│ Dimension    Intent   Execution   Δ           │
+├────────────────────────────────────────────────┤
+│ Power (P)    1.00  →  0.00     -1.00  ⚠️      │
+│ Wisdom (W)   0.00  →  1.00     +1.00  ⚠️      │
+└────────────────────────────────────────────────┘
+
+🧭 DISHARMONY VECTOR: Power → Wisdom
+💡 Function suggests Power but operates in Wisdom domain
+🔧 Consider renaming or splitting function
+```
+
+### CLI Options
+
 ```bash
 # JSON output format (for tools/CI/CD)
 harmonizer --format json myfile.py
@@ -70,7 +99,7 @@ Harmonizer returns meaningful exit codes:
 
 ```json
 {
-  "version": "1.2",
+  "version": "1.3",
   "threshold": 0.5,
   "files": [{
     "file": "myfile.py",
@@ -78,7 +107,15 @@ Harmonizer returns meaningful exit codes:
       "name": "get_user",
       "score": 0.95,
       "severity": "high",
-      "disharmonious": true
+      "disharmonious": true,
+      "semantic_map": {
+        "trajectory": {
+          "vector": "Wisdom → Power",
+          "deltas": { "power": 0.8, "wisdom": -0.7 }
+        },
+        "interpretation": "Function suggests Wisdom but operates in Power",
+        "recommendations": ["Consider renaming", "Or split functions"]
+      }
     }]
   }],
   "summary": {
@@ -207,16 +244,24 @@ def validate_email(email):
 ```python
 from src.harmonizer.main import PythonCodeHarmonizer
 
-# Initialize
-harmonizer = PythonCodeHarmonizer(disharmony_threshold=0.5)
+# Initialize (v1.3+)
+harmonizer = PythonCodeHarmonizer(
+    disharmony_threshold=0.5,
+    show_semantic_maps=True  # v1.3: Enable trajectory maps
+)
 
-# Analyze
+# Analyze (v1.3 returns Dict with score, ice_result, semantic_map)
 report = harmonizer.analyze_file("mycode.py")
 
-# Process results
-for func_name, score in report.items():
+# Process results (v1.3+)
+for func_name, data in report.items():
+    score = data["score"]
     if score > 0.8:
         print(f"⚠️ {func_name}: {score:.2f}")
+
+        # Access semantic map (v1.3+)
+        trajectory = data["semantic_map"]["trajectory"]["vector"]
+        print(f"   Trajectory: {trajectory}")
 ```
 
 ---
