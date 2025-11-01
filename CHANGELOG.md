@@ -9,6 +9,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [1.2.0] - 2025-11-01
+
+### Added
+- **Exit codes for CI/CD integration** 🚀
+  - `0` = All harmonious (excellent or low severity)
+  - `1` = Medium severity found (0.5-0.8)
+  - `2` = High severity found (0.8-1.2)
+  - `3` = Critical severity found (≥ 1.2)
+  - Enables automated quality gates in pipelines
+  - Build fails automatically on high/critical disharmony
+
+- **JSON output format** 📊
+  - `--format json` option for machine-readable output
+  - Structured data for tool integration
+  - Includes severity levels, scores, and summary statistics
+  - Perfect for IDEs, dashboards, and analytics
+
+- **Enhanced command-line interface**
+  - Argument parsing with argparse
+  - `--version` flag
+  - `--threshold` option for custom thresholds
+  - Comprehensive `--help` with examples
+  - Multiple file support improved
+
+- **Enhanced README badges**
+  - CI status badge
+  - Version badge
+  - Test pass rate badge
+  - Harmony score badge (meta!)
+  - All clickable with relevant links
+
+### Changed
+- Version bumped to 1.2
+- Improved CLI usability with better help text
+- Quiet mode when using JSON output
+
+### Documentation
+- Quick Reference guide updated with v1.2 features
+- Exit code examples for CI/CD
+- JSON output format examples
+- Advanced usage patterns
+
+---
+
+## [1.1.0] - 2025-10-31
+
 ### Added
 - Comprehensive documentation suite
 - Integration templates (GitHub Actions, pre-commit, VS Code)
@@ -16,6 +64,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Tool comparison guide
 - Troubleshooting guide
 - Real-world example files
+- Complete refactoring journey examples
+- Severity level demonstrations
+
+### Documentation
+- USER_GUIDE.md (~14K words)
+- TUTORIAL.md (~19K words)
+- FAQ.md (~19K words)
+- PHILOSOPHY.md (~22K words)
+- ARCHITECTURE.md (~23K words)
+- API.md (~21K words)
+- COMPARISON.md (~11K words)
+- QUICK_REFERENCE.md (~5K words)
+- TROUBLESHOOTING.md (~11K words)
 
 ---
 

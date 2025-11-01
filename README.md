@@ -1,8 +1,12 @@
 # Python Code Harmonizer
 
-[![MIT License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Python Versions](https://img.shields.io/badge/python-3.8+-blue.svg)]()
+[![CI Status](https://github.com/BruinGrowly/Python-Code-Harmonizer/workflows/Python%20Code%20Harmonizer%20CI/badge.svg)](https://github.com/BruinGrowly/Python-Code-Harmonizer/actions)
+[![Version](https://img.shields.io/badge/version-1.2-blue.svg)](CHANGELOG.md)
+[![Python Versions](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Tests](https://img.shields.io/badge/tests-20%20passed-brightgreen.svg)](tests/)
+[![Harmony Score](https://img.shields.io/badge/harmony-0.15-brightgreen.svg)](examples/test_code.py)
 
 **The world's first semantic code debugger.**
 
