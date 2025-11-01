@@ -19,21 +19,21 @@
 
 ```
 ┌─────────────────────────────────────────────────────┐
-│              Python Code Harmonizer                  │
-│                    (CLI Entry)                       │
+│              Python Code Harmonizer                 │
+│                    (CLI Entry)                      │
 └──────────────────────┬──────────────────────────────┘
                        │
             ┌──────────┴────────────┐
             │                       │
     ┌───────▼────────┐    ┌────────▼───────────┐
-    │   Harmonizer    │    │  DIVE-V2 Engine    │
-    │   Main (CLI)    │────│  (Semantic Core)   │
+    │   Harmonizer   │    │  DIVE-V2 Engine    │
+    │   Main (CLI)   │────│  (Semantic Core)   │
     └───────┬────────┘    └────────┬───────────┘
             │                      │
     ┌───────▼────────┐    ┌────────▼───────────┐
-    │  AST Parser     │    │  Vocabulary Mgr    │
-    │  (Rosetta       │    │  (Concept Maps)    │
-    │   Stone)        │    └────────────────────┘
+    │  AST Parser    │    │  Vocabulary Mgr    │
+    │  (Rosetta      │    │  (Concept Maps)    │
+    │   Stone)       │    └────────────────────┘
     └────────────────┘
 ```
 
