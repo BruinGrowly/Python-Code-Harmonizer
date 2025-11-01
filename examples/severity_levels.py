@@ -20,9 +20,10 @@ You'll see the full spectrum from perfect harmony to critical disharmony.
 # Name matches implementation beautifully.
 # No action needed - keep this quality!
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("EXCELLENT HARMONY (0.0 - 0.3)")
-print("="*70)
+print("=" * 70)
+
 
 def create_user_account(username, email):
     """
@@ -39,6 +40,7 @@ def create_user_account(username, email):
     initialize_user_preferences(user_data)
     return user_data
 
+
 def calculate_total_amount(items):
     """
     Expected score: ~0.08
@@ -49,7 +51,8 @@ def calculate_total_amount(items):
     - Pure calculation, no side effects
     - Self-documenting code ✓
     """
-    return sum(item['price'] for item in items)
+    return sum(item["price"] for item in items)
+
 
 def validate_email_format(email):
     """
@@ -61,7 +64,8 @@ def validate_email_format(email):
     - Returns boolean
     - No modifications ✓
     """
-    return '@' in email and '.' in email.split('@')[1]
+    return "@" in email and "." in email.split("@")[1]
+
 
 def delete_temporary_files(directory):
     """
@@ -74,9 +78,11 @@ def delete_temporary_files(directory):
     - No surprises ✓
     """
     import os
+
     for file in os.listdir(directory):
-        if file.endswith('.tmp'):
+        if file.endswith(".tmp"):
             remove_file(os.path.join(directory, file))
+
 
 def query_user_by_id(user_id):
     """
@@ -88,7 +94,7 @@ def query_user_by_id(user_id):
     - Read-only operation
     - Returns data ✓
     """
-    return fetch_from_database('users', user_id)
+    return fetch_from_database("users", user_id)
 
 
 # =============================================================================
@@ -98,9 +104,10 @@ def query_user_by_id(user_id):
 # Consider refactoring if you have time.
 # Monitor to prevent drift.
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("LOW CONCERN (0.3 - 0.5)")
-print("="*70)
+print("=" * 70)
+
 
 def process_payment(payment_data):
     """
@@ -117,6 +124,7 @@ def process_payment(payment_data):
     record_transaction(payment_data)
     return True
 
+
 def get_or_create_session(user_id):
     """
     Expected score: ~0.40
@@ -131,6 +139,7 @@ def get_or_create_session(user_id):
     if not session:
         session = create_new_session(user_id)
     return session
+
 
 def update_user_profile(user_id, data):
     """
@@ -147,6 +156,7 @@ def update_user_profile(user_id, data):
     merged = merge_profile_data(current, data)
     save_profile(user_id, merged)
 
+
 def handle_error_gracefully(error):
     """
     Expected score: ~0.42
@@ -160,6 +170,7 @@ def handle_error_gracefully(error):
     log_error_to_file(error)
     formatted = format_error_message(error)
     return formatted
+
 
 def check_and_initialize_config(config_path):
     """
@@ -183,9 +194,10 @@ def check_and_initialize_config(config_path):
 # Should refactor when you can.
 # Potential for confusion and bugs.
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("MEDIUM CONCERN (0.5 - 0.8)")
-print("="*70)
+print("=" * 70)
+
 
 def validate_user_credentials(username, password):
     """
@@ -202,6 +214,7 @@ def validate_user_credentials(username, password):
         # ISSUE: Validation shouldn't modify!
         update_last_login(username)
     return is_valid
+
 
 def get_user_preferences(user_id):
     """
@@ -220,6 +233,7 @@ def get_user_preferences(user_id):
         save_preferences(user_id, prefs)
     return prefs
 
+
 def calculate_and_cache_result(input_data):
     """
     Expected score: ~0.58
@@ -234,6 +248,7 @@ def calculate_and_cache_result(input_data):
     # Mixed: calculation with caching
     store_in_cache(input_data, result)
     return result
+
 
 def process_order(order_data):
     """
@@ -250,6 +265,7 @@ def process_order(order_data):
     ship_items(order_data)
     send_confirmation_email(order_data)
     return True
+
 
 def load_configuration_file(filepath):
     """
@@ -275,9 +291,10 @@ def load_configuration_file(filepath):
 # Refactor immediately.
 # High risk of bugs and confusion.
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("HIGH CONCERN (0.8 - 1.0)")
-print("="*70)
+print("=" * 70)
+
 
 def read_log_file(logfile_path):
     """
@@ -290,13 +307,14 @@ def read_log_file(logfile_path):
     - Reality: File gets cleared!
     - FIX: Rename to 'read_and_clear_log' OR remove clearing
     """
-    with open(logfile_path, 'r') as f:
+    with open(logfile_path, "r") as f:
         contents = f.read()
 
     # VIOLATION: Read shouldn't clear!
     clear_log_file(logfile_path)
 
     return contents
+
 
 def check_inventory_level(product_id):
     """
@@ -316,6 +334,7 @@ def check_inventory_level(product_id):
 
     return level
 
+
 def log_transaction(transaction_data):
     """
     Expected score: ~0.88
@@ -330,8 +349,9 @@ def log_transaction(transaction_data):
     write_to_log(transaction_data)
 
     # VIOLATION: Log shouldn't raise!
-    if transaction_data['amount'] > 10000:
+    if transaction_data["amount"] > 10000:
         raise ValueError("Transaction too large!")
+
 
 def filter_active_users(users_list):
     """
@@ -346,13 +366,14 @@ def filter_active_users(users_list):
     """
     active = []
     for user in users_list:
-        if user['is_active']:
+        if user["is_active"]:
             active.append(user)
         else:
             # VIOLATION: Filter shouldn't delete from DB!
-            delete_from_database(user['id'])
+            delete_from_database(user["id"])
 
     return active
+
 
 def get_cache_value(cache_key):
     """
@@ -382,9 +403,10 @@ def get_cache_value(cache_key):
 # **IMMEDIATE ACTION REQUIRED**
 # Very high risk - could cause data loss or security issues.
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("CRITICAL CONCERN (1.0+)")
-print("="*70)
+print("=" * 70)
+
 
 def validate_password(password):
     """
@@ -404,6 +426,7 @@ def validate_password(password):
         return False
     return True
 
+
 def get_user_data(user_id):
     """
     Expected score: ~1.02
@@ -422,6 +445,7 @@ def get_user_data(user_id):
 
     return user
 
+
 def save_preferences(user_id, preferences):
     """
     Expected score: ~0.98
@@ -439,6 +463,7 @@ def save_preferences(user_id, preferences):
     # Privacy issue: saving preferences shouldn't notify others
     send_email_to_all_admins(f"User {user_id} changed preferences")
 
+
 def query_database(sql_query):
     """
     Expected score: ~1.10
@@ -455,6 +480,7 @@ def query_database(sql_query):
     execute_raw_sql(sql_query)
 
     return fetch_results()
+
 
 def check_permission(user_id, resource):
     """
@@ -480,149 +506,198 @@ def check_permission(user_id, resource):
 # Placeholder Functions
 # =============================================================================
 
+
 def build_user_object(username, email):
     return {"username": username, "email": email}
+
 
 def save_to_database(data):
     print(f"Saving to database: {data}")
 
+
 def initialize_user_preferences(user):
     print(f"Initializing preferences for {user['username']}")
+
 
 def remove_file(filepath):
     print(f"Removing file: {filepath}")
 
+
 def fetch_from_database(table, id):
     return {"id": id, "data": "sample"}
+
 
 def validate_payment_data(data):
     return True
 
+
 def charge_credit_card(data):
     print("Charging credit card")
+
 
 def record_transaction(data):
     print("Recording transaction")
 
+
 def get_existing_session(user_id):
     return None
+
 
 def create_new_session(user_id):
     return {"user_id": user_id, "session_id": "abc123"}
 
+
 def validate_profile_data(data):
     return True
+
 
 def get_user_profile(user_id):
     return {"name": "User"}
 
+
 def merge_profile_data(current, new):
     return {**current, **new}
+
 
 def save_profile(user_id, data):
     print(f"Saving profile for user {user_id}")
 
+
 def log_error_to_file(error):
     print(f"Logging error: {error}")
+
 
 def format_error_message(error):
     return str(error)
 
+
 def config_exists(path):
     return False
+
 
 def initialize_default_config(path):
     print(f"Initializing config at {path}")
 
+
 def load_config(path):
     return {"setting": "value"}
+
 
 def check_credentials(username, password):
     return True
 
+
 def update_last_login(username):
     print(f"Updating last login for {username}")
+
 
 def fetch_preferences(user_id):
     return None
 
+
 def create_default_preferences(user_id):
     return {"theme": "light"}
+
 
 def save_preferences(user_id, prefs):
     print(f"Saving preferences for user {user_id}")
 
+
 def perform_calculation(data):
     return 42
+
 
 def store_in_cache(key, value):
     print(f"Caching {key} = {value}")
 
+
 def validate_order(data):
     print("Validating order")
+
 
 def charge_payment(data):
     print("Charging payment")
 
+
 def ship_items(data):
     print("Shipping items")
+
 
 def send_confirmation_email(data):
     print("Sending confirmation email")
 
+
 def parse_config_file(path):
     return {}
+
 
 def apply_default_values(config):
     return config
 
+
 def save_config_file(path, config):
     print(f"Saving config to {path}")
+
 
 def clear_log_file(path):
     print(f"CLEARING log file: {path}")
 
+
 def get_inventory_count(product_id):
     return 5
+
 
 def trigger_reorder(product_id):
     print(f"TRIGGERING REORDER for product {product_id}")
 
+
 def write_to_log(data):
     print(f"Logging: {data}")
+
 
 def delete_from_database(id):
     print(f"DELETING from database: ID {id}")
 
+
 cache = {}
+
 
 def fetch_from_external_api(key):
     print(f"FETCHING from external API: {key}")
     return "api_value"
 
+
 def delete_user_account_for_weak_password():
     print("CATASTROPHIC: DELETING USER ACCOUNT!")
+
 
 def fetch_user(user_id):
     return {"id": user_id, "name": "User"}
 
+
 def delete_user_from_database(user_id):
     print(f"CATASTROPHIC: DELETING USER {user_id}!")
+
 
 def store_preferences(user_id, prefs):
     print(f"Storing preferences for {user_id}")
 
+
 def send_email_to_all_admins(message):
     print(f"SENDING EMAIL TO ADMINS: {message}")
+
 
 def execute_raw_sql(query):
     print(f"EXECUTING RAW SQL: {query}")
 
+
 def fetch_results():
     return []
 
+
 def verify_user_access(user_id, resource):
     return False
+
 
 def grant_admin_privileges(user_id):
     print(f"SECURITY VIOLATION: GRANTING ADMIN TO {user_id}!")
@@ -691,9 +766,9 @@ You'll see the full range from excellent to critical! 💛⚓
 # =============================================================================
 
 if __name__ == "__main__":
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("SEVERITY LEVELS DEMONSTRATION")
-    print("="*70)
+    print("=" * 70)
     print("\nThis file contains functions at every severity level:")
     print("\n  📗 EXCELLENT (0.0-0.3):  Perfect alignment")
     print("  📘 LOW (0.3-0.5):        Minor issues")
@@ -702,4 +777,4 @@ if __name__ == "__main__":
     print("  🔥 CRITICAL (1.0+):      EMERGENCIES")
     print("\nRun: harmonizer examples/severity_levels.py")
     print("\nUse this as a reference for prioritizing refactoring!")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")

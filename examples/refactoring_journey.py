@@ -16,13 +16,14 @@ Run sections separately to see score differences:
 # JOURNEY #1: User Management Refactoring
 # =============================================================================
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("JOURNEY #1: From 'process' to clear intent")
-print("="*70)
+print("=" * 70)
 
 # -----------------------------------------------------------------------------
 # BEFORE - Disharmony Score: ~0.75
 # -----------------------------------------------------------------------------
+
 
 def process_user(user_data):
     """
@@ -43,9 +44,10 @@ def process_user(user_data):
     save_to_database(user)
 
     # Sends welcome email
-    send_welcome_email(user['email'])
+    send_welcome_email(user["email"])
 
     return user
+
 
 # -----------------------------------------------------------------------------
 # REFACTORING STEPS
@@ -64,6 +66,7 @@ def process_user(user_data):
 # AFTER - Disharmony Score: ~0.15 (Excellent!)
 # -----------------------------------------------------------------------------
 
+
 def register_new_user(user_data):
     """
     SOLUTION: Name describes exact behavior
@@ -80,7 +83,7 @@ def register_new_user(user_data):
     """
     user = create_user_record(user_data)
     save_to_database(user)
-    send_welcome_email(user['email'])
+    send_welcome_email(user["email"])
     return user
 
 
@@ -88,13 +91,14 @@ def register_new_user(user_data):
 # JOURNEY #2: Data Retrieval Refactoring
 # =============================================================================
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("JOURNEY #2: From misleading to honest")
-print("="*70)
+print("=" * 70)
 
 # -----------------------------------------------------------------------------
 # BEFORE - Disharmony Score: ~0.90 (Critical!)
 # -----------------------------------------------------------------------------
+
 
 def get_user_settings(user_id):
     """
@@ -123,6 +127,7 @@ def get_user_settings(user_id):
 
     return settings
 
+
 # -----------------------------------------------------------------------------
 # REFACTORING STEPS
 # -----------------------------------------------------------------------------
@@ -135,6 +140,7 @@ def get_user_settings(user_id):
 # AFTER - Disharmony Score: ~0.10 (Excellent!)
 # -----------------------------------------------------------------------------
 
+
 def get_user_settings(user_id):
     """
     SOLUTION: Pure read operation
@@ -145,6 +151,7 @@ def get_user_settings(user_id):
     - Harmonizer score: excellent
     """
     return query_settings_from_db(user_id)
+
 
 def track_settings_access(user_id):
     """
@@ -157,6 +164,7 @@ def track_settings_access(user_id):
     """
     update_last_login(user_id)
     increment_analytics_counter(user_id)
+
 
 def get_and_track_settings(user_id):
     """
@@ -176,13 +184,14 @@ def get_and_track_settings(user_id):
 # JOURNEY #3: Validation Logic Refactoring
 # =============================================================================
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("JOURNEY #3: From overgrown to focused")
-print("="*70)
+print("=" * 70)
 
 # -----------------------------------------------------------------------------
 # BEFORE - Disharmony Score: ~0.70
 # -----------------------------------------------------------------------------
+
 
 def validate_input(data):
     """
@@ -217,6 +226,7 @@ def validate_input(data):
 
     return True
 
+
 # -----------------------------------------------------------------------------
 # REFACTORING STEPS
 # -----------------------------------------------------------------------------
@@ -228,6 +238,7 @@ def validate_input(data):
 # -----------------------------------------------------------------------------
 # AFTER - Disharmony Scores: All ~0.05-0.20 (Excellent!)
 # -----------------------------------------------------------------------------
+
 
 def validate_input(data):
     """
@@ -245,6 +256,7 @@ def validate_input(data):
         return False
     return True
 
+
 def sanitize_input(data):
     """
     SOLUTION: Pure sanitization
@@ -256,6 +268,7 @@ def sanitize_input(data):
     """
     return sanitize_sql_injection(data)
 
+
 def format_input(data):
     """
     SOLUTION: Pure formatting
@@ -266,6 +279,7 @@ def format_input(data):
     - Clear intent
     """
     return format_to_lowercase(data)
+
 
 def process_user_input(data):
     """
@@ -290,13 +304,14 @@ def process_user_input(data):
 # JOURNEY #4: Resource Management Refactoring
 # =============================================================================
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("JOURNEY #4: From surprising to expected")
-print("="*70)
+print("=" * 70)
 
 # -----------------------------------------------------------------------------
 # BEFORE - Disharmony Score: ~0.80
 # -----------------------------------------------------------------------------
+
 
 def check_cache_available(cache_key):
     """
@@ -325,6 +340,7 @@ def check_cache_available(cache_key):
 
     return False
 
+
 # -----------------------------------------------------------------------------
 # REFACTORING STEPS
 # -----------------------------------------------------------------------------
@@ -337,6 +353,7 @@ def check_cache_available(cache_key):
 # AFTER - Disharmony Scores: ~0.05-0.15 (Excellent!)
 # -----------------------------------------------------------------------------
 
+
 def check_cache_available(cache_key):
     """
     SOLUTION: Pure check
@@ -347,6 +364,7 @@ def check_cache_available(cache_key):
     - Returns simple boolean
     """
     return cache_key in cache_store
+
 
 def initialize_cache_if_missing(cache_key):
     """
@@ -361,6 +379,7 @@ def initialize_cache_if_missing(cache_key):
         initialize_cache(cache_key)
         create_default_values(cache_key)
     return True
+
 
 def ensure_cache_ready(cache_key):
     """
@@ -380,13 +399,14 @@ def ensure_cache_ready(cache_key):
 # JOURNEY #5: API Endpoint Refactoring
 # =============================================================================
 
-print("\n" + "="*70)
+print("\n" + "=" * 70)
 print("JOURNEY #5: From overloaded to specialized")
-print("="*70)
+print("=" * 70)
 
 # -----------------------------------------------------------------------------
 # BEFORE - Disharmony Score: ~0.85
 # -----------------------------------------------------------------------------
+
 
 def handle_request(request_data):
     """
@@ -421,6 +441,7 @@ def handle_request(request_data):
 
     return response
 
+
 # -----------------------------------------------------------------------------
 # REFACTORING STEPS
 # -----------------------------------------------------------------------------
@@ -433,25 +454,31 @@ def handle_request(request_data):
 # AFTER - Disharmony Scores: All ~0.05-0.20 (Excellent!)
 # -----------------------------------------------------------------------------
 
+
 def parse_request(request_data):
     """Stage 1: Parsing"""
     return parse_json(request_data)
+
 
 def validate_request(data):
     """Stage 2: Validation"""
     return is_valid(data)
 
+
 def execute_request(data):
     """Stage 3: Business logic"""
     return execute_business_logic(data)
+
 
 def format_response(result):
     """Stage 4: Response formatting"""
     return format_json_response(result)
 
+
 def log_request_processed(request_data):
     """Side effect: Logging"""
     log_request(request_data)
+
 
 def process_api_request(request_data):
     """
@@ -484,57 +511,77 @@ def process_api_request(request_data):
 # Placeholder Functions (for examples to run)
 # =============================================================================
 
+
 def create_user_record(data):
     return {"id": 1, "email": data.get("email", "test@example.com")}
+
 
 def save_to_database(user):
     print(f"Saving user {user['id']} to database")
 
+
 def send_welcome_email(email):
     print(f"Sending welcome email to {email}")
+
 
 def query_settings_from_db(user_id):
     return {"theme": "dark", "language": "en"}
 
+
 def update_last_login(user_id):
     print(f"Updating last login for user {user_id}")
+
 
 def increment_analytics_counter(user_id):
     print(f"Incrementing analytics for user {user_id}")
 
+
 def log_validation_error(message):
     print(f"VALIDATION ERROR: {message}")
+
 
 def sanitize_sql_injection(data):
     return data.replace("'", "''")
 
+
 def format_to_lowercase(data):
     return data.lower()
 
+
 cache_store = {}
+
 
 def initialize_cache(key):
     cache_store[key] = {}
 
+
 def create_default_values(key):
     cache_store[key] = {"default": True}
 
+
 def parse_json(data):
     import json
+
     return json.loads(data) if isinstance(data, str) else data
+
 
 def is_valid(data):
     return bool(data)
 
+
 def execute_business_logic(data):
     return {"status": "success", "data": data}
 
+
 def format_json_response(result):
     import json
+
     return json.dumps(result)
+
 
 def error_response(message):
     return {"error": message}
+
 
 def log_request(data):
     print(f"Logging request: {data}")
@@ -618,9 +665,9 @@ The goal: Code that says what it means and means what it says! 💛⚓
 # =============================================================================
 
 if __name__ == "__main__":
-    print("\n" + "="*70)
+    print("\n" + "=" * 70)
     print("REFACTORING JOURNEY DEMO")
-    print("="*70)
+    print("=" * 70)
     print("\nThis file shows before/after refactoring examples.")
     print("\nRun: harmonizer examples/refactoring_journey.py")
     print("\nNotice:")
@@ -628,4 +675,4 @@ if __name__ == "__main__":
     print("  - 'AFTER' functions have lower scores")
     print("  - Score improvement shows semantic alignment")
     print("\nKey insight: Good refactoring reduces semantic distance!")
-    print("="*70 + "\n")
+    print("=" * 70 + "\n")
