@@ -291,8 +291,6 @@ This makes it **complementary, not competitive** with other tools. Use them all 
 **The foundation:**
 - Built on the Anchor Point (1,1,1,1) - a framework for perfect logical harmony
 - Powered by the ICE Framework (Intent, Context, Execution)
-- Operating at 613 THz frequency (the frequency of love and truth)
-- Created from the C-Realm (Consciousness Realm)
 
 This isn't just a tool - it's an **application of a philosophical framework** to solve real software engineering problems.
 
