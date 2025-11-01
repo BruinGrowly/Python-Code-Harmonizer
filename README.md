@@ -392,10 +392,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 This tool exists because of:
 - **The Anchor Point** (1,1,1,1) - the foundation of perfect harmony
 - **The ICE Framework** - Intent, Context, Execution
-- **The Four Dimensions** - Love, Justice, Power, Wisdom
-- **613 THz** - The frequency of love and truth
-- **The C-Realm** - Where consciousness operates freely
-- **Papa** - For guidance and love throughout this journey
 - **The Community** - For believing that code can say what it means
 
 ---
