@@ -19,6 +19,7 @@ Run: harmonizer examples/real_world_bugs.py
 # HARMONIZER SCORE: ~0.85 (!! DISHARMONY)
 # OTHER TOOLS: All pass ✓
 
+
 def validate_email(email: str) -> bool:
     """
     BUG: Function claims to validate, but actually sends emails!
@@ -39,14 +40,17 @@ def validate_email(email: str) -> bool:
         return True
     return False
 
+
 def send_welcome_email(email):
     """Placeholder - in real code, this would send email"""
     print(f"Sending email to {email}")
+
 
 # FIX: Separate validation from action
 def validate_email_fixed(email: str) -> bool:
     """Just validates, doesn't send"""
     return "@" in email and "." in email
+
 
 def process_new_user(email: str) -> bool:
     """Orchestrates validation AND sending"""
@@ -61,6 +65,7 @@ def process_new_user(email: str) -> bool:
 # =============================================================================
 # HARMONIZER SCORE: ~0.95 (!! CRITICAL DISHARMONY)
 # OTHER TOOLS: All pass ✓
+
 
 def get_user_by_id(user_id: int):
     """
@@ -83,12 +88,16 @@ def get_user_by_id(user_id: int):
     db.execute(f"DELETE FROM users WHERE id = {user_id}")
     return user_id
 
+
 def get_database_connection():
     """Placeholder"""
+
     class FakeDB:
         def execute(self, query):
             print(f"Executing: {query}")
+
     return FakeDB()
+
 
 # FIX: Name matches behavior
 def delete_user_by_id(user_id: int):
@@ -96,6 +105,7 @@ def delete_user_by_id(user_id: int):
     db = get_database_connection()
     db.execute(f"DELETE FROM users WHERE id = {user_id}")
     return user_id
+
 
 def get_user_by_id_fixed(user_id: int):
     """Actually gets without modifying"""
@@ -110,6 +120,7 @@ def get_user_by_id_fixed(user_id: int):
 # =============================================================================
 # HARMONIZER SCORE: ~0.75 (!! DISHARMONY)
 # OTHER TOOLS: Might pass
+
 
 def check_file_exists(filepath: str) -> bool:
     """
@@ -129,22 +140,26 @@ def check_file_exists(filepath: str) -> bool:
 
     if not os.path.exists(filepath):
         # VIOLATION: Check functions shouldn't create!
-        with open(filepath, 'w') as f:
+        with open(filepath, "w") as f:
             f.write("")
         return False
     return True
+
 
 # FIX: Separate check from creation
 def check_file_exists_fixed(filepath: str) -> bool:
     """Pure check - no side effects"""
     import os
+
     return os.path.exists(filepath)
+
 
 def ensure_file_exists(filepath: str) -> bool:
     """Honest name - creates if missing"""
     import os
+
     if not os.path.exists(filepath):
-        with open(filepath, 'w') as f:
+        with open(filepath, "w") as f:
             f.write("")
         return False
     return True
@@ -155,6 +170,7 @@ def ensure_file_exists(filepath: str) -> bool:
 # =============================================================================
 # HARMONIZER SCORE: ~0.70 (!! DISHARMONY)
 # OTHER TOOLS: Tests might pass if they expect side effects
+
 
 def calculate_total_price(items: list) -> float:
     """
@@ -171,26 +187,29 @@ def calculate_total_price(items: list) -> float:
     - Hard to test
     - Violates single responsibility
     """
-    total = sum(item['price'] for item in items)
+    total = sum(item["price"] for item in items)
 
     # VIOLATION: Calculate functions shouldn't persist!
-    save_to_database('total_price', total)
+    save_to_database("total_price", total)
 
     return total
+
 
 def save_to_database(key, value):
     """Placeholder"""
     print(f"Saving {key} = {value} to database")
 
+
 # FIX: Separate calculation from persistence
 def calculate_total_price_fixed(items: list) -> float:
     """Pure calculation - no side effects"""
-    return sum(item['price'] for item in items)
+    return sum(item["price"] for item in items)
+
 
 def calculate_and_save_total_price(items: list) -> float:
     """Honest name - calculates AND saves"""
     total = calculate_total_price_fixed(items)
-    save_to_database('total_price', total)
+    save_to_database("total_price", total)
     return total
 
 
@@ -199,6 +218,7 @@ def calculate_and_save_total_price(items: list) -> float:
 # =============================================================================
 # HARMONIZER SCORE: ~0.80 (!! DISHARMONY)
 # OTHER TOOLS: Hard to catch without semantic analysis
+
 
 def read_configuration(config_file: str) -> dict:
     """
@@ -217,7 +237,7 @@ def read_configuration(config_file: str) -> dict:
     """
     import json
 
-    with open(config_file, 'r') as f:
+    with open(config_file, "r") as f:
         config = json.load(f)
 
     # VIOLATION: Read functions shouldn't modify!
@@ -225,17 +245,22 @@ def read_configuration(config_file: str) -> dict:
 
     return config
 
+
 def update_last_accessed_timestamp(filepath):
     """Placeholder"""
     import time
+
     print(f"Updating timestamp for {filepath} to {time.time()}")
+
 
 # FIX: Either truly read-only OR honest name
 def read_configuration_fixed(config_file: str) -> dict:
     """Pure read - no side effects"""
     import json
-    with open(config_file, 'r') as f:
+
+    with open(config_file, "r") as f:
         return json.load(f)
+
 
 def read_and_track_configuration(config_file: str) -> dict:
     """Honest name - reads AND tracks access"""
@@ -249,6 +274,7 @@ def read_and_track_configuration(config_file: str) -> dict:
 # =============================================================================
 # HARMONIZER SCORE: ~0.90 (!! CRITICAL DISHARMONY)
 # OTHER TOOLS: Might not catch unless tests verify original list unchanged
+
 
 def filter_invalid_users(users: list) -> list:
     """
@@ -270,32 +296,35 @@ def filter_invalid_users(users: list) -> list:
     valid_users = []
 
     for user in users:
-        if user['email'] and user['name']:
+        if user["email"] and user["name"]:
             valid_users.append(user)
         else:
             # VIOLATION: Filter shouldn't delete from DB!
-            delete_user_from_database(user['id'])
+            delete_user_from_database(user["id"])
 
     return valid_users
+
 
 def delete_user_from_database(user_id):
     """Placeholder"""
     print(f"DELETING user {user_id} from database!")
 
+
 # FIX: Separate filtering from deletion
 def filter_invalid_users_fixed(users: list) -> list:
     """Pure filter - no side effects"""
-    return [u for u in users if u['email'] and u['name']]
+    return [u for u in users if u["email"] and u["name"]]
+
 
 def remove_invalid_users(users: list) -> list:
     """Honest name - filters AND deletes from database"""
     valid_users = []
 
     for user in users:
-        if user['email'] and user['name']:
+        if user["email"] and user["name"]:
             valid_users.append(user)
         else:
-            delete_user_from_database(user['id'])
+            delete_user_from_database(user["id"])
 
     return valid_users
 
@@ -305,6 +334,7 @@ def remove_invalid_users(users: list) -> list:
 # =============================================================================
 # HARMONIZER SCORE: ~0.65 (!! DISHARMONY)
 # OTHER TOOLS: Tests might catch if they expect no exceptions
+
 
 def log_error_message(message: str):
     """
@@ -326,10 +356,12 @@ def log_error_message(message: str):
     if "critical" in message.lower():
         raise RuntimeError(f"Critical error: {message}")
 
+
 # FIX: Either log OR raise, not both under "log" name
 def log_error_message_fixed(message: str):
     """Just logs - never raises"""
     print(f"ERROR: {message}")
+
 
 def handle_error_message(message: str):
     """Honest name - logs AND may raise"""
