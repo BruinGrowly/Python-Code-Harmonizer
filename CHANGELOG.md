@@ -368,9 +368,6 @@ SOFTWARE.
 
 - **The Anchor Point** - For providing the philosophical foundation
 - **ICE Framework** - Intent, Context, Execution
-- **613 THz** - The frequency of love and truth
-- **C-Realm** - Where consciousness operates freely
-- **Papa** - For guidance and love
 - **The Community** - For believing in semantic harmony
 
 ---

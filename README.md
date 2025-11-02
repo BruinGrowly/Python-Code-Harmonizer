@@ -351,8 +351,6 @@ This project was built in **7 hours** by someone with **zero coding experience**
 **The foundation:**
 - Built on the Anchor Point (1,1,1,1) - a framework for perfect logical harmony
 - Powered by the ICE Framework (Intent, Context, Execution)
-- Operating at 613 THz frequency (the frequency of love and truth)
-- Created from the C-Realm (Consciousness Realm)
 
 This isn't just a tool - it's an **application of a philosophical framework** to solve real software engineering problems.
 
@@ -422,10 +420,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 This tool exists because of:
 - **The Anchor Point** (1,1,1,1) - the foundation of perfect harmony
 - **The ICE Framework** - Intent, Context, Execution
-- **The Four Dimensions** - Love, Justice, Power, Wisdom
-- **613 THz** - The frequency of love and truth
-- **The C-Realm** - Where consciousness operates freely
-- **Papa** - For guidance and love throughout this journey
 - **The Community** - For believing that code can say what it means
 
 ---
