@@ -106,7 +106,15 @@ class PythonCodeHarmonizer:
         # 6. Show semantic maps (v1.3 feature)
         self.show_semantic_maps = show_semantic_maps
 
-        if not quiet:
+        # 7. Communicate initialization (Love dimension)
+        self._communicate_startup()
+
+    def _communicate_startup(self):
+        """
+        Communicates startup information to user.
+        Pure Love domain: clear, friendly communication.
+        """
+        if not self.quiet:
             print("=" * 70)
             print("Python Code Harmonizer (v1.3) ONLINE")
             print("Actively guided by the Anchor Point framework.")
@@ -125,74 +133,103 @@ class PythonCodeHarmonizer:
             'semantic_map': Dict (from SemanticMapGenerator)
         }
         """
+        # Love: Communicate what we're doing
+        self._communicate_analysis_start(file_path)
+
+        # Justice: Validate file exists and is readable
+        content = self._load_and_validate_file(file_path)
+        if content is None:
+            return {}
+
+        # Wisdom: Parse code into AST
+        tree = self._parse_code_to_ast(content, file_path)
+        if tree is None:
+            return {}
+
+        # Power: Execute analysis on all functions
+        harmony_report = self._analyze_all_functions(tree)
+
+        # Love: Communicate completion
+        self._communicate_analysis_complete(len(harmony_report))
+
+        return harmony_report
+
+    def _communicate_analysis_start(self, file_path: str):
+        """Love dimension: Inform user analysis is starting."""
         if not self.quiet:
             print(f"\nAnalyzing file: {file_path}")
             print("-" * 70)
 
+    def _communicate_analysis_complete(self, function_count: int):
+        """Love dimension: Inform user analysis is complete."""
+        if not self.quiet and function_count > 0:
+            print(f"✓ Analyzed {function_count} function(s)")
+
+    def _load_and_validate_file(self, file_path: str) -> str:
+        """
+        Justice dimension: Validate file and load content.
+        Returns file content or None if validation fails.
+        """
         try:
             with open(file_path, "r", encoding="utf-8") as f:
-                content = f.read()
+                return f.read()
         except FileNotFoundError:
             if not self.quiet:
                 print(f"ERROR: File not found at '{file_path}'")
-            return {}
+            return None
         except Exception as e:
             if not self.quiet:
                 print(f"ERROR: Could not read file: {e}")
-            return {}
+            return None
 
-        # 1. Use Python's AST to parse the code into a logical tree
+    def _parse_code_to_ast(self, content: str, file_path: str) -> ast.AST:
+        """
+        Wisdom dimension: Parse Python code into Abstract Syntax Tree.
+        Returns AST or None if parse fails.
+        """
         try:
-            tree = ast.parse(content)
+            return ast.parse(content)
         except SyntaxError as e:
             if not self.quiet:
                 print(f"ERROR: Could not parse file. Syntax error on line {e.lineno}")
-            return {}
+            return None
 
+    def _analyze_all_functions(self, tree: ast.AST) -> Dict[str, Dict]:
+        """
+        Power dimension: Execute analysis on all functions in AST.
+        Returns complete harmony report.
+        """
         harmony_report = {}
 
-        # 2. "Walk" the tree and visit every function definition
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef):
                 function_name = node.name
                 docstring = ast.get_docstring(node)
 
-                # 3. Get INTENT: "The Stated Purpose"
-                # We use our parser to get the concepts from the name/docstring
+                # Get intent and execution concepts
                 intent_concepts = self.parser.get_intent_concepts(
                     function_name, docstring
                 )
-
-                # 4. Get EXECUTION: "The Actual Action"
-                # We use our parser to get the concepts from the function's body
                 execution_concepts = self.parser.get_execution_concepts(node.body)
 
-                # 5. THE "A-HA!" MOMENT: Use the V2 ICEAnalyzer
-                # We pass our parsed concepts into the V2 engine's
-                # built-in ICE framework analyzer.
+                # Perform ICE analysis
                 ice_result = self.engine.perform_ice_analysis(
                     intent_words=intent_concepts,
-                    context_words=[
-                        "python",
-                        "function",
-                        function_name,
-                    ],  # Provide context
+                    context_words=["python", "function", function_name],
                     execution_words=execution_concepts,
                 )
 
-                # The "bug" is the semantic distance between Intent and Execution
-                # This metric *is* returned by the "Optimized" V2 engine.
+                # Calculate disharmony score
                 disharmony_score = ice_result["ice_metrics"][
                     "intent_execution_disharmony"
                 ]
 
-                # 6. Generate Semantic Map (v1.3)
-                # This shows WHERE in the 4D semantic space the disharmony occurs
+                # Generate semantic map
                 semantic_map = self.map_generator.generate_map(
                     ice_result, function_name
                 )
 
-                # Store complete analysis data
+                # Store complete analysis
                 harmony_report[function_name] = {
                     "score": disharmony_score,
                     "ice_result": ice_result,
@@ -240,15 +277,17 @@ class PythonCodeHarmonizer:
         else:
             return 0  # Excellent/Low
 
-    def print_report(self, harmony_report: Dict[str, Dict]):
-        """Prints the final harmony report to the console."""
-
-        print("FUNCTION NAME                | INTENT-EXECUTION DISHARMONY")
-        print("-----------------------------|--------------------------------")
-
+    def format_report(self, harmony_report: Dict[str, Dict]) -> str:
+        """
+        Formats harmony report data into human-readable text.
+        Pure Wisdom domain: analysis and formatting.
+        """
         if not harmony_report:
-            print("No functions found to analyze.")
-            return
+            return "No functions found to analyze."
+
+        lines = []
+        lines.append("FUNCTION NAME                | INTENT-EXECUTION DISHARMONY")
+        lines.append("-----------------------------|--------------------------------")
 
         # Sort by score (now nested in the dict)
         sorted_report = sorted(
@@ -261,16 +300,24 @@ class PythonCodeHarmonizer:
             if score > self.disharmony_threshold:
                 status = f"!! DISHARMONY (Score: {score:.2f})"
 
-            print(f"{func_name:<28} | {status}")
+            lines.append(f"{func_name:<28} | {status}")
 
             # Show semantic map for disharmonious functions (v1.3)
             if self.show_semantic_maps and score > self.disharmony_threshold:
                 semantic_map = data["semantic_map"]
                 map_text = self.map_generator.format_text_map(semantic_map, score)
-                print(map_text)
+                lines.append(map_text)
 
-        print("=" * 70)
-        print("Analysis Complete.")
+        lines.append("=" * 70)
+        lines.append("Analysis Complete.")
+        return "\n".join(lines)
+
+    def output_report(self, formatted_report: str):
+        """
+        Outputs formatted report to console.
+        Pure Love domain: communication and display.
+        """
+        print(formatted_report)
 
     def print_json_report(self, all_reports: Dict[str, Dict[str, Dict]]):
         """Prints the harmony report in JSON format."""
@@ -342,8 +389,11 @@ class PythonCodeHarmonizer:
 # --- MAIN EXECUTION ---
 
 
-def run_cli():
-    """Command-line interface entry point."""
+def parse_cli_arguments() -> argparse.Namespace:
+    """
+    Parses command-line arguments.
+    Pure Wisdom domain: understanding user intent.
+    """
     parser = argparse.ArgumentParser(
         description="Python Code Harmonizer - Semantic code analysis tool",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -387,41 +437,94 @@ Exit Codes:
     parser.add_argument(
         "--version",
         action="version",
-        version="Python Code Harmonizer v1.2",
+        version="Python Code Harmonizer v1.3",
     )
 
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    # 1. Initialize the Harmonizer
-    quiet = args.format == "json"
-    harmonizer = PythonCodeHarmonizer(disharmony_threshold=args.threshold, quiet=quiet)
 
-    # 2. Run the analysis for all provided files
-    all_reports = {}
-    highest_exit_code = 0
+def validate_cli_arguments(args: argparse.Namespace) -> List[str]:
+    """
+    Validates command-line arguments.
+    Pure Justice domain: verification and error checking.
+    Returns list of valid file paths.
+    """
+    valid_files = []
+    invalid_files = []
 
     for file_path in args.files:
         if os.path.exists(file_path):
-            report = harmonizer.analyze_file(file_path)
-            all_reports[file_path] = report
-
-            # Track highest severity for exit code
-            exit_code = harmonizer.get_highest_severity_code(report)
-            highest_exit_code = max(highest_exit_code, exit_code)
-
-            # Print text report immediately if not JSON
-            if args.format == "text":
-                harmonizer.print_report(report)
+            if file_path.endswith(".py"):
+                valid_files.append(file_path)
+            else:
+                invalid_files.append((file_path, "Not a Python file"))
         else:
-            if args.format == "text":
-                print(f"\nERROR: File not found: {file_path}")
-                print("-" * 70)
+            invalid_files.append((file_path, "File not found"))
 
-    # 3. Print JSON report if requested
+    # Report validation errors (Love dimension: communication)
+    if invalid_files and args.format == "text":
+        for file_path, error in invalid_files:
+            print(f"\nWARNING: {file_path} - {error}")
+            print("-" * 70)
+
+    return valid_files
+
+
+def execute_analysis(
+    harmonizer: PythonCodeHarmonizer, file_paths: List[str], output_format: str
+) -> tuple[Dict[str, Dict[str, Dict]], int]:
+    """
+    Executes the analysis pipeline.
+    Pure Power domain: orchestrating the actual work.
+    Returns (all_reports, highest_exit_code).
+    """
+    all_reports = {}
+    highest_exit_code = 0
+
+    for file_path in file_paths:
+        report = harmonizer.analyze_file(file_path)
+        all_reports[file_path] = report
+
+        # Track highest severity for exit code
+        exit_code = harmonizer.get_highest_severity_code(report)
+        highest_exit_code = max(highest_exit_code, exit_code)
+
+        # Print text report immediately if not JSON
+        if output_format == "text":
+            formatted = harmonizer.format_report(report)
+            harmonizer.output_report(formatted)
+
+    return all_reports, highest_exit_code
+
+
+def run_cli():
+    """
+    Command-line interface entry point.
+    Orchestrates all dimensions: Wisdom → Justice → Power → Love.
+    """
+    # 1. Wisdom: Parse and understand arguments
+    args = parse_cli_arguments()
+
+    # 2. Justice: Validate arguments
+    valid_files = validate_cli_arguments(args)
+
+    if not valid_files:
+        print("\nERROR: No valid Python files to analyze.")
+        sys.exit(1)
+
+    # 3. Power: Initialize harmonizer and execute analysis
+    quiet = args.format == "json"
+    harmonizer = PythonCodeHarmonizer(disharmony_threshold=args.threshold, quiet=quiet)
+
+    all_reports, highest_exit_code = execute_analysis(
+        harmonizer, valid_files, args.format
+    )
+
+    # 4. Love: Communicate final results if JSON format
     if args.format == "json":
         harmonizer.print_json_report(all_reports)
 
-    # 4. Exit with appropriate code for CI/CD
+    # 5. Return status code for CI/CD integration
     sys.exit(highest_exit_code)
 
 
