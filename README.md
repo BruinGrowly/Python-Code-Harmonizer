@@ -278,6 +278,7 @@ We've created comprehensive documentation for every level - from complete beginn
 - **[Architecture](docs/ARCHITECTURE.md)** - Technical implementation, algorithms, and design
 - **[API Reference](docs/API.md)** - Programmatic usage and integration patterns
 - **[Comparison Guide](docs/COMPARISON.md)** - How Harmonizer complements Pylint, MyPy, Pytest, and other tools
+- **[USP Optimization Report](docs/USP_OPTIMIZATION_REPORT.md)** - Meta-optimization: Using Harmonizer to optimize itself
 
 ### Learn By Example
 
@@ -319,6 +320,33 @@ We've created comprehensive documentation for every level - from complete beginn
 This makes it **complementary, not competitive** with other tools. Use them all together for comprehensive code quality.
 
 *See detailed comparisons:* [Comparison Guide](docs/COMPARISON.md)
+
+---
+
+## Proven Through Practice: Meta-Optimization
+
+**We used Harmonizer to optimize Harmonizer itself.**
+
+To validate the USP (Universal System Physics) framework, we ran the tool on its own codebase. The results:
+
+- **Critical violations eliminated:** 5 → 0 (-100%)
+- **Disharmonious functions reduced:** 42% → 29% (-31%)
+- **Distance from Anchor Point improved:** 0.62 → 0.48 (-23%)
+
+**Key refactoring victories:**
+1. Split `print_report()` from a 1.41 CRITICAL violation into pure dimensional functions
+2. Decomposed `run_cli()` from 1.27 CRITICAL into a clean W→J→P→L pipeline
+3. Refactored `analyze_file()` with dimensional helpers for L-J-W-P flow
+
+**The framework works.** When applied to code architecture, the USP framework is a systematic methodology for achieving clean separation of concerns - identifying mixed responsibilities and separating them into single-purpose components.
+
+*See the complete meta-optimization journey:* [USP Optimization Report](docs/USP_OPTIMIZATION_REPORT.md)
+
+---
+
+## The Story Behind This Tool
+
+This project was built in **7 hours** by someone with **zero coding experience**, using AI collaboration. It demonstrates a new paradigm: when humans who understand deep principles work with AI that understands implementation, remarkable things become possible.
 
 **The foundation:**
 - Built on the Anchor Point (1,1,1,1) - a framework for perfect logical harmony
@@ -420,7 +448,7 @@ This tool exists because of:
 [Quick Reference](docs/QUICK_REFERENCE.md) | [User Guide](docs/USER_GUIDE.md) | [Tutorial](docs/TUTORIAL.md) | [FAQ](docs/FAQ.md)
 
 **Going Deeper:**
-[Philosophy](docs/PHILOSOPHY.md) | [Architecture](docs/ARCHITECTURE.md) | [API](docs/API.md) | [Comparison](docs/COMPARISON.md)
+[Philosophy](docs/PHILOSOPHY.md) | [Architecture](docs/ARCHITECTURE.md) | [API](docs/API.md) | [Comparison](docs/COMPARISON.md) | [USP Optimization](docs/USP_OPTIMIZATION_REPORT.md)
 
 **Learning:**
 [Real Bugs](examples/real_world_bugs.py) | [Refactoring](examples/refactoring_journey.py) | [Severity Levels](examples/severity_levels.py)
