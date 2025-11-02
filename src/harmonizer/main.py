@@ -28,7 +28,7 @@ import ast
 import json
 import os
 import sys
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 # --- COMPONENT IMPORTS ---
 # This script assumes the following two files are in the
@@ -472,7 +472,7 @@ def validate_cli_arguments(args: argparse.Namespace) -> List[str]:
 
 def execute_analysis(
     harmonizer: PythonCodeHarmonizer, file_paths: List[str], output_format: str
-) -> tuple[Dict[str, Dict[str, Dict]], int]:
+) -> Tuple[Dict[str, Dict[str, Dict]], int]:
     """
     Executes the analysis pipeline.
     Pure Power domain: orchestrating the actual work.
