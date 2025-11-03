@@ -13,6 +13,8 @@ import ast
 from collections import defaultdict
 from typing import Dict, List
 
+import black
+
 
 class Refactorer:
     """
@@ -41,17 +43,30 @@ class Refactorer:
             new_func_name = f"_{self.function_node.name}_{dimension}"
             new_func = self._create_new_function(new_func_name, nodes)
             new_functions.append(new_func)
-            new_body_calls.append(
-                ast.Expr(
-                    value=ast.Call(
-                        func=ast.Name(id=new_func_name, ctx=ast.Load()),
-                        args=[
-                            ast.Name(id=arg.arg, ctx=ast.Load())
-                            for arg in self.function_node.args.args
-                        ],
-                        keywords=[],
-                    )
+            # Handle 'self' for method calls
+            is_method = (
+                self.function_node.args.args
+                and self.function_node.args.args[0].arg == "self"
+            )
+            if is_method:
+                call_func = ast.Attribute(
+                    value=ast.Name(id="self", ctx=ast.Load()),
+                    attr=new_func_name,
+                    ctx=ast.Load(),
                 )
+                call_args = [
+                    ast.Name(id=arg.arg, ctx=ast.Load())
+                    for arg in self.function_node.args.args[1:]
+                ]
+            else:
+                call_func = ast.Name(id=new_func_name, ctx=ast.Load())
+                call_args = [
+                    ast.Name(id=arg.arg, ctx=ast.Load())
+                    for arg in self.function_node.args.args
+                ]
+
+            new_body_calls.append(
+                ast.Expr(value=ast.Call(func=call_func, args=call_args, keywords=[]))
             )
 
         original_func_rewritten = ast.FunctionDef(
@@ -70,13 +85,27 @@ class Refactorer:
 
         # Fix missing location info and unparse the entire module
         ast.fix_missing_locations(new_module)
-        final_code = ast.unparse(new_module)
+        unformatted_code = ast.unparse(new_module)
+
+        # Format the generated code using black
+        try:
+            final_code = black.format_str(
+                unformatted_code, mode=black.FileMode()
+            ).strip()
+        except black.NothingChanged:
+            final_code = unformatted_code.strip()
 
         return "# --- Suggested Refactoring: Dimensional Split ---\n\n" + final_code
 
     def _group_nodes_by_dimension(self) -> Dict[str, List[ast.AST]]:
-        """Groups the function's body nodes by their semantic dimension."""
+        """
+        Groups the function's body nodes by their semantic dimension,
+        keeping control flow blocks together.
+        """
         groups = defaultdict(list)
+
+        # This is a simplified approach. A more robust solution would
+        # build a dependency graph.
         for node, dimension in self.execution_map.items():
             groups[dimension].append(node)
         return groups

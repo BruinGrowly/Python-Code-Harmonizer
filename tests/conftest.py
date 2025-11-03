@@ -1,7 +1,7 @@
 # tests/conftest.py
 
-import sys
 import os
+import sys
 
 # Add the project root to the Python path.
 # This ensures that the 'harmonizer' package is discoverable by pytest,

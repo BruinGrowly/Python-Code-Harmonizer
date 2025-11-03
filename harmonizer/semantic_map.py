@@ -7,8 +7,9 @@ Visualizes the semantic trajectory from Intent to Execution in 4D space,
 showing WHERE in the Meaning Scaffold the disharmony occurs.
 """
 
-from typing import Dict, Tuple
-from .divine_invitation_engine_V2 import Coordinates
+from typing import Dict
+
+from harmonizer.divine_invitation_engine_V2 import Coordinates
 
 
 class SemanticMapGenerator:
@@ -165,7 +166,7 @@ class SemanticMapGenerator:
                         for dim, delta in significant_deltas
                     ]
                 )
-                return f"Function '{function_name}' operates primarily in {intent_dim} domain, but shows significant drift: {changes}."
+                return f"Function '{function_name}' operates primarily in {intent_dim} domain, but shows significant drift: {changes}."  # noqa: E501
             return f"Function '{function_name}' is semantically aligned in {intent_dim} domain."
 
         # Different dominant dimensions
@@ -255,7 +256,7 @@ class SemanticMapGenerator:
             # Format dimension name
             dim_name = f"{dim.capitalize()} ({dim[0].upper()})"
 
-            line = f"│ {dim_name:12} {intent_val:.2f}  →  {exec_val:.2f}     {delta_str:6}   {interp:20} │"
+            line = f"│ {dim_name:12} {intent_val:.2f}  →  {exec_val:.2f}     {delta_str:6}   {interp:20} │"  # noqa: E501
             lines.append(line)
 
         lines.append("└" + "─" * 70 + "┘")

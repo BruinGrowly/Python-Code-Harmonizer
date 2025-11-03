@@ -1,5 +1,6 @@
 # tests/test_harmonizer.py
 
+import argparse
 import os
 import tempfile
 import argparse

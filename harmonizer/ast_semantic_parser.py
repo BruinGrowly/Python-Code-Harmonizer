@@ -72,8 +72,6 @@ class AST_Semantic_Parser(ast.NodeVisitor):
             "connect": "love",
             "merge": "love",
             "print": "love",  # Communication is a form of Love
-            "user": "love",
-            "profile": "love",
         }
 
         self._node_map: Dict[ast.AST, str] = {}
@@ -128,6 +126,7 @@ class AST_Semantic_Parser(ast.NodeVisitor):
         self._concepts_found = set()
         for node in body:
             self.visit(node)
+
         return self._node_map, list(self._concepts_found)
 
     def _add_concept(self, node: ast.AST, concept: str):

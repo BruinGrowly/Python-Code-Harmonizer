@@ -14,21 +14,27 @@ New in v1.4:
 - Enhanced AST parser with node-to-dimension mapping.
 """
 
-import argparse
-import ast
-import fnmatch
-import json
 import os
 import sys
-from typing import Dict, List, Tuple
 
-import yaml
+# Ensure the project root is on the Python path.
+# This must be done before any local imports.
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
 
-# --- COMPONENT IMPORTS ---
-from . import divine_invitation_engine_V2 as dive
-from .ast_semantic_parser import AST_Semantic_Parser
-from .semantic_map import SemanticMapGenerator
-from .refactorer import Refactorer
+import argparse  # noqa: E402
+import ast  # noqa: E402
+import fnmatch  # noqa: E402
+import json  # noqa: E402
+from typing import Dict, List, Tuple  # noqa: E402
+
+import yaml  # noqa: E402
+
+from harmonizer import divine_invitation_engine_V2 as dive  # noqa: E402
+from harmonizer.ast_semantic_parser import AST_Semantic_Parser  # noqa: E402
+from harmonizer.refactorer import Refactorer  # noqa: E402
+from harmonizer.semantic_map import SemanticMapGenerator  # noqa: E402
 
 # --- CONFIGURATION LOADING ---
 

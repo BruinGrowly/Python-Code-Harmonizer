@@ -1,5 +1,7 @@
 # tests/test_parser.py
 
+import ast
+
 import pytest
 import ast
 
