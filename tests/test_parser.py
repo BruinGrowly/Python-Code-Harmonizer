@@ -1,9 +1,11 @@
 # tests/test_parser.py
 
+import ast
+
 import pytest
 
-from src.ast_semantic_parser import AST_Semantic_Parser
-from src.divine_invitation_engine_V2 import DivineInvitationSemanticEngine
+from harmonizer.ast_semantic_parser import AST_Semantic_Parser
+from harmonizer.divine_invitation_engine_V2 import DivineInvitationSemanticEngine
 
 
 @pytest.fixture(scope="module")
@@ -18,16 +20,12 @@ def parser():
 
 def test_intent_from_function_name(parser):
     """
-    Tests that concepts are correctly extracted from a function name, including
-    both mapped keywords and words present in the engine's vocabulary.
+    Tests that concepts are correctly extracted from a function name.
     """
     name = "get_user_by_id_and_update_status"
-    # 'get' -> information, 'update' -> power
-    # 'status' is in the core vocabulary and should also be picked up.
-    expected_concepts = {"information", "power", "status"}
-
+    # 'get' -> wisdom, 'update' -> power
+    expected_concepts = {"wisdom", "power", "status"}
     concepts = parser.get_intent_concepts(name, None)
-
     assert set(concepts) == expected_concepts
 
 
@@ -35,11 +33,8 @@ def test_intent_from_docstring(parser):
     """Tests that concepts from the docstring are merged with the name's concepts."""
     name = "process_data"
     docstring = "This function will calculate and analyze the results."
-    # 'process' is not in the map, but 'calculate' and 'analyze' map to 'wisdom'.
     expected_concepts = {"wisdom"}
-
     concepts = parser.get_intent_concepts(name, docstring)
-
     assert set(concepts) == expected_concepts
 
 
@@ -47,11 +42,8 @@ def test_intent_name_and_docstring_combined(parser):
     """Ensures concepts from both the name and docstring are found."""
     name = "get_data"
     docstring = "This function will create a new user."
-    # 'get' -> information, 'create' -> create
-    expected_concepts = {"information", "create"}
-
+    expected_concepts = {"wisdom", "power"}
     concepts = parser.get_intent_concepts(name, docstring)
-
     assert set(concepts) == expected_concepts
 
 
@@ -61,29 +53,30 @@ def test_intent_name_and_docstring_combined(parser):
 def test_execution_simple_function_call(parser):
     """Tests that a simple function call is mapped to a concept."""
     code = "delete_user(user_id)"
-    # 'delete' is in the intent map and should be picked up.
-    expected_concepts = {"force"}
-
-    # The parser expects a list of AST nodes, so we parse the code first.
-    import ast
-
+    expected_concepts = {"power"}
     body = ast.parse(code).body
-    concepts = parser.get_execution_concepts(body)
+    _, concepts = parser.get_execution_map(body)
+    assert set(concepts) == expected_concepts
 
+
+def test_execution_contextual_override(parser):
+    """
+    Tests the contextual override for `_concepts_found.add`.
+    This should be mapped to 'wisdom', not 'love'.
+    """
+    code = "self._concepts_found.add('new_concept')"
+    expected_concepts = {"wisdom"}
+    body = ast.parse(code).body
+    _, concepts = parser.get_execution_map(body)
     assert set(concepts) == expected_concepts
 
 
 def test_execution_method_call(parser):
     """Tests that a method call (e.g., db.query) is mapped correctly."""
     code = "db.query('SELECT * FROM users')"
-    # 'query' maps to 'information'
-    expected_concepts = {"information"}
-
-    import ast
-
+    expected_concepts = {"wisdom"}
     body = ast.parse(code).body
-    concepts = parser.get_execution_concepts(body)
-
+    _, concepts = parser.get_execution_map(body)
     assert set(concepts) == expected_concepts
 
 
@@ -94,14 +87,9 @@ if user.is_admin:
     for item in items:
         process_item(item)
     """
-    # 'if' -> logic, 'for' -> process
-    expected_concepts = {"logic", "process"}
-
-    import ast
-
+    expected_concepts = {"justice"}
     body = ast.parse(code).body
-    concepts = parser.get_execution_concepts(body)
-
+    _, concepts = parser.get_execution_map(body)
     assert set(concepts) == expected_concepts
 
 
@@ -114,12 +102,7 @@ except ZeroDivisionError:
     log_error("Division by zero")
     raise ValueError("Invalid operation")
     """
-    # 'try/except' -> logic, mercy; 'raise' -> power, force
-    expected_concepts = {"logic", "mercy", "power", "force"}
-
-    import ast
-
+    expected_concepts = {"justice", "love", "power"}
     body = ast.parse(code).body
-    concepts = parser.get_execution_concepts(body)
-
+    _, concepts = parser.get_execution_map(body)
     assert set(concepts) == expected_concepts
