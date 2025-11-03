@@ -3,6 +3,7 @@
 import ast
 
 import pytest
+import ast
 
 from harmonizer.ast_semantic_parser import AST_Semantic_Parser
 from harmonizer.divine_invitation_engine_V2 import DivineInvitationSemanticEngine
