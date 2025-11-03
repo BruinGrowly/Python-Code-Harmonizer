@@ -155,7 +155,22 @@ class AST_Semantic_Parser(ast.NodeVisitor):
 
         # Check for obj.method() calls (e.g., db.delete)
         if isinstance(node.func, ast.Attribute):
-            concept = self._map_word_to_concept(node.func.attr)
+            method_name = node.func.attr
+            obj_name = ""
+            if isinstance(node.func.value, ast.Attribute):
+                if (
+                    isinstance(node.func.value.value, ast.Name)
+                    and node.func.value.value.id == "self"
+                ):
+                    obj_name = node.func.value.attr
+
+            # --- CONTEXTUAL OVERRIDE (v1.4) ---
+            # If we find `self._concepts_found.add()`, this is not a "community"
+            # action, but an act of "recording information" (Wisdom).
+            if method_name == "add" and obj_name == "_concepts_found":
+                concept = "wisdom"
+            else:
+                concept = self._map_word_to_concept(method_name)
 
         # Check for simple function() calls (e.g., print)
         elif isinstance(node.func, ast.Name):
