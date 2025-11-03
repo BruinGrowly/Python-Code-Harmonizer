@@ -1,5 +1,7 @@
 pytest
-black
+black==24.4.2
+astunparse==1.6.3
 flake8
 isort
 pre-commit
+PyYAML
