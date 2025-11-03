@@ -20,7 +20,9 @@ class Refactorer:
     concrete refactoring strategies.
     """
 
-    def __init__(self, function_node: ast.FunctionDef, execution_map: Dict[ast.AST, str]):
+    def __init__(
+        self, function_node: ast.FunctionDef, execution_map: Dict[ast.AST, str]
+    ):
         self.function_node = function_node
         self.execution_map = execution_map
 
@@ -43,7 +45,10 @@ class Refactorer:
                 ast.Expr(
                     value=ast.Call(
                         func=ast.Name(id=new_func_name, ctx=ast.Load()),
-                        args=[ast.Name(id=arg.arg, ctx=ast.Load()) for arg in self.function_node.args.args],
+                        args=[
+                            ast.Name(id=arg.arg, ctx=ast.Load())
+                            for arg in self.function_node.args.args
+                        ],
                         keywords=[],
                     )
                 )
@@ -67,10 +72,7 @@ class Refactorer:
         ast.fix_missing_locations(new_module)
         final_code = ast.unparse(new_module)
 
-        return (
-            "# --- Suggested Refactoring: Dimensional Split ---\n\n"
-            + final_code
-        )
+        return "# --- Suggested Refactoring: Dimensional Split ---\n\n" + final_code
 
     def _group_nodes_by_dimension(self) -> Dict[str, List[ast.AST]]:
         """Groups the function's body nodes by their semantic dimension."""
@@ -79,7 +81,9 @@ class Refactorer:
             groups[dimension].append(node)
         return groups
 
-    def _create_new_function(self, name: str, body_nodes: List[ast.AST]) -> ast.FunctionDef:
+    def _create_new_function(
+        self, name: str, body_nodes: List[ast.AST]
+    ) -> ast.FunctionDef:
         """Creates a new function definition from a list of body nodes."""
         return ast.FunctionDef(
             name=name,

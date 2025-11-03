@@ -32,6 +32,7 @@ from .refactorer import Refactorer
 
 # --- CONFIGURATION LOADING ---
 
+
 def load_configuration() -> Dict:
     """
     Searches for and loads .harmonizer.yml from the current directory
@@ -65,6 +66,7 @@ def load_configuration() -> Dict:
 
 # --- THE HARMONIZER APPLICATION ---
 
+
 class PythonCodeHarmonizer:
     """
     Analyzes Python code for "Intent Harmony" using the DIVE-V2
@@ -86,7 +88,9 @@ class PythonCodeHarmonizer:
     ):
         self.config = config if config else {}
         self.engine = dive.DivineInvitationSemanticEngine(config=self.config)
-        self.parser = AST_Semantic_Parser(vocabulary=self.engine.vocabulary.all_keywords)
+        self.parser = AST_Semantic_Parser(
+            vocabulary=self.engine.vocabulary.all_keywords
+        )
         self.map_generator = SemanticMapGenerator()
         self.disharmony_threshold = disharmony_threshold
         self.quiet = quiet
@@ -297,14 +301,20 @@ def parse_cli_arguments() -> argparse.Namespace:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("files", nargs="+", help="Python file(s) to analyze")
-    parser.add_argument("--format", choices=["text", "json"], default="text", help="Output format")
-    parser.add_argument("--threshold", type=float, default=0.5, help="Disharmony threshold")
+    parser.add_argument(
+        "--format", choices=["text", "json"], default="text", help="Output format"
+    )
+    parser.add_argument(
+        "--threshold", type=float, default=0.5, help="Disharmony threshold"
+    )
     parser.add_argument(
         "--suggest-refactor",
         action="store_true",
         help="Suggest a refactoring for disharmonious functions.",
     )
-    parser.add_argument("--version", action="version", version="Python Code Harmonizer v1.4")
+    parser.add_argument(
+        "--version", action="version", version="Python Code Harmonizer v1.4"
+    )
     return parser.parse_args()
 
 
@@ -350,7 +360,9 @@ def execute_analysis(
         exit_code = harmonizer.get_highest_severity_code(report)
         highest_exit_code = max(highest_exit_code, exit_code)
         if output_format == "text":
-            formatted = harmonizer.format_report(report, suggest_refactor=suggest_refactor)
+            formatted = harmonizer.format_report(
+                report, suggest_refactor=suggest_refactor
+            )
             harmonizer.output_report(formatted)
     return all_reports, highest_exit_code
 
@@ -376,6 +388,7 @@ def run_cli():
         harmonizer.print_json_report(all_reports)
 
     sys.exit(highest_exit_code)
+
 
 if __name__ == "__main__":
     run_cli()

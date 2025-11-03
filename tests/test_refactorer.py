@@ -43,7 +43,11 @@ def test_dimensional_split_refactoring(parser):
     assert len(suggestion_ast.body) == 4  # 3 new functions + 1 rewritten original
 
     # Find the generated functions in the new module
-    generated_funcs = {node.name: node for node in suggestion_ast.body if isinstance(node, ast.FunctionDef)}
+    generated_funcs = {
+        node.name: node
+        for node in suggestion_ast.body
+        if isinstance(node, ast.FunctionDef)
+    }
 
     # Check for the presence of all expected functions
     assert "_validate_and_delete_user_justice" in generated_funcs

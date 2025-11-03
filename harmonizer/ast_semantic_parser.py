@@ -117,7 +117,9 @@ class AST_Semantic_Parser(ast.NodeVisitor):
             return [word for word in name_words if word in self.known_vocabulary]
         return list(concepts)
 
-    def get_execution_map(self, body: List[ast.AST]) -> Tuple[Dict[ast.AST, str], List[str]]:
+    def get_execution_map(
+        self, body: List[ast.AST]
+    ) -> Tuple[Dict[ast.AST, str], List[str]]:
         """
         Parses the function's body to map each AST node to a semantic dimension
         and return the list of concepts found.
