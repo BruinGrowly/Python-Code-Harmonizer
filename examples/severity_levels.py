@@ -599,7 +599,7 @@ def create_default_preferences(user_id):
     return {"theme": "light"}
 
 
-def save_preferences(user_id, prefs):
+def save_preferences(user_id, prefs):  # noqa: F811
     print(f"Saving preferences for user {user_id}")
 
 

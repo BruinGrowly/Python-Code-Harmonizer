@@ -141,7 +141,7 @@ def get_user_settings(user_id):
 # -----------------------------------------------------------------------------
 
 
-def get_user_settings(user_id):
+def get_user_settings(user_id):  # noqa: F811
     """
     SOLUTION: Pure read operation
 
@@ -240,7 +240,7 @@ def validate_input(data):
 # -----------------------------------------------------------------------------
 
 
-def validate_input(data):
+def validate_input(data):  # noqa: F811
     """
     SOLUTION: Pure validation
 
@@ -354,7 +354,7 @@ def check_cache_available(cache_key):
 # -----------------------------------------------------------------------------
 
 
-def check_cache_available(cache_key):
+def check_cache_available(cache_key):  # noqa: F811
     """
     SOLUTION: Pure check
 

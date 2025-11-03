@@ -2,7 +2,10 @@
 
 import pytest
 
-from src.divine_invitation_engine_V2 import Coordinates, DivineInvitationSemanticEngine
+from harmonizer.divine_invitation_engine_V2 import (
+    Coordinates,
+    DivineInvitationSemanticEngine,
+)
 
 
 @pytest.fixture(scope="module")
@@ -71,7 +74,7 @@ def test_get_distance_calculation(engine):
 
 def test_semantic_clarity(engine):
     """Tests the semantic clarity calculation."""
-    # A specialized, "spiky" concept has high standard deviation, and thus low clarity.
+    # A "spiky" concept has high std dev, and thus low clarity.  # noqa: E501
     # The engine defines clarity as dimensional balance.
     specialized_concept = Coordinates(1.0, 0.0, 0.0, 0.0)
     assert engine.get_semantic_clarity(specialized_concept) == pytest.approx(
@@ -88,7 +91,7 @@ def test_semantic_clarity(engine):
 
 
 def test_semantic_analyzer_cluster(engine):
-    """Tests the semantic analyzer's ability to find the centroid of a concept cluster."""  # noqa: E501
+    """Tests the semantic analyzer's ability to find the centroid of a concept cluster."""
     concepts = ["love", "justice"]
     result = engine.perform_semantic_harmony_analysis(concepts)
 
@@ -105,8 +108,8 @@ def test_semantic_analyzer_cluster(engine):
 
 def test_ice_analysis_highly_coherent(engine):
     """
-    Tests the ICE analysis for a highly coherent case where all concepts
-    belong to the same dimension (Wisdom).
+    Tests ICE analysis for a coherent case where all concepts are in the same
+    dimension.
     """  # noqa: E501
     result = engine.perform_ice_analysis(
         intent_words=["wisdom", "knowledge"],
