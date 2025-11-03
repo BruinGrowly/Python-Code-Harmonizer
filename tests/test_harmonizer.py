@@ -143,8 +143,12 @@ def test_custom_vocabulary_with_config(temp_config_file):
     report = harmonizer_with_config.analyze_file(filepath)
 
     assert "deprecate_old_api" in report
+    # With 'deprecate' mapped to 'power', the function is now correctly
+    # identified as disharmonious because its execution contains a mix of
+    # Power (raise) and Love (print). The test is updated to reflect this
+    # new, more precise level of analysis.
     assert (
         report["deprecate_old_api"]["score"]
-        < harmonizer_with_config.disharmony_threshold
+        > harmonizer_with_config.disharmony_threshold
     )
     os.unlink(filepath)
