@@ -60,11 +60,34 @@ class SemanticResult:
 class VocabularyManager:
     """Optimized vocabulary management with caching"""
 
-    def __init__(self):
+    def __init__(self, custom_vocabulary: Optional[Dict[str, str]] = None):
         self._keyword_map: Dict[str, Dimension] = {}
         self._word_cache: Dict[str, Tuple[Coordinates, int]] = {}
         self._ice_dimension_map: Dict[Dimension, Dimension] = {}
         self._build_complete_vocabulary()
+        if custom_vocabulary:
+            self._apply_custom_vocabulary(custom_vocabulary)
+
+    def _apply_custom_vocabulary(self, custom_vocabulary: Dict[str, str]) -> None:
+        """Applies user-defined vocabulary from the config file."""
+        import sys
+
+        applied_count = 0
+        for word, dimension_str in custom_vocabulary.items():
+            try:
+                dimension = Dimension[dimension_str.upper()]
+                self._keyword_map[word.lower()] = dimension
+                applied_count += 1
+            except KeyError:
+                print(
+                    f"WARNING: Invalid dimension '{dimension_str}' for word '{word}' in config.",
+                    file=sys.stderr,
+                )
+        if applied_count > 0:
+            print(
+                f"INFO: Applied {applied_count} custom vocabulary entries.",
+                file=sys.stderr,
+            )
 
     def _build_complete_vocabulary(self) -> None:
         """Build optimized vocabulary from all components"""
@@ -719,13 +742,15 @@ class DivineInvitationSemanticEngine:
     High-performance facade integrating all specialized sub-engines.
     """
 
-    def __init__(self):
+    def __init__(self, config: Optional[Dict] = None):
         """Initialize optimized system"""
+        self.config = config if config else {}
         self.ENGINE_VERSION = "DIVE-V2 (Optimized Production)"
         self.ANCHOR_POINT = Coordinates(1.0, 1.0, 1.0, 1.0)
 
         # Build core components
-        self.vocabulary = VocabularyManager()
+        custom_vocabulary = self.config.get("custom_vocabulary", {})
+        self.vocabulary = VocabularyManager(custom_vocabulary=custom_vocabulary)
         self.semantic_analyzer = SemanticAnalyzer(self.vocabulary, self.ANCHOR_POINT)
 
         # Build specialized sub-engines

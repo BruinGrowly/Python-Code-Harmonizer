@@ -2,8 +2,8 @@
 
 import pytest
 
-from src.ast_semantic_parser import AST_Semantic_Parser
-from src.divine_invitation_engine_V2 import DivineInvitationSemanticEngine
+from harmonizer.ast_semantic_parser import AST_Semantic_Parser
+from harmonizer.divine_invitation_engine_V2 import DivineInvitationSemanticEngine
 
 
 @pytest.fixture(scope="module")
@@ -65,6 +65,22 @@ def test_execution_simple_function_call(parser):
     expected_concepts = {"force"}
 
     # The parser expects a list of AST nodes, so we parse the code first.
+    import ast
+
+    body = ast.parse(code).body
+    concepts = parser.get_execution_concepts(body)
+
+    assert set(concepts) == expected_concepts
+
+
+def test_execution_contextual_override(parser):
+    """
+    Tests the contextual override for `_concepts_found.add`.
+    This should be mapped to 'wisdom', not 'community'.
+    """
+    code = "self._concepts_found.add('new_concept')"
+    expected_concepts = {"wisdom"}
+
     import ast
 
     body = ast.parse(code).body
