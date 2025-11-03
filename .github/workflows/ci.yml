@@ -38,12 +38,12 @@ jobs:
 
       - name: Test with pytest
         run: |
-          pytest
+          python -m pytest
 
       - name: Check Code Harmony
         run: |
           # v1.2+: Harmony check with automatic exit codes
           # Note: Currently informational as source has some disharmony
           # (This demonstrates the tool working - it found semantic issues!)
-          find src -name "*.py" -type f | xargs harmonizer || echo "⚠️ Disharmony found (tool is working correctly!)"
+          find harmonizer -name "*.py" -type f | xargs harmonizer || echo "⚠️ Disharmony found (tool is working correctly!)"
         continue-on-error: true
