@@ -218,6 +218,18 @@ def pop_cache_value(key):
 
 ---
 
+## Configuration
+
+The Harmonizer can be customized to fit your project's needs using a `.harmonizer.yml` file in your project's root directory.
+
+This allows you to:
+- **Exclude files and directories** from analysis (e.g., `tests/`, `venv/`).
+- **Define a custom vocabulary** to teach the Harmonizer about your project's specific domain language.
+
+For a complete guide to all available options, see the **[Configuration Documentation](docs/CONFIGURATION.md)**.
+
+---
+
 ## Integration Into Your Workflow
 
 ### GitHub Actions (CI/CD)

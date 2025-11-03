@@ -25,40 +25,76 @@ Previous (v1.2):
 
 import argparse
 import ast
+import fnmatch
 import json
 import os
 import sys
 from typing import Dict, List, Tuple
 
+import yaml
+
 # --- COMPONENT IMPORTS ---
-# This script assumes the following two files are in the
-# same directory or in Python's path.
+# All components are now part of the 'harmonizer' package.
 
 try:
     # 1. Import your powerful V2 engine
-    # (This assumes 'divine_invitation_engine_V2.py' is the
-    # 'Optimized Production-Ready' version)
-    from src import divine_invitation_engine_V2 as dive
+    from . import divine_invitation_engine_V2 as dive
 except ImportError:
     print("FATAL ERROR: 'divine_invitation_engine_V2.py' not found.")
-    print("Please place the V2 engine file in the same directory.")
+    print("Please place the V2 engine file in the 'harmonizer' directory.")
     sys.exit(1)
 
 try:
     # 2. Import our new "Rosetta Stone" parser
-    from src.ast_semantic_parser import AST_Semantic_Parser
+    from .ast_semantic_parser import AST_Semantic_Parser
 except ImportError:
     print("FATAL ERROR: 'ast_semantic_parser.py' not found.")
-    print("Please place the parser file in the same directory.")
+    print("Please place the parser file in the 'harmonizer' directory.")
     sys.exit(1)
 
 try:
     # 3. Import the Semantic Map Generator (v1.3 feature)
-    from src.harmonizer.semantic_map import SemanticMapGenerator
+    from .semantic_map import SemanticMapGenerator
 except ImportError:
     print("FATAL ERROR: 'semantic_map.py' not found.")
     print("Please place the semantic map file in the harmonizer directory.")
     sys.exit(1)
+
+# --- CONFIGURATION LOADING ---
+
+
+def load_configuration() -> Dict:
+    """
+    Searches for and loads .harmonizer.yml from the current directory
+    up to the root.
+    """
+    current_dir = os.getcwd()
+    while True:
+        config_path = os.path.join(current_dir, ".harmonizer.yml")
+        if os.path.exists(config_path):
+            try:
+                with open(config_path, "r", encoding="utf-8") as f:
+                    config = yaml.safe_load(f)
+                    if config:
+                        # Use stderr to avoid polluting JSON output
+                        print(
+                            f"INFO: Loaded configuration from {config_path}",
+                            file=sys.stderr,
+                        )
+                        return config
+                    return {}
+            except (yaml.YAMLError, IOError) as e:
+                print(
+                    f"WARNING: Could not load or parse config: {e}", file=sys.stderr
+                )
+                return {}
+
+        parent_dir = os.path.dirname(current_dir)
+        if parent_dir == current_dir:  # Reached file system root
+            break
+        current_dir = parent_dir
+    return {}
+
 
 # --- THE HARMONIZER APPLICATION ---
 
@@ -80,11 +116,15 @@ class PythonCodeHarmonizer:
         disharmony_threshold: float = 0.5,
         quiet: bool = False,
         show_semantic_maps: bool = True,
+        config: Dict = None,
     ):
-        # 1. Initialize your V2 engine. This is our "compass."
-        self.engine = dive.DivineInvitationSemanticEngine()
+        # 1. Store configuration
+        self.config = config if config else {}
 
-        # 2. Initialize our "Rosetta Stone" parser.
+        # 2. Initialize your V2 engine, passing the config. This is our "compass."
+        self.engine = dive.DivineInvitationSemanticEngine(config=self.config)
+
+        # 3. Initialize our "Rosetta Stone" parser.
 
         # --- HARMONIZATION FIX (v1.1) ---
         # The "Optimized" V2 engine's VocabularyManager stores its
@@ -443,16 +483,25 @@ Exit Codes:
     return parser.parse_args()
 
 
-def validate_cli_arguments(args: argparse.Namespace) -> List[str]:
+def validate_cli_arguments(args: argparse.Namespace, config: Dict) -> List[str]:
     """
-    Validates command-line arguments.
+    Validates and filters command-line arguments based on config.
     Pure Justice domain: verification and error checking.
-    Returns list of valid file paths.
+    Returns list of valid, non-excluded file paths.
     """
     valid_files = []
     invalid_files = []
+    excluded_files = []
+
+    # Get exclusion patterns from config
+    exclude_patterns = config.get("exclude", [])
 
     for file_path in args.files:
+        # Check if the file should be excluded
+        if any(fnmatch.fnmatch(file_path, pattern) for pattern in exclude_patterns):
+            excluded_files.append(file_path)
+            continue
+
         if os.path.exists(file_path):
             if file_path.endswith(".py"):
                 valid_files.append(file_path)
@@ -462,10 +511,15 @@ def validate_cli_arguments(args: argparse.Namespace) -> List[str]:
             invalid_files.append((file_path, "File not found"))
 
     # Report validation errors (Love dimension: communication)
-    if invalid_files and args.format == "text":
+    if (invalid_files or excluded_files) and args.format == "text":
         for file_path, error in invalid_files:
-            print(f"\nWARNING: {file_path} - {error}")
-            print("-" * 70)
+            print(f"\nWARNING: Skipping '{file_path}' - {error}", file=sys.stderr)
+        if excluded_files:
+            print(
+                f"\nINFO: Excluded {len(excluded_files)} file(s) based on config.",
+                file=sys.stderr,
+            )
+        print("-" * 70, file=sys.stderr)
 
     return valid_files
 
@@ -502,19 +556,22 @@ def run_cli():
     Command-line interface entry point.
     Orchestrates all dimensions: Wisdom → Justice → Power → Love.
     """
-    # 1. Wisdom: Parse and understand arguments
+    # 1. Wisdom: Parse arguments and load config
     args = parse_cli_arguments()
+    config = load_configuration()
 
     # 2. Justice: Validate arguments
-    valid_files = validate_cli_arguments(args)
+    valid_files = validate_cli_arguments(args, config)
 
     if not valid_files:
-        print("\nERROR: No valid Python files to analyze.")
+        print("\nERROR: No valid Python files to analyze.", file=sys.stderr)
         sys.exit(1)
 
     # 3. Power: Initialize harmonizer and execute analysis
     quiet = args.format == "json"
-    harmonizer = PythonCodeHarmonizer(disharmony_threshold=args.threshold, quiet=quiet)
+    harmonizer = PythonCodeHarmonizer(
+        disharmony_threshold=args.threshold, quiet=quiet, config=config
+    )
 
     all_reports, highest_exit_code = execute_analysis(
         harmonizer, valid_files, args.format

@@ -14,8 +14,8 @@ classifiers = [
 ]
 
 [project.scripts]
-harmonizer = "src.harmonizer.main:run_cli"
+harmonizer = "harmonizer.main:run_cli"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["src*"]
+include = ["harmonizer"]
