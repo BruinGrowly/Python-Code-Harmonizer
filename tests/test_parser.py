@@ -70,22 +70,6 @@ def test_execution_contextual_override(parser):
     assert set(concepts) == expected_concepts
 
 
-def test_execution_contextual_override(parser):
-    """
-    Tests the contextual override for `_concepts_found.add`.
-    This should be mapped to 'wisdom', not 'community'.
-    """
-    code = "self._concepts_found.add('new_concept')"
-    expected_concepts = {"wisdom"}
-
-    import ast
-
-    body = ast.parse(code).body
-    concepts = parser.get_execution_concepts(body)
-
-    assert set(concepts) == expected_concepts
-
-
 def test_execution_method_call(parser):
     """Tests that a method call (e.g., db.query) is mapped correctly."""
     code = "db.query('SELECT * FROM users')"

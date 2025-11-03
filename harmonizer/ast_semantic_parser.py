@@ -55,6 +55,7 @@ class AST_Semantic_Parser(ast.NodeVisitor):
             "run": "power",
             "execute": "power",
             "raise": "power",
+            "save": "power",
             # JUSTICE (Order, Rules, Logic)
             "assert": "justice",
             "try": "justice",
@@ -71,6 +72,8 @@ class AST_Semantic_Parser(ast.NodeVisitor):
             "connect": "love",
             "merge": "love",
             "print": "love",  # Communication is a form of Love
+            "user": "love",
+            "profile": "love",
         }
 
         self._node_map: Dict[ast.AST, str] = {}
