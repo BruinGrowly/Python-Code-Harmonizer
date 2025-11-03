@@ -8,7 +8,7 @@ showing WHERE in the Meaning Scaffold the disharmony occurs.
 """
 
 from typing import Dict, Tuple
-from src.divine_invitation_engine_V2 import Coordinates
+from .divine_invitation_engine_V2 import Coordinates
 
 
 class SemanticMapGenerator:
