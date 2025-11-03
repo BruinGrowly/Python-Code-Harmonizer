@@ -218,6 +218,18 @@ def pop_cache_value(key):
 
 ---
 
+## Configuration
+
+The Harmonizer can be customized to fit your project's needs using a `.harmonizer.yml` file in your project's root directory.
+
+This allows you to:
+- **Exclude files and directories** from analysis (e.g., `tests/`, `venv/`).
+- **Define a custom vocabulary** to teach the Harmonizer about your project's specific domain language.
+
+For a complete guide to all available options, see the **[Configuration Documentation](docs/CONFIGURATION.md)**.
+
+---
+
 ## Integration Into Your Workflow
 
 ### GitHub Actions (CI/CD)
@@ -323,24 +335,38 @@ This makes it **complementary, not competitive** with other tools. Use them all 
 
 ---
 
-## Proven Through Practice: Meta-Optimization
+## Proven Through Practice: The Harmonizer's Learning Loop
 
-**We used Harmonizer to optimize Harmonizer itself.**
+**The Harmonizer is not just a tool; it's a learning system. We prove this by using it to analyze and improve itself.**
 
-To validate the USP (Universal System Physics) framework, we ran the tool on its own codebase. The results:
+This process is a live demonstration of the tool's power. It finds its own flaws, guides us in fixing them, and becomes more intelligent as a result.
 
-- **Critical violations eliminated:** 5 → 0 (-100%)
-- **Disharmonious functions reduced:** 42% → 29% (-31%)
-- **Distance from Anchor Point improved:** 0.62 → 0.48 (-23%)
+### The Initial Discovery: A Vocabulary Blind Spot
 
-**Key refactoring victories:**
-1. Split `print_report()` from a 1.41 CRITICAL violation into pure dimensional functions
-2. Decomposed `run_cli()` from 1.27 CRITICAL into a clean W→J→P→L pipeline
-3. Refactored `analyze_file()` with dimensional helpers for L-J-W-P flow
+In our latest meta-analysis, the Harmonizer flagged several of its own core functions as "critically disharmonious." For example, the `visit_Raise` function, which identifies `raise` statements in code, was given a disharmony vector of `Power → Love`.
 
-**The framework works.** When applied to code architecture, the USP framework is a systematic methodology for achieving clean separation of concerns - identifying mixed responsibilities and separating them into single-purpose components.
+- **Intent (Correct):** The function's name correctly implies the `Power` dimension.
+- **Execution (Incorrect):** The tool misinterpreted the code `self._concepts_found.add(...)` as a `Love` dimension action (i.e., "adding" to a community).
 
-*See the complete meta-optimization journey:* [USP Optimization Report](docs/USP_OPTIMIZATION_REPORT.md)
+This was a **systemic false positive**. The Harmonizer was confusing an *implementation detail* (adding a string to a Python set) with the true *semantic purpose* of the function (recording a concept).
+
+### The Fix: Teaching Context
+
+Guided by this insight, we taught the Harmonizer to be more context-aware. We enhanced its parser to recognize that when the `add` method is called on the `_concepts_found` object, it's an act of **"recording information" (Wisdom)**, not "community building" (Love).
+
+### The Result: Deeper Insight
+
+After the fix, we ran the analysis again. The false positives were gone. In their place, the Harmonizer produced a much more profound and accurate insight.
+
+The `visit_Raise` function now has a disharmony vector of `Power → Wisdom`.
+
+- **Interpretation:** The tool now correctly understands that the function's **Intent** is to talk about `Power`, but its **Execution** is an act of `Wisdom` (analyzing the code and recording a concept).
+
+This is no longer a bug in the tool; it's a genuine philosophical observation about the code's structure. It has moved beyond simple bug detection and is now revealing the deep semantic patterns of the software's architecture.
+
+**The Harmonizer learned.** It used its own framework to find a weakness in its understanding of the world, and in fixing it, we made it smarter. This cycle of self-analysis and improvement is what makes the Harmonizer unique.
+
+*See the full, unprecedented journey of this discovery:* **[Meta-Analysis Report v2](docs/META_ANALYSIS_V2.md)**
 
 ---
 
