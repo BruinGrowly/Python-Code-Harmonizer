@@ -84,9 +84,7 @@ def load_configuration() -> Dict:
                         return config
                     return {}
             except (yaml.YAMLError, IOError) as e:
-                print(
-                    f"WARNING: Could not load or parse config: {e}", file=sys.stderr
-                )
+                print(f"WARNING: Could not load or parse config: {e}", file=sys.stderr)
                 return {}
 
         parent_dir = os.path.dirname(current_dir)

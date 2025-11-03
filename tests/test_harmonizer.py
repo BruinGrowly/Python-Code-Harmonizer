@@ -5,7 +5,11 @@ import tempfile
 import argparse
 import pytest
 
-from harmonizer.main import PythonCodeHarmonizer, load_configuration, validate_cli_arguments
+from harmonizer.main import (
+    PythonCodeHarmonizer,
+    load_configuration,
+    validate_cli_arguments,
+)
 
 # A self-contained Python script to be used for testing.
 # It contains one harmonious function and one disharmonious one.
