@@ -15,11 +15,6 @@ from typing import Dict, List
 
 import black
 
-try:
-    from ast import unparse
-except ImportError:
-    from astunparse import unparse
-
 
 class Refactorer:
     """
@@ -90,7 +85,7 @@ class Refactorer:
 
         # Fix missing location info and unparse the entire module
         ast.fix_missing_locations(new_module)
-        unformatted_code = unparse(new_module)
+        unformatted_code = ast.unparse(new_module)
 
         # Format the generated code using black
         try:
