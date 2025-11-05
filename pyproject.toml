@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "PythonCodeHarmonizer"
-version = "1.1.0"
+version = "1.4.0"
 description = "A semantic code debugger."
 readme = "README.md"
 license = { file="LICENSE" }
@@ -15,6 +15,9 @@ classifiers = [
 
 [project.scripts]
 harmonizer = "harmonizer.main:run_cli"
+
+[project.optional-dependencies]
+refactor = ["black>=24.4.2"]
 
 [tool.setuptools.packages.find]
 where = ["."]
