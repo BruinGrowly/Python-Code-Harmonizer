@@ -4,7 +4,10 @@ Demo: How semantic naming helps the Harmonizer
 Shows practical application of the validated mixing formula
 """
 
-from harmonizer.divine_invitation_engine_V2 import DivineInvitationSemanticEngine, Coordinates
+from harmonizer.divine_invitation_engine_V2 import (
+    DivineInvitationSemanticEngine,
+    Coordinates,
+)
 from harmonizer.semantic_naming import SemanticNamingEngine
 
 
@@ -31,12 +34,16 @@ def demo_1_detect_and_suggest():
     print(f"\nIntent (function name):  {intent_result.coordinates}")
     print(f"Execution (body):        {execution_result.coordinates}")
 
-    distance = engine.get_distance(intent_result.coordinates, execution_result.coordinates)
+    distance = engine.get_distance(
+        intent_result.coordinates, execution_result.coordinates
+    )
     print(f"Disharmony distance:     {distance:.3f} ⚠️ HIGH!")
 
     # Suggest better names based on actual execution
     print("\n✅ SUGGESTED FIXES based on execution semantics:")
-    suggestions = namer.suggest_names(execution_result.coordinates, context="user", top_n=5)
+    suggestions = namer.suggest_names(
+        execution_result.coordinates, context="user", top_n=5
+    )
 
     for name, score in suggestions:
         print(f"  • {name:25s} (match: {score:.1%})")
@@ -68,7 +75,8 @@ def demo_2_generate_from_intent():
 
     # Show what the function should do
     print("\n📋 Generated function skeleton:")
-    print(f"""
+    print(
+        f"""
 def {suggestions[0][0]}(user_input):
     '''
     {namer.explain_coordinates(result.coordinates)}
@@ -87,7 +95,8 @@ def {suggestions[0][0]}(user_input):
         )
 
     return ValidationResult(valid=True)
-""")
+"""
+    )
 
 
 def demo_3_refactoring_suggestion():
@@ -101,7 +110,8 @@ def demo_3_refactoring_suggestion():
 
     # Analyze a multi-purpose function
     print("\n⚠️  PROBLEMATIC CODE (does too much):")
-    print("""
+    print(
+        """
 def process_user(user_data):
     # Validation (Justice)
     if not user_data.is_valid:
@@ -118,15 +128,16 @@ def process_user(user_data):
 
     # Analytics (Wisdom)
     log_user_metrics(user_data)
-""")
+"""
+    )
 
     # Analyze each operation
     operations = {
-        'validation': 'validate user data',
-        'transformation': 'transform data',
-        'storage': 'save database',
-        'notification': 'send email',
-        'analytics': 'log metrics'
+        "validation": "validate user data",
+        "transformation": "transform data",
+        "storage": "save database",
+        "notification": "send email",
+        "analytics": "log metrics",
     }
 
     print("\n🔍 SEMANTIC ANALYSIS OF OPERATIONS:")
@@ -143,9 +154,9 @@ def process_user(user_data):
 
     # Group by semantic similarity
     groups = {
-        'validation': ['validation'],
-        'processing': ['transformation', 'storage'],
-        'notification': ['notification', 'analytics']
+        "validation": ["validation"],
+        "processing": ["transformation", "storage"],
+        "notification": ["notification", "analytics"],
     }
 
     for group_name, ops in groups.items():
@@ -155,11 +166,11 @@ def process_user(user_data):
             love=sum(coords_map[op].love for op in ops) / len(ops),
             justice=sum(coords_map[op].justice for op in ops) / len(ops),
             power=sum(coords_map[op].power for op in ops) / len(ops),
-            wisdom=sum(coords_map[op].wisdom for op in ops) / len(ops)
+            wisdom=sum(coords_map[op].wisdom for op in ops) / len(ops),
         )
 
         suggestions = namer.suggest_names(group_coords, context="user", top_n=3)
-        print(f"  Suggested names:")
+        print("  Suggested names:")
         for name, score in suggestions:
             print(f"    • {name} (match: {score:.1%})")
 
@@ -205,7 +216,9 @@ def demo_4_code_review():
             # Suggest better name
             suggestions = namer.suggest_names(actual.coordinates, top_n=1)
             if suggestions:
-                print(f"   💡 Suggest: {suggestions[0][0]} (match: {suggestions[0][1]:.1%})")
+                print(
+                    f"   💡 Suggest: {suggestions[0][0]} (match: {suggestions[0][1]:.1%})"
+                )
         print()
 
 
