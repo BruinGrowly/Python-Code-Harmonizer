@@ -451,7 +451,14 @@ class MathematicalInferenceEngine:
 
 
 class GeopoliticalAnalyzer:
-    """Optimized geopolitical analysis"""
+    """
+    Optimized geopolitical analysis
+
+    NOTE: This class is currently not integrated into the main analysis pipeline.
+    It provides experimental capabilities for analyzing entity postures and relationships
+    in a geopolitical context using the 4D semantic framework. Available for future
+    extensions or custom use cases.
+    """
 
     def __init__(self, vocab_manager: VocabularyManager, analyzer: SemanticAnalyzer):
         self.vocab = vocab_manager

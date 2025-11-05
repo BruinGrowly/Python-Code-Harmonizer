@@ -34,7 +34,7 @@ jobs:
           # Exit codes: 0=harmonious, 1=medium, 2=high, 3=critical
           # Note: Currently informational as source code itself has some disharmony
           # (main.py functions do more than their names suggest - great meta example!)
-          find src -name "*.py" -type f | xargs harmonizer || {
+          find harmonizer -name "*.py" -type f | xargs harmonizer || {
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             echo "⚠️ Source code has disharmony (demonstrates tool working!)"
             echo "   This is a great example of semantic issues the tool catches."
@@ -76,7 +76,7 @@ jobs:
           echo "📋 Generating detailed JSON harmony report..."
 
           # Generate JSON report for all Python files
-          find src examples tests -name "*.py" -type f | xargs harmonizer --format json > harmony-report.json 2>/dev/null || true
+          find harmonizer examples tests -name "*.py" -type f | xargs harmonizer --format json > harmony-report.json 2>/dev/null || true
 
           # Display summary if report was generated
           if [ -f harmony-report.json ] && [ -s harmony-report.json ]; then
@@ -170,7 +170,7 @@ jobs:
 
           # Use stricter threshold (0.3 instead of default 0.5)
           # This catches even minor semantic drift
-          if find src -name "*.py" -type f | xargs harmonizer --threshold 0.3; then
+          if find harmonizer -name "*.py" -type f | xargs harmonizer --threshold 0.3; then
             echo "✅ Code meets excellent harmony standards!"
           else
             echo ""

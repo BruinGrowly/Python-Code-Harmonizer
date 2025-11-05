@@ -55,7 +55,7 @@ We use `black` for code formatting and `flake8` for linting to ensure a consiste
 Before you commit your changes, please run `black` to automatically format your code:
 
 ```sh
-black src/ tests/
+black harmonizer/ tests/
 ```
 
 ### Linting
@@ -63,7 +63,7 @@ black src/ tests/
 You can check for any style issues or potential errors with `flake8`:
 
 ```sh
-flake8 src/ tests/
+flake8 harmonizer/ tests/
 ```
 
 Our Continuous Integration (CI) pipeline will automatically check for formatting and linting issues, so it's a good idea to run these tools locally before pushing your changes.
