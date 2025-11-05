@@ -22,21 +22,21 @@ class TestInitialization:
     def test_engine_initialization(self, naming_engine):
         """Verify the naming engine initializes correctly"""
         assert naming_engine is not None
-        assert hasattr(naming_engine, 'action_verbs')
-        assert hasattr(naming_engine, 'object_nouns')
+        assert hasattr(naming_engine, "action_verbs")
+        assert hasattr(naming_engine, "object_nouns")
 
     def test_action_verbs_loaded(self, naming_engine):
         """Verify action verbs dictionary is populated"""
         assert len(naming_engine.action_verbs) > 0
-        assert 'validate' in naming_engine.action_verbs
-        assert 'create' in naming_engine.action_verbs
-        assert 'analyze' in naming_engine.action_verbs
+        assert "validate" in naming_engine.action_verbs
+        assert "create" in naming_engine.action_verbs
+        assert "analyze" in naming_engine.action_verbs
 
     def test_object_nouns_loaded(self, naming_engine):
         """Verify object nouns list is populated"""
         assert len(naming_engine.object_nouns) > 0
-        assert 'user' in naming_engine.object_nouns
-        assert 'data' in naming_engine.object_nouns
+        assert "user" in naming_engine.object_nouns
+        assert "data" in naming_engine.object_nouns
 
 
 class TestSuggestionGeneration:
@@ -71,8 +71,11 @@ class TestSuggestionGeneration:
 
         # Should suggest justice verbs like validate, verify, check
         names = [s[0] for s in suggestions]
-        assert any(verb in name for verb in ['validate', 'verify', 'check', 'ensure']
-                   for name in names)
+        assert any(
+            verb in name
+            for verb in ["validate", "verify", "check", "ensure"]
+            for name in names
+        )
 
     def test_suggest_names_wisdom_dominant(self, naming_engine):
         """Test suggestions for a wisdom-dominant function"""
@@ -82,8 +85,11 @@ class TestSuggestionGeneration:
 
         # Should suggest wisdom verbs like analyze, calculate, evaluate
         names = [s[0] for s in suggestions]
-        assert any(verb in name for verb in ['analyze', 'calculate', 'evaluate', 'compute']
-                   for name in names)
+        assert any(
+            verb in name
+            for verb in ["analyze", "calculate", "evaluate", "compute"]
+            for name in names
+        )
 
     def test_suggest_names_love_dominant(self, naming_engine):
         """Test suggestions for a love-dominant function"""
@@ -217,7 +223,9 @@ class TestCoordinateExplanations:
         explanation = naming_engine.explain_coordinates(coords)
 
         assert "power" in explanation.lower()
-        assert "action" in explanation.lower() or "transformation" in explanation.lower()
+        assert (
+            "action" in explanation.lower() or "transformation" in explanation.lower()
+        )
 
     def test_explain_coordinates_balanced(self, naming_engine):
         """Test explanation for balanced coordinates"""
@@ -253,31 +261,31 @@ class TestDominantDimension:
         """Test dominant dimension detection for power"""
         coords = Coordinates(love=0.1, justice=0.1, power=0.7, wisdom=0.1)
         dominant = naming_engine._get_dominant_dimension(coords)
-        assert dominant == 'power'
+        assert dominant == "power"
 
     def test_get_dominant_dimension_justice(self, naming_engine):
         """Test dominant dimension detection for justice"""
         coords = Coordinates(love=0.1, justice=0.7, power=0.1, wisdom=0.1)
         dominant = naming_engine._get_dominant_dimension(coords)
-        assert dominant == 'justice'
+        assert dominant == "justice"
 
     def test_get_dominant_dimension_wisdom(self, naming_engine):
         """Test dominant dimension detection for wisdom"""
         coords = Coordinates(love=0.1, justice=0.1, power=0.1, wisdom=0.7)
         dominant = naming_engine._get_dominant_dimension(coords)
-        assert dominant == 'wisdom'
+        assert dominant == "wisdom"
 
     def test_get_dominant_dimension_love(self, naming_engine):
         """Test dominant dimension detection for love"""
         coords = Coordinates(love=0.7, justice=0.1, power=0.1, wisdom=0.1)
         dominant = naming_engine._get_dominant_dimension(coords)
-        assert dominant == 'love'
+        assert dominant == "love"
 
     def test_get_dominant_dimension_from_tuple(self, naming_engine):
         """Test dominant dimension detection from tuple"""
         vec = (0.1, 0.7, 0.1, 0.1)
         dominant = naming_engine._get_dominant_dimension_from_tuple(vec)
-        assert dominant == 'justice'
+        assert dominant == "justice"
 
 
 class TestEdgeCases:
@@ -315,28 +323,28 @@ class TestVerbCoordinateAccuracy:
 
     def test_validate_verb_is_justice_dominant(self, naming_engine):
         """Verify 'validate' is primarily Justice"""
-        coords = naming_engine.action_verbs['validate']
+        coords = naming_engine.action_verbs["validate"]
         assert coords[1] > coords[0]  # Justice > Love
         assert coords[1] > coords[2]  # Justice > Power
         assert coords[1] > coords[3]  # Justice > Wisdom
 
     def test_create_verb_is_power_dominant(self, naming_engine):
         """Verify 'create' is primarily Power"""
-        coords = naming_engine.action_verbs['create']
+        coords = naming_engine.action_verbs["create"]
         assert coords[2] > coords[0]  # Power > Love
         assert coords[2] > coords[1]  # Power > Justice
         assert coords[2] > coords[3]  # Power > Wisdom
 
     def test_analyze_verb_is_wisdom_dominant(self, naming_engine):
         """Verify 'analyze' is primarily Wisdom"""
-        coords = naming_engine.action_verbs['analyze']
+        coords = naming_engine.action_verbs["analyze"]
         assert coords[3] > coords[0]  # Wisdom > Love
         assert coords[3] > coords[1]  # Wisdom > Justice
         assert coords[3] > coords[2]  # Wisdom > Power
 
     def test_care_for_verb_is_love_dominant(self, naming_engine):
         """Verify 'care_for' is primarily Love"""
-        coords = naming_engine.action_verbs['care_for']
+        coords = naming_engine.action_verbs["care_for"]
         assert coords[0] > coords[1]  # Love > Justice
         assert coords[0] > coords[2]  # Love > Power
         assert coords[0] > coords[3]  # Love > Wisdom
@@ -345,8 +353,9 @@ class TestVerbCoordinateAccuracy:
         """Verify all verb coordinates are normalized (sum to ~1.0)"""
         for verb, coords in naming_engine.action_verbs.items():
             total = sum(coords)
-            assert total == pytest.approx(1.0, abs=0.01), \
-                f"Verb '{verb}' coordinates sum to {total}, expected ~1.0"
+            assert total == pytest.approx(
+                1.0, abs=0.01
+            ), f"Verb '{verb}' coordinates sum to {total}, expected ~1.0"
 
 
 class TestIntegrationWithDIVE:
@@ -354,7 +363,9 @@ class TestIntegrationWithDIVE:
 
     def test_suggest_names_with_dive_coordinates(self, naming_engine):
         """Test that suggestions work with actual DIVE-generated coordinates"""
-        from harmonizer.divine_invitation_engine_V2 import DivineInvitationSemanticEngine
+        from harmonizer.divine_invitation_engine_V2 import (
+            DivineInvitationSemanticEngine,
+        )
 
         dive_engine = DivineInvitationSemanticEngine()
         result = dive_engine.analyze_text("validate user input")
