@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "PythonCodeHarmonizer"
-version = "1.4.0"
-description = "A semantic code debugger."
+version = "2.0.0"
+description = "The world's first semantic code debugger with a mathematically proven foundation."
 readme = "README.md"
 license = { file="LICENSE" }
 requires-python = ">=3.8"
