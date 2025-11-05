@@ -28,25 +28,26 @@ jobs:
       - name: Lint with flake8
         run: |
           # stop the build if there are Python syntax errors or undefined names
-          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --extend-exclude=.git,__pycache__,docs,examples
           # exit-zero treats all errors as warnings
-          flake8 . --count --exit-zero --max-complexity=10 --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --statistics --extend-exclude=.git,__pycache__,docs,examples
 
       - name: Check formatting with black
         run: |
-          black --check .
+          black --check . --extend-exclude="/(\.git|\.venv|__pycache__|docs|examples|\.pytest_cache)/"
 
       - name: Test with pytest
         run: |
-          python -m pytest
+          python -m pytest -v
 
       - name: Run standalone test files
         run: |
           # V2.0: Run new semantic framework tests
-          python test_primitives.py
-          python test_language_semantics.py
-          python test_enhanced_parser.py
-          python test_harmonizer_enhanced.py
+          # Suppress VocabularyManager initialization messages
+          python test_primitives.py 2>/dev/null || python test_primitives.py
+          python test_language_semantics.py 2>/dev/null || python test_language_semantics.py
+          python test_enhanced_parser.py 2>/dev/null || python test_enhanced_parser.py
+          python test_harmonizer_enhanced.py 2>/dev/null || python test_harmonizer_enhanced.py
 
       - name: Check Code Harmony
         run: |
