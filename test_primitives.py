@@ -21,7 +21,7 @@ def test_primitives():
     # Test 1: LOVE primitive
     print("\n1. LOVE PRIMITIVE")
     love_result = engine.analyze_text("love compassion kindness care")
-    print(f"   Text: 'love compassion kindness care'")
+    print("   Text: 'love compassion kindness care'")
     print(f"   Coordinates: {love_result.coordinates}")
     print(f"   LOVE value: {love_result.coordinates.love:.3f}")
     assert love_result.coordinates.love > 0.8, "LOVE dimension should be dominant"
@@ -30,16 +30,18 @@ def test_primitives():
     # Test 2: JUSTICE primitive
     print("\n2. JUSTICE PRIMITIVE")
     justice_result = engine.analyze_text("justice truth fairness law order")
-    print(f"   Text: 'justice truth fairness law order'")
+    print("   Text: 'justice truth fairness law order'")
     print(f"   Coordinates: {justice_result.coordinates}")
     print(f"   JUSTICE value: {justice_result.coordinates.justice:.3f}")
-    assert justice_result.coordinates.justice > 0.8, "JUSTICE dimension should be dominant"
+    assert (
+        justice_result.coordinates.justice > 0.8
+    ), "JUSTICE dimension should be dominant"
     print("   ✓ JUSTICE primitive working correctly")
 
     # Test 3: POWER primitive
     print("\n3. POWER PRIMITIVE")
     power_result = engine.analyze_text("power strength action control execute")
-    print(f"   Text: 'power strength action control execute'")
+    print("   Text: 'power strength action control execute'")
     print(f"   Coordinates: {power_result.coordinates}")
     print(f"   POWER value: {power_result.coordinates.power:.3f}")
     assert power_result.coordinates.power > 0.8, "POWER dimension should be dominant"
@@ -48,7 +50,7 @@ def test_primitives():
     # Test 4: WISDOM primitive
     print("\n4. WISDOM PRIMITIVE")
     wisdom_result = engine.analyze_text("wisdom knowledge understanding analysis")
-    print(f"   Text: 'wisdom knowledge understanding analysis'")
+    print("   Text: 'wisdom knowledge understanding analysis'")
     print(f"   Coordinates: {wisdom_result.coordinates}")
     print(f"   WISDOM value: {wisdom_result.coordinates.wisdom:.3f}")
     assert wisdom_result.coordinates.wisdom > 0.8, "WISDOM dimension should be dominant"
@@ -57,7 +59,7 @@ def test_primitives():
     # Test 5: Mixed coordinates
     print("\n5. MIXED COORDINATES")
     mixed_result = engine.analyze_text("love justice power wisdom")
-    print(f"   Text: 'love justice power wisdom'")
+    print("   Text: 'love justice power wisdom'")
     print(f"   Coordinates: {mixed_result.coordinates}")
     print(f"   L={mixed_result.coordinates.love:.3f}, ", end="")
     print(f"J={mixed_result.coordinates.justice:.3f}, ", end="")
