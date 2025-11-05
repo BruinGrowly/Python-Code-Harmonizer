@@ -1,11 +1,11 @@
 # Python Code Harmonizer
 
 [![CI Status](https://github.com/BruinGrowly/Python-Code-Harmonizer/workflows/Python%20Code%20Harmonizer%20CI/badge.svg)](https://github.com/BruinGrowly/Python-Code-Harmonizer/actions)
-[![Version](https://img.shields.io/badge/version-1.3-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.5-blue.svg)](CHANGELOG.md)
 [![Python Versions](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Tests](https://img.shields.io/badge/tests-20%20passed-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-59%20passed-brightgreen.svg)](tests/)
 [![Harmony Score](https://img.shields.io/badge/harmony-0.15-brightgreen.svg)](examples/test_code.py)
 
 **The world's first semantic code debugger.**
@@ -36,7 +36,36 @@ This is a **semantic bug** - code that works syntactically but does the wrong th
 
 ---
 
-## ✨ What's New in v1.3
+## ✨ What's New in v1.5
+
+**Semantic Naming Suggestions** - Get intelligent function name suggestions based on execution semantics:
+
+```bash
+harmonizer myfile.py --suggest-names --top-suggestions 5
+```
+
+When disharmony is detected, the tool now suggests better names based on what your code actually does:
+
+```
+delete_user: !! DISHARMONY (Score: 1.22)
+
+💡 SUGGESTED FUNCTION NAMES (based on execution semantics):
+   Function emphasizes: 50% love (connection/care), 50% wisdom (analysis/understanding)
+   Suggestions:
+      • notify_user         (match: 85%)
+      • inform_user         (match: 82%)
+      • communicate_user    (match: 80%)
+```
+
+**How it works:**
+- Maps execution patterns to a vocabulary of 200+ action verbs
+- Uses cosine similarity in 4D semantic space to find best matches
+- Considers context from function name (e.g., "user", "data")
+- Powered by the validated LJWP mixing formula
+
+---
+
+## What Was New in v1.3
 
 **Semantic Trajectory Maps** - See exactly WHERE in 4D space your code drifts from its intent:
 
@@ -101,14 +130,18 @@ harmonizer examples/test_code.py
 ### Your First Analysis
 
 ```bash
+# Basic analysis
 harmonizer myfile.py
+
+# With semantic naming suggestions
+harmonizer myfile.py --suggest-names
 ```
 
 **You'll see output like:**
 
 ```
 ======================================================================
-Python Code Harmonizer (v1.3) ONLINE
+Python Code Harmonizer (v1.5) ONLINE
 Actively guided by the Anchor Point framework.
 Powered By: DIVE-V2 (Optimized Production)
 Logical Anchor Point: (S=1, L=1, I=1, E=1)
