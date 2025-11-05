@@ -18,7 +18,6 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     # WISDOM-DOMINANT OPERATIONS (Information & Knowledge)
     # Semantic signature: (L=0.1, J=0.1, P=0.1, W=0.7)
     # ====================================================================
-
     # Information retrieval
     "get": "wisdom",
     "fetch": "wisdom",
@@ -30,7 +29,6 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "search": "wisdom",
     "lookup": "wisdom",
     "access": "wisdom",
-
     # Computation & analysis
     "calculate": "wisdom",
     "compute": "wisdom",
@@ -42,7 +40,6 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "sum": "wisdom",
     "average": "wisdom",
     "aggregate": "wisdom",
-
     # Understanding & interpretation
     "parse": "wisdom",
     "interpret": "wisdom",
@@ -50,14 +47,12 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "decipher": "wisdom",
     "understand": "wisdom",
     "comprehend": "wisdom",
-
     # Knowledge representation
     "represent": "wisdom",
     "model": "wisdom",
     "describe": "wisdom",
     "define": "wisdom",
     "specify": "wisdom",
-
     # Observation & monitoring
     "observe": "wisdom",
     "monitor": "wisdom",
@@ -65,16 +60,13 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "track": "wisdom",
     "log": "wisdom",
     "record": "wisdom",
-
     # Returns are WISDOM (giving information back)
     "return": "wisdom",
     "yield": "wisdom",
-
     # ====================================================================
     # JUSTICE-DOMINANT OPERATIONS (Correctness & Validation)
     # Semantic signature: (L=0.1, J=0.7, P=0.1, W=0.1)
     # ====================================================================
-
     # Validation & verification
     "validate": "justice",
     "verify": "justice",
@@ -83,26 +75,22 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "ensure": "justice",
     "confirm": "justice",
     "certify": "justice",
-
     # Enforcement & rules
     "enforce": "justice",
     "assert": "justice",
     "require": "justice",
     "demand": "justice",
     "mandate": "justice",
-
     # Comparison & equality
     "compare": "justice",
     "equals": "justice",
     "match": "justice",
     "differs": "justice",
-
     # Filtering & selection
     "filter": "justice",
     "select": "justice",
     "reject": "justice",
     "accept": "justice",
-
     # Authorization & permission
     "authorize": "justice",
     "authenticate": "justice",
@@ -111,26 +99,22 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "deny": "justice",
     "restrict": "justice",
     "approve": "justice",
-
     # Boolean predicates (is_*, has_*, can_*)
     "is": "justice",
     "has": "justice",
     "can": "justice",
     "should": "justice",
     "must": "justice",
-
     # Ordering & structuring
     "order": "justice",
     "sort": "justice",
     "arrange": "justice",
     "organize": "justice",
     "structure": "justice",
-
     # ====================================================================
     # POWER-DOMINANT OPERATIONS (Execution & Transformation)
     # Semantic signature: (L=0.1, J=0.1, P=0.7, W=0.1)
     # ====================================================================
-
     # Creation & generation
     "create": "power",
     "build": "power",
@@ -141,7 +125,6 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "spawn": "power",
     "initialize": "power",
     "instantiate": "power",
-
     # Modification & transformation
     "modify": "power",
     "update": "power",
@@ -152,7 +135,6 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "mutate": "power",
     "edit": "power",
     "revise": "power",
-
     # Destruction & removal
     "delete": "power",
     "remove": "power",
@@ -162,7 +144,6 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "purge": "power",
     "drop": "power",
     "truncate": "power",
-
     # Storage operations
     "save": "power",
     "store": "power",
@@ -171,7 +152,6 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "insert": "power",
     "append": "power",
     "prepend": "power",
-
     # Execution & control
     "execute": "power",
     "run": "power",
@@ -187,7 +167,6 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "pause": "power",
     "resume": "power",
     "restart": "power",
-
     # State management
     "set": "power",
     "reset": "power",
@@ -196,23 +175,19 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "disable": "power",
     "activate": "power",
     "deactivate": "power",
-
     # Processing
     "process": "power",
     "handle": "power",
     "apply": "power",
     "render": "power",
     "compile": "power",
-
     # Raising errors is POWER (forcing exception)
     "raise": "power",
     "throw": "power",
-
     # ====================================================================
     # LOVE-DOMINANT OPERATIONS (Connection & Communication)
     # Semantic signature: (L=0.7, J=0.1, P=0.1, W=0.1)
     # ====================================================================
-
     # Connection & integration
     "connect": "love",
     "link": "love",
@@ -225,7 +200,6 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "combine": "love",
     "unite": "love",
     "integrate": "love",
-
     # Communication & notification
     "send": "love",
     "notify": "love",
@@ -237,46 +211,39 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "signal": "love",
     "alert": "love",
     "message": "love",
-
     # Composition & building relationships
     "compose": "love",
     "assemble": "love",
     "aggregate": "love",
     "collect": "love",
     "gather": "love",
-
     # Sharing & distribution
     "share": "love",
     "distribute": "love",
     "spread": "love",
     "propagate": "love",
-
     # Synchronization & coordination
     "sync": "love",
     "synchronize": "love",
     "coordinate": "love",
     "orchestrate": "love",
-
     # Output & display (communication to user)
     "print": "love",
     "display": "love",
     "show": "love",
     "render": "love",
     "present": "love",
-
     # API & interface operations
     "expose": "love",
     "provide": "love",
     "serve": "love",
     "offer": "love",
-
     # Adding to collections is LOVE (community building)
     # UNLESS it's to a specific technical collection like _concepts_found
     # That case is handled specially in the parser
     "add": "love",
     "include": "love",
     "incorporate": "love",
-
     # Exception handling is LOVE (mercy, graceful degradation)
     "handle": "love",
     "catch": "love",
@@ -287,8 +254,18 @@ PROGRAMMING_VERBS: Dict[str, str] = {
 # Control flow keywords - these are recognized differently
 # They are always JUSTICE (logical structure)
 CONTROL_FLOW_KEYWORDS = {
-    "if", "else", "elif", "for", "while", "with", "try", "except",
-    "finally", "assert", "break", "continue"
+    "if",
+    "else",
+    "elif",
+    "for",
+    "while",
+    "with",
+    "try",
+    "except",
+    "finally",
+    "assert",
+    "break",
+    "continue",
 }
 
 # Special cases that require context
@@ -314,14 +291,12 @@ COMPOUND_PATTERNS: Dict[str, str] = {
     "query_database": "wisdom",
     "calculate_total": "wisdom",
     "compute_hash": "wisdom",
-
     # JUSTICE patterns
     "validate_input": "justice",
     "check_permission": "justice",
     "verify_token": "justice",
     "test_condition": "justice",
     "ensure_valid": "justice",
-
     # POWER patterns
     "create_user": "power",
     "delete_record": "power",
@@ -329,7 +304,6 @@ COMPOUND_PATTERNS: Dict[str, str] = {
     "save_file": "power",
     "execute_command": "power",
     "process_request": "power",
-
     # LOVE patterns
     "send_notification": "love",
     "notify_user": "love",
@@ -337,6 +311,7 @@ COMPOUND_PATTERNS: Dict[str, str] = {
     "join_tables": "love",
     "broadcast_event": "love",
 }
+
 
 def get_semantic_dimension(verb: str, context: str = "default") -> str:
     """
@@ -412,6 +387,7 @@ if __name__ == "__main__":
 
     # Show distribution
     from collections import Counter
+
     distribution = Counter(PROGRAMMING_VERBS.values())
     print()
     print("Distribution across dimensions:")

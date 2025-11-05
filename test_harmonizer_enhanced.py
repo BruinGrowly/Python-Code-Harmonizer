@@ -43,10 +43,10 @@ def analyze_function_with_v2(code: str, function_name: str):
     exec_coords = exec_result.coordinates
 
     disharmony = (
-        (intent_coords.love - exec_coords.love) ** 2 +
-        (intent_coords.justice - exec_coords.justice) ** 2 +
-        (intent_coords.power - exec_coords.power) ** 2 +
-        (intent_coords.wisdom - exec_coords.wisdom) ** 2
+        (intent_coords.love - exec_coords.love) ** 2
+        + (intent_coords.justice - exec_coords.justice) ** 2
+        + (intent_coords.power - exec_coords.power) ** 2
+        + (intent_coords.wisdom - exec_coords.wisdom) ** 2
     ) ** 0.5
 
     return {
@@ -66,33 +66,37 @@ def print_analysis_report(result):
     print(f"FUNCTION: {result['function_name']}")
     print("=" * 70)
 
-    if result['docstring']:
+    if result["docstring"]:
         print(f"\nDocstring: {result['docstring'][:60]}...")
 
     print(f"\nINTENT (from function name):")
     print(f"  Concepts: {result['intent_concepts']}")
-    print(f"  Coordinates: L={result['intent_coords'].love:.3f}, "
-          f"J={result['intent_coords'].justice:.3f}, "
-          f"P={result['intent_coords'].power:.3f}, "
-          f"W={result['intent_coords'].wisdom:.3f}")
+    print(
+        f"  Coordinates: L={result['intent_coords'].love:.3f}, "
+        f"J={result['intent_coords'].justice:.3f}, "
+        f"P={result['intent_coords'].power:.3f}, "
+        f"W={result['intent_coords'].wisdom:.3f}"
+    )
 
     print(f"\nEXECUTION (from function body):")
     print(f"  Concepts: {result['exec_concepts']}")
-    print(f"  Coordinates: L={result['exec_coords'].love:.3f}, "
-          f"J={result['exec_coords'].justice:.3f}, "
-          f"P={result['exec_coords'].power:.3f}, "
-          f"W={result['exec_coords'].wisdom:.3f}")
+    print(
+        f"  Coordinates: L={result['exec_coords'].love:.3f}, "
+        f"J={result['exec_coords'].justice:.3f}, "
+        f"P={result['exec_coords'].power:.3f}, "
+        f"W={result['exec_coords'].wisdom:.3f}"
+    )
 
     print(f"\nDISHARMONY SCORE: {result['disharmony']:.3f}")
 
     # Classify harmony level
-    if result['disharmony'] < 0.3:
+    if result["disharmony"] < 0.3:
         status = "✅ EXCELLENT HARMONY"
-    elif result['disharmony'] < 0.5:
+    elif result["disharmony"] < 0.5:
         status = "✅ GOOD HARMONY"
-    elif result['disharmony'] < 0.8:
+    elif result["disharmony"] < 0.8:
         status = "⚠️  MEDIUM DISHARMONY"
-    elif result['disharmony'] < 1.2:
+    elif result["disharmony"] < 1.2:
         status = "❗ HIGH DISHARMONY"
     else:
         status = "🚨 CRITICAL DISHARMONY"
@@ -115,7 +119,7 @@ def main():
     user_data = database.query(f"SELECT * FROM users WHERE id = {user_id}")
     return user_data''',
             "func_name": "get_user_by_id",
-            "expected": "EXCELLENT"
+            "expected": "EXCELLENT",
         },
         {
             "name": "HARMONIOUS: validate_email_format",
@@ -125,7 +129,7 @@ def main():
         return False
     return True''',
             "func_name": "validate_email_format",
-            "expected": "EXCELLENT"
+            "expected": "EXCELLENT",
         },
         {
             "name": "HARMONIOUS: send_welcome_email",
@@ -134,7 +138,7 @@ def main():
     message = f"Welcome to our platform!"
     email_service.send(to=user_email, body=message)''',
             "func_name": "send_welcome_email",
-            "expected": "EXCELLENT"
+            "expected": "EXCELLENT",
         },
         {
             "name": "DISHARMONIOUS: check_user_permissions (BUG!)",
@@ -143,7 +147,7 @@ def main():
     database.delete_user(user_token)
     return "Deleted"''',
             "func_name": "check_user_permissions",
-            "expected": "CRITICAL"
+            "expected": "CRITICAL",
         },
         {
             "name": "DISHARMONIOUS: get_cached_data (BUG!)",
@@ -153,7 +157,7 @@ def main():
     del cache[cache_key]
     return value''',
             "func_name": "get_cached_data",
-            "expected": "MEDIUM"
+            "expected": "MEDIUM",
         },
         {
             "name": "MIXED: fetch_validate_and_save_user",
@@ -166,7 +170,7 @@ def main():
     database.save_user(user)
     return user''',
             "func_name": "fetch_validate_and_save_user",
-            "expected": "GOOD"
+            "expected": "GOOD",
         },
     ]
 
@@ -175,7 +179,7 @@ def main():
         print(f"# {test['name']}")
         print("#" * 70)
 
-        result = analyze_function_with_v2(test['code'], test['func_name'])
+        result = analyze_function_with_v2(test["code"], test["func_name"])
         print_analysis_report(result)
 
         print(f"\nExpected: {test['expected']}")
