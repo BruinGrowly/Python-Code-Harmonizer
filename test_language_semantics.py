@@ -28,8 +28,10 @@ def test_wisdom_constructs():
         result = engine.analyze_text(sample)
         coords = result.coordinates
         print(f"\nText: '{sample}'")
-        print(f"Coordinates: L={coords.love:.3f}, J={coords.justice:.3f}, "
-              f"P={coords.power:.3f}, W={coords.wisdom:.3f}")
+        print(
+            f"Coordinates: L={coords.love:.3f}, J={coords.justice:.3f}, "
+            f"P={coords.power:.3f}, W={coords.wisdom:.3f}"
+        )
 
         # WISDOM should be dominant
         assert coords.wisdom > 0.5, f"WISDOM should dominate for: {sample}"
@@ -62,8 +64,10 @@ def test_justice_constructs():
         result = engine.analyze_text(sample)
         coords = result.coordinates
         print(f"\nText: '{sample}'")
-        print(f"Coordinates: L={coords.love:.3f}, J={coords.justice:.3f}, "
-              f"P={coords.power:.3f}, W={coords.wisdom:.3f}")
+        print(
+            f"Coordinates: L={coords.love:.3f}, J={coords.justice:.3f}, "
+            f"P={coords.power:.3f}, W={coords.wisdom:.3f}"
+        )
 
         # JUSTICE should be dominant
         assert coords.justice > 0.5, f"JUSTICE should dominate for: {sample}"
@@ -96,8 +100,10 @@ def test_power_constructs():
         result = engine.analyze_text(sample)
         coords = result.coordinates
         print(f"\nText: '{sample}'")
-        print(f"Coordinates: L={coords.love:.3f}, J={coords.justice:.3f}, "
-              f"P={coords.power:.3f}, W={coords.wisdom:.3f}")
+        print(
+            f"Coordinates: L={coords.love:.3f}, J={coords.justice:.3f}, "
+            f"P={coords.power:.3f}, W={coords.wisdom:.3f}"
+        )
 
         # POWER should be dominant
         assert coords.power > 0.5, f"POWER should dominate for: {sample}"
@@ -130,8 +136,10 @@ def test_love_constructs():
         result = engine.analyze_text(sample)
         coords = result.coordinates
         print(f"\nText: '{sample}'")
-        print(f"Coordinates: L={coords.love:.3f}, J={coords.justice:.3f}, "
-              f"P={coords.power:.3f}, W={coords.wisdom:.3f}")
+        print(
+            f"Coordinates: L={coords.love:.3f}, J={coords.justice:.3f}, "
+            f"P={coords.power:.3f}, W={coords.wisdom:.3f}"
+        )
 
         # LOVE should be dominant
         assert coords.love > 0.5, f"LOVE should dominate for: {sample}"
@@ -185,8 +193,10 @@ def test_mixed_constructs():
         result = engine.analyze_text(case["text"])
         coords = result.coordinates
         print(f"\nText: '{case['text']}'")
-        print(f"Coordinates: L={coords.love:.3f}, J={coords.justice:.3f}, "
-              f"P={coords.power:.3f}, W={coords.wisdom:.3f}")
+        print(
+            f"Coordinates: L={coords.love:.3f}, J={coords.justice:.3f}, "
+            f"P={coords.power:.3f}, W={coords.wisdom:.3f}"
+        )
 
         coord_dict = {
             "love": coords.love,
@@ -200,8 +210,10 @@ def test_mixed_constructs():
             assert (
                 coord_dict[expected_dim] >= case["threshold"]
             ), f"{expected_dim} should be >= {case['threshold']} for '{case['text']}'"
-            print(f"✓ {expected_dim.upper()} >= {case['threshold']} "
-                  f"({coord_dict[expected_dim]:.3f})")
+            print(
+                f"✓ {expected_dim.upper()} >= {case['threshold']} "
+                f"({coord_dict[expected_dim]:.3f})"
+            )
 
     print("\n✓ All mixed constructs validated")
 
@@ -238,8 +250,10 @@ def test_programming_paradigms():
         coords = result.coordinates
         print(f"\n{paradigm.upper()} PARADIGM:")
         print(f"Text: '{data['text']}'")
-        print(f"Coordinates: L={coords.love:.3f}, J={coords.justice:.3f}, "
-              f"P={coords.power:.3f}, W={coords.wisdom:.3f}")
+        print(
+            f"Coordinates: L={coords.love:.3f}, J={coords.justice:.3f}, "
+            f"P={coords.power:.3f}, W={coords.wisdom:.3f}"
+        )
 
         coord_dict = {
             "love": coords.love,
@@ -372,8 +386,10 @@ def test_all_dimensions_necessary():
     coords = result.coordinates
 
     print(f"\nComplete system: '{complete_system}'")
-    print(f"Coordinates: L={coords.love:.3f}, J={coords.justice:.3f}, "
-          f"P={coords.power:.3f}, W={coords.wisdom:.3f}")
+    print(
+        f"Coordinates: L={coords.love:.3f}, J={coords.justice:.3f}, "
+        f"P={coords.power:.3f}, W={coords.wisdom:.3f}"
+    )
 
     # All dimensions should have non-trivial values
     threshold = 0.15  # Reasonable presence in all dimensions

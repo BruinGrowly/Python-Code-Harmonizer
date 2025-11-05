@@ -66,16 +66,18 @@ class AST_Semantic_Parser_V2(ast.NodeVisitor):
 
     def _split_camel_case(self, name: str) -> List[str]:
         """Split 'getUserById' into ['get', 'User', 'By', 'Id']"""
-        return re.findall(r'[A-Z]?[a-z]+|[A-Z]+(?=[A-Z][a-z]|\d|\W|$)|\d+', name)
+        return re.findall(r"[A-Z]?[a-z]+|[A-Z]+(?=[A-Z][a-z]|\d|\W|$)|\d+", name)
 
     def _split_name(self, name: str) -> List[str]:
         """Smart name splitting supporting both snake_case and camelCase"""
-        if '_' in name:
+        if "_" in name:
             return self._split_snake_case(name)
         else:
             return self._split_camel_case(name)
 
-    def _map_word_to_concept(self, word: str, context: str = "default") -> Optional[str]:
+    def _map_word_to_concept(
+        self, word: str, context: str = "default"
+    ) -> Optional[str]:
         """
         Map a word to its semantic dimension.
 
@@ -158,7 +160,9 @@ class AST_Semantic_Parser_V2(ast.NodeVisitor):
 
         # Fallback to words in vocabulary
         if not concepts and name_words:
-            concepts.update([word for word in name_words if word in self.known_vocabulary])
+            concepts.update(
+                [word for word in name_words if word in self.known_vocabulary]
+            )
 
         return list(concepts)
 
