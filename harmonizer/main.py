@@ -2,16 +2,21 @@
 # -*- coding: utf-8 -*-
 
 """
-Python Code Harmonizer (Version 1.4)
+Python Code Harmonizer (Version 1.5)
 
 This is the main application that integrates the Divine Invitation
 Semantic Engine (DIVE-V2) with the AST Semantic Parser. It now includes
-a proof-of-concept self-healing capability.
+semantic naming suggestions.
 
-New in v1.4:
-- Refactorer engine for suggesting dimensional splits.
-- --suggest-refactor flag to generate refactored code.
-- Enhanced AST parser with node-to-dimension mapping.
+New in v1.5:
+- Semantic naming engine with 200+ action verbs
+- --suggest-names flag to show function name suggestions
+- --top-suggestions flag to control number of suggestions
+- Intelligent name matching using cosine similarity in 4D semantic space
+
+Previous versions:
+- v1.4: Refactorer engine and dimensional splits
+- v1.3: Semantic trajectory maps
 """
 
 import os
@@ -35,6 +40,7 @@ from harmonizer import divine_invitation_engine_V2 as dive  # noqa: E402
 from harmonizer.ast_semantic_parser import AST_Semantic_Parser  # noqa: E402
 from harmonizer.refactorer import Refactorer  # noqa: E402
 from harmonizer.semantic_map import SemanticMapGenerator  # noqa: E402
+from harmonizer.semantic_naming import SemanticNamingEngine  # noqa: E402
 
 # --- CONFIGURATION LOADING ---
 
@@ -91,6 +97,8 @@ class PythonCodeHarmonizer:
         quiet: bool = False,
         show_semantic_maps: bool = True,
         config: Dict = None,
+        suggest_names: bool = False,
+        top_suggestions: int = 3,
     ):
         self.config = config if config else {}
         self.engine = dive.DivineInvitationSemanticEngine(config=self.config)
@@ -98,15 +106,18 @@ class PythonCodeHarmonizer:
             vocabulary=self.engine.vocabulary.all_keywords
         )
         self.map_generator = SemanticMapGenerator()
+        self.naming_engine = SemanticNamingEngine()
         self.disharmony_threshold = disharmony_threshold
         self.quiet = quiet
         self.show_semantic_maps = show_semantic_maps
+        self.suggest_names = suggest_names
+        self.top_suggestions = top_suggestions
         self._communicate_startup()
 
     def _communicate_startup(self):
         if not self.quiet:
             print("=" * 70)
-            print("Python Code Harmonizer (v1.4) ONLINE")
+            print("Python Code Harmonizer (v1.5) ONLINE")
             print("Actively guided by the Anchor Point framework.")
             print(f"Powered By: {self.engine.get_engine_version()}")
             print("Logical Anchor Point: (S=1, L=1, I=1, E=1)")
@@ -235,6 +246,8 @@ class PythonCodeHarmonizer:
                     lines.append(
                         self.map_generator.format_text_map(data["semantic_map"], score)
                     )
+                if self.suggest_names:
+                    lines.append(self._generate_naming_suggestions(func_name, data))
                 if suggest_refactor:
                     refactorer = Refactorer(
                         data["function_node"], data["execution_map"]
@@ -245,12 +258,42 @@ class PythonCodeHarmonizer:
         lines.append("Analysis Complete.")
         return "\n".join(lines)
 
+    def _generate_naming_suggestions(self, func_name: str, data: Dict) -> str:
+        """Generate naming suggestions based on execution semantics"""
+        execution_coords = data["ice_result"]["ice_components"]["execution"].coordinates
+
+        # Extract context from function name (e.g., "validate_user" -> "user")
+        parts = func_name.split("_")
+        context = parts[-1] if len(parts) > 1 else ""
+
+        # Get suggestions
+        if context:
+            suggestions = self.naming_engine.suggest_names(
+                execution_coords, context=context, top_n=self.top_suggestions
+            )
+        else:
+            suggestions = self.naming_engine.suggest_names(
+                execution_coords, top_n=self.top_suggestions
+            )
+
+        # Format suggestions
+        lines = ["\n💡 SUGGESTED FUNCTION NAMES (based on execution semantics):"]
+        explanation = self.naming_engine.explain_coordinates(execution_coords)
+        lines.append(f"   {explanation}")
+        lines.append("   Suggestions:")
+
+        for name, similarity in suggestions:
+            percentage = int(similarity * 100)
+            lines.append(f"      • {name:<30s} (match: {percentage}%)")
+
+        return "\n".join(lines)
+
     def output_report(self, formatted_report: str):
         print(formatted_report)
 
     def print_json_report(self, all_reports: Dict[str, Dict[str, Dict]]):
         output = {
-            "version": "1.4",
+            "version": "1.5",
             "threshold": self.disharmony_threshold,
             "severity_thresholds": {
                 "excellent": self.THRESHOLD_EXCELLENT,
@@ -319,7 +362,18 @@ def parse_cli_arguments() -> argparse.Namespace:
         help="Suggest a refactoring for disharmonious functions.",
     )
     parser.add_argument(
-        "--version", action="version", version="Python Code Harmonizer v1.4"
+        "--suggest-names",
+        action="store_true",
+        help="Suggest better function names based on execution semantics.",
+    )
+    parser.add_argument(
+        "--top-suggestions",
+        type=int,
+        default=3,
+        help="Number of naming suggestions to show (default: 3).",
+    )
+    parser.add_argument(
+        "--version", action="version", version="Python Code Harmonizer v1.5"
     )
     return parser.parse_args()
 
@@ -383,7 +437,11 @@ def run_cli():
 
     quiet = args.format == "json"
     harmonizer = PythonCodeHarmonizer(
-        disharmony_threshold=args.threshold, quiet=quiet, config=config
+        disharmony_threshold=args.threshold,
+        quiet=quiet,
+        config=config,
+        suggest_names=args.suggest_names,
+        top_suggestions=args.top_suggestions,
     )
 
     all_reports, highest_exit_code = execute_analysis(
