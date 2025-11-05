@@ -1,3 +1,6 @@
 __pycache__/
 *.egg-info/
 harmony-report.json
+
+# Generated visualizations from legacy mapper
+semantic_map.html
