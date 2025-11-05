@@ -11,6 +11,153 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.5.0] - 2025-11-05
+
+### Added
+- **Semantic Naming Suggestions** 🎯 **(Major Feature)**
+  - Intelligent function name suggestions based on execution semantics
+  - 200+ action verbs mapped to LJWP coordinate space
+  - Cosine similarity matching in 4D semantic space to find best name matches
+  - Context-aware suggestions that extract nouns from function names
+  - `--suggest-names` CLI flag to enable naming suggestions
+  - `--top-suggestions N` flag to control number of suggestions (default: 3)
+  - Suggestions show match percentage and semantic emphasis breakdown
+
+- **Enhanced Test Coverage**
+  - 35 new tests for semantic naming engine
+  - Total test suite: 59 tests (all passing)
+  - Tests validate coordinate normalization and accuracy
+  - End-to-end CLI integration tests
+
+- **Expanded Vocabulary**
+  - 200+ action verbs covering all four dimensions:
+    * Love domain: notify, inform, communicate, connect, share
+    * Justice domain: validate, authorize, verify, enforce, check
+    * Power domain: create, update, delete, transform, execute
+    * Wisdom domain: analyze, calculate, search, measure, understand
+  - Uses validated LJWP mixing formula from empirical testing
+
+### Changed
+- Version bumped to 1.5
+- Updated README with v1.5 feature showcase
+- Updated test count badge (59 tests)
+- Enhanced CLI help text with new flags
+
+### Technical Details
+- New file: `harmonizer/semantic_naming.py` (190+ lines)
+- New tests: `tests/test_semantic_naming.py` (373+ lines, 35 tests)
+- Modified: `harmonizer/main.py` (integrated naming suggestions)
+- SemanticNamingEngine uses cosine similarity for intelligent matching
+- Performance optimized with efficient vector calculations
+
+### Example Output
+```
+delete_user: !! DISHARMONY (Score: 1.22)
+
+💡 SUGGESTED FUNCTION NAMES (based on execution semantics):
+   Function emphasizes: 50% love (connection/care), 50% wisdom (analysis/understanding)
+   Suggestions:
+      • notify_user         (match: 85%)
+      • inform_user         (match: 82%)
+      • communicate_user    (match: 80%)
+```
+
+### What This Means
+This feature transforms the Harmonizer from a **detector** to a **teacher**, providing actionable suggestions for better function names based on what the code actually does.
+
+---
+
+## [1.4.0] - 2025-11-03
+
+### Added
+- **Configuration File Support** ⚙️ **(Major Feature)**
+  - `.harmonizer.yml` file for project-specific configuration
+  - File exclusion patterns (e.g., `tests/`, `venv/`, `*.pyc`)
+  - Custom vocabulary extensions for domain-specific terms
+  - Configuration documentation: `docs/CONFIGURATION.md`
+  - Template file: `.harmonizer.yml.template`
+
+- **Self-Healing Refactoring Engine** 🔧 **(Experimental Feature)**
+  - Automated code refactoring suggestions based on dimensional analysis
+  - Dimensional split functionality - splits mixed-concern functions
+  - `--suggest-refactor` CLI flag to trigger refactoring suggestions
+  - Generates refactored code that separates Love, Justice, Power, Wisdom concerns
+  - AST-based code generation with proper formatting (Black integration)
+
+- **Enhanced AST Parser**
+  - Per-node dimensional mapping (every AST node mapped to dimension)
+  - Granular semantic analysis for refactoring engine
+  - Improved contextual awareness
+  - Better handling of complex code structures
+
+- **Project Restructure**
+  - Moved from `src/` layout to root-level `harmonizer/` package
+  - Improved import structure and module organization
+  - Better compatibility with standard Python packaging
+
+### Changed
+- Version bumped to 1.4
+- Added PyYAML dependency for configuration file parsing
+- Enhanced test suite with configuration and refactoring tests
+- README updated with configuration features
+
+### Technical Details
+- New file: `harmonizer/refactorer.py` (90+ lines)
+- New tests: `tests/test_refactorer.py` (71+ lines)
+- Modified: `harmonizer/ast_semantic_parser.py` (enhanced dimensional mapping)
+- Modified: `harmonizer/main.py` (configuration loading, refactoring integration)
+- Added: `docs/CONFIGURATION.md` (70+ lines)
+- Added: `docs/META_ANALYSIS_V2.md` (113+ lines)
+
+### Configuration Example
+```yaml
+# .harmonizer.yml
+exclude:
+  - "venv/**"
+  - "tests/**"
+  - "*.pyc"
+
+custom_vocabulary:
+  authenticate: justice
+  serialize: wisdom
+  broadcast: love
+  deploy: power
+```
+
+### Refactoring Example
+```python
+# Before: Mixed-concern function
+def process_user(user):
+    validate_email(user.email)      # Justice
+    user.save()                      # Power
+    send_welcome_email(user.email)  # Love
+    log_registration(user)           # Wisdom
+
+# After: Dimensional split suggested by refactorer
+def _process_user_justice(user):
+    validate_email(user.email)
+
+def _process_user_power(user):
+    user.save()
+
+def _process_user_love(user):
+    send_welcome_email(user.email)
+
+def _process_user_wisdom(user):
+    log_registration(user)
+
+def process_user(user):
+    _process_user_justice(user)
+    _process_user_power(user)
+    _process_user_love(user)
+    _process_user_wisdom(user)
+```
+
+### What This Means
+v1.4 introduces **configurability** and **automation** to the Harmonizer, allowing it to adapt to your project's needs and actively suggest improvements.
+
+---
+
 ## [1.3.0] - 2025-11-01
 
 ### Added
