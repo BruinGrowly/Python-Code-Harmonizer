@@ -34,12 +34,12 @@ def analyze_with_v2(code, function_name):
     disharmony = engine.get_distance(intent_coords, execution_coords)
 
     return {
-        'function': function_name,
-        'intent_concepts': intent_concepts,
-        'execution_concepts': execution_concepts,
-        'intent_coords': intent_coords,
-        'execution_coords': execution_coords,
-        'disharmony': disharmony
+        "function": function_name,
+        "intent_concepts": intent_concepts,
+        "execution_concepts": execution_concepts,
+        "intent_coords": intent_coords,
+        "execution_coords": execution_coords,
+        "disharmony": disharmony,
     }
 
 
@@ -51,28 +51,32 @@ def print_analysis(result):
 
     print(f"\nINTENT (what function claims to do):")
     print(f"  Concepts: {result['intent_concepts']}")
-    print(f"  Coordinates: L={result['intent_coords'].love:.3f}, J={result['intent_coords'].justice:.3f}, "
-          f"P={result['intent_coords'].power:.3f}, W={result['intent_coords'].wisdom:.3f}")
+    print(
+        f"  Coordinates: L={result['intent_coords'].love:.3f}, J={result['intent_coords'].justice:.3f}, "
+        f"P={result['intent_coords'].power:.3f}, W={result['intent_coords'].wisdom:.3f}"
+    )
 
     print(f"\nEXECUTION (what function actually does):")
     print(f"  Concepts: {result['execution_concepts']}")
-    print(f"  Coordinates: L={result['execution_coords'].love:.3f}, J={result['execution_coords'].justice:.3f}, "
-          f"P={result['execution_coords'].power:.3f}, W={result['execution_coords'].wisdom:.3f}")
+    print(
+        f"  Coordinates: L={result['execution_coords'].love:.3f}, J={result['execution_coords'].justice:.3f}, "
+        f"P={result['execution_coords'].power:.3f}, W={result['execution_coords'].wisdom:.3f}"
+    )
 
     print(f"\nDISHARMONY SCORE: {result['disharmony']:.3f}")
 
-    if result['disharmony'] < 0.5:
+    if result["disharmony"] < 0.5:
         print("STATUS: ✅ EXCELLENT HARMONY")
-    elif result['disharmony'] < 1.0:
+    elif result["disharmony"] < 1.0:
         print("STATUS: ⚠️  MEDIUM DISHARMONY")
     else:
         print("STATUS: 🚨 CRITICAL DISHARMONY - Likely Bug!")
 
 
 # Test examples
-print("="*70)
+print("=" * 70)
 print("ENHANCED PARSER V2 - REAL-WORLD DEMONSTRATION")
-print("="*70)
+print("=" * 70)
 
 # Example 1: Harmonious function
 code1 = '''
@@ -131,7 +135,7 @@ print_analysis(result5)
 
 print(f"\n{'='*70}")
 print("DEMONSTRATION COMPLETE")
-print("="*70)
+print("=" * 70)
 print("\n✅ Enhanced Parser V2 Features:")
 print("   • 184 programming verbs (7.4x more than V1)")
 print("   • Compound pattern detection (get_user, send_notification, etc.)")
