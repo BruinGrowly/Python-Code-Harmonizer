@@ -154,6 +154,120 @@ delete_expired_records       | 0.08             | ✓ HARMONIOUS
 
 ---
 
+## 🗺️ Legacy Code Mapper - Understand Any Codebase
+
+**NEW:** Complete semantic analysis of entire codebases with git history tracking, architectural debt estimation, and interactive visualizations.
+
+### What It Does
+
+The Legacy Code Mapper answers the challenge: *"Legacy code's real complexity still fights back"* by providing:
+
+- **Semantic Clustering**: Maps all files to LJPW space and groups by semantic purpose
+- **Architectural Smell Detection**: Finds God Files, Mixed Concerns, High Disharmony, Semantic Confusion
+- **Refactoring Opportunities**: Ranks files by impact with specific actionable recommendations
+- **Git History Tracking**: Tracks how code evolved semantically over commits
+- **Architecture Reality Check**: Compares documentation vs actual implementation
+- **Debt Estimation**: Calculates technical debt in **hours and dollars** with priorities
+- **Interactive Visualizations**: 3D semantic maps, drift timelines, HTML exports
+
+### Quick Start
+
+```bash
+# Analyze entire codebase with all features
+python -m harmonizer.legacy_mapper <path> --full
+
+# Just the basics (clustering, smells, opportunities)
+python -m harmonizer.legacy_mapper <path>
+
+# With specific analyses
+python -m harmonizer.legacy_mapper <path> --git-commits 100 --hourly-rate 200
+
+# Export interactive HTML visualization
+python -m harmonizer.legacy_mapper <path> --export-html
+```
+
+### Example Output
+
+```
+🔍 Analyzing codebase: myproject
+Found 45 Python files
+
+✅ Analyzed 45 files successfully
+
+======================================================================
+SEMANTIC CODEBASE MAP - COMPREHENSIVE ANALYSIS
+======================================================================
+
+📚 WISDOM CLUSTER (28 files)
+   Avg Coordinates: L=0.15, J=0.20, P=0.01, W=0.48
+   Files:
+     - data_processor.py              (32 funcs, disharmony: 0.71)
+     - analyzer.py                    (18 funcs, disharmony: 0.65)
+     ...
+
+⚖️ JUSTICE CLUSTER (12 files)
+   Avg Coordinates: L=0.10, J=0.55, P=0.05, W=0.25
+   Files:
+     - validators.py                  (24 funcs, disharmony: 0.58)
+     ...
+
+📊 OVERALL METRICS
+   Total files analyzed: 45
+   Average disharmony: 0.52
+   Codebase health: MODERATE ⚠️
+
+🚨 ARCHITECTURAL SMELLS (8 detected)
+   • God File: main.py (82 functions)
+   • High Disharmony: legacy_module.py (avg: 0.95)
+   • Mixed Concerns: utils.py (4 semantic dimensions active)
+
+💰 ARCHITECTURAL DEBT ESTIMATION
+   Total Estimated Debt: 127.5 hours ($19,125)
+
+   HIGH (6 files) - 89.5hrs ($13,425):
+     • legacy_module.py: $4,500 (High Disharmony + Semantic Confusion)
+     • utils.py: $3,300 (God File + Mixed Concerns)
+```
+
+### Advanced Features
+
+**Git History & Semantic Drift:**
+```bash
+# Track how code evolved semantically
+python -m harmonizer.legacy_mapper <path> --drift-timeline
+```
+
+Shows which files changed semantically over time, stability scores, and dimension-specific drift.
+
+**Architecture Documentation Check:**
+```bash
+# Compare docs vs reality
+python -m harmonizer.legacy_mapper <path> --docs-path README.md
+```
+
+Validates whether your documentation matches actual implementation.
+
+**Visualizations:**
+```bash
+# All visualizations
+python -m harmonizer.legacy_mapper <path> --semantic-map --debt-breakdown --export-html
+```
+
+Generates:
+- 3D semantic space map (ASCII)
+- Detailed debt breakdown with cost analysis
+- Interactive HTML visualization (open in browser)
+
+### Use Cases
+
+1. **Understanding Legacy Code**: Quickly grasp architecture and identify problem areas
+2. **Refactoring Planning**: Prioritize what to fix first based on impact and cost
+3. **Code Review**: Identify semantic issues before they become bugs
+4. **Technical Debt**: Quantify and communicate debt to stakeholders
+5. **Onboarding**: Help new developers understand codebase structure
+
+---
+
 ## What's New in v2.0
 
 ### Major Enhancements
