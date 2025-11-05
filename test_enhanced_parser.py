@@ -21,7 +21,6 @@ def test_wisdom_operations():
         ("def get_user(id): return database.query(id)", "get_user"),
         ("def fetch_data(): return api.fetch()", "fetch_data"),
         ("def read_file(path): return open(path).read()", "read_file"),
-
         # Computation
         ("def calculate_total(items): return sum(items)", "calculate_total"),
         ("def compute_hash(data): return hash(data)", "compute_hash"),
@@ -42,7 +41,9 @@ def test_wisdom_operations():
         print(f"  Intent concepts: {intent_concepts}")
 
         # Verify WISDOM is in intent
-        assert "wisdom" in intent_concepts, f"WISDOM should be in intent for {func_name}"
+        assert (
+            "wisdom" in intent_concepts
+        ), f"WISDOM should be in intent for {func_name}"
         print(f"  ✓ WISDOM detected in intent")
 
     print("\n✓ All WISDOM operations validated")
@@ -56,13 +57,21 @@ def test_justice_operations():
 
     code_samples = [
         # Validation
-        ("def validate_input(data):\n    if not data:\n        raise ValueError()", "validate_input"),
+        (
+            "def validate_input(data):\n    if not data:\n        raise ValueError()",
+            "validate_input",
+        ),
         ("def check_permission(user):\n    assert user.is_admin", "check_permission"),
-        ("def verify_token(token):\n    if token.expired:\n        return False\n    return True", "verify_token"),
-
+        (
+            "def verify_token(token):\n    if token.expired:\n        return False\n    return True",
+            "verify_token",
+        ),
         # Comparison
         ("def compare_values(a, b): return a == b", "compare_values"),
-        ("def filter_valid(items): return [i for i in items if i.valid]", "filter_valid"),
+        (
+            "def filter_valid(items): return [i for i in items if i.valid]",
+            "filter_valid",
+        ),
     ]
 
     engine = DivineInvitationSemanticEngine()
@@ -79,7 +88,9 @@ def test_justice_operations():
         print(f"  Intent concepts: {intent_concepts}")
 
         # Verify JUSTICE is in intent
-        assert "justice" in intent_concepts, f"JUSTICE should be in intent for {func_name}"
+        assert (
+            "justice" in intent_concepts
+        ), f"JUSTICE should be in intent for {func_name}"
         print(f"  ✓ JUSTICE detected in intent")
 
     print("\n✓ All JUSTICE operations validated")
@@ -93,17 +104,17 @@ def test_power_operations():
 
     code_samples = [
         # Creation
-        ("def create_user(name):\n    user = User(name)\n    return user", "create_user"),
+        (
+            "def create_user(name):\n    user = User(name)\n    return user",
+            "create_user",
+        ),
         ("def build_object():\n    obj = Object()\n    return obj", "build_object"),
-
         # Modification
         ("def update_status(obj, status):\n    obj.status = status", "update_status"),
         ("def modify_data(data):\n    data.value = 42", "modify_data"),
-
         # Destruction
         ("def delete_record(id):\n    database.delete(id)", "delete_record"),
         ("def remove_item(item):\n    items.remove(item)", "remove_item"),
-
         # Execution
         ("def execute_command(cmd):\n    os.system(cmd)", "execute_command"),
         ("def process_request(req):\n    req.process()", "process_request"),
@@ -137,10 +148,15 @@ def test_love_operations():
 
     code_samples = [
         # Communication
-        ("def send_notification(user, msg):\n    mailer.send(user, msg)", "send_notification"),
+        (
+            "def send_notification(user, msg):\n    mailer.send(user, msg)",
+            "send_notification",
+        ),
         ("def notify_user(user):\n    user.notify()", "notify_user"),
-        ("def broadcast_event(event):\n    event_bus.broadcast(event)", "broadcast_event"),
-
+        (
+            "def broadcast_event(event):\n    event_bus.broadcast(event)",
+            "broadcast_event",
+        ),
         # Connection
         ("def connect_database():\n    return db.connect()", "connect_database"),
         ("def join_tables(t1, t2):\n    return t1.join(t2)", "join_tables"),
@@ -233,22 +249,22 @@ def test_execution_detection():
         {
             "code": "def func():\n    x = 42\n    return x",
             "expected": ["power", "wisdom"],  # assignment, return
-            "desc": "Assignment + Return"
+            "desc": "Assignment + Return",
         },
         {
             "code": "def func(x):\n    if x > 0:\n        print(x)",
             "expected": ["justice", "love"],  # if, print
-            "desc": "Conditional + Output"
+            "desc": "Conditional + Output",
         },
         {
             "code": "def func():\n    try:\n        do_something()\n    except:\n        pass",
             "expected": ["justice", "love"],  # try, except
-            "desc": "Error Handling"
+            "desc": "Error Handling",
         },
         {
             "code": "def func(items):\n    for item in items:\n        process(item)",
             "expected": ["justice", "power"],  # for loop, process call
-            "desc": "Loop + Processing"
+            "desc": "Loop + Processing",
         },
     ]
 
@@ -266,8 +282,9 @@ def test_execution_detection():
         print(f"  Expected: {case['expected']}")
 
         for expected_dim in case["expected"]:
-            assert expected_dim in exec_concepts, \
-                f"{expected_dim} should be detected in execution"
+            assert (
+                expected_dim in exec_concepts
+            ), f"{expected_dim} should be detected in execution"
             print(f"  ✓ {expected_dim.upper()} detected")
 
     print("\n✓ Execution detection validated")
@@ -300,8 +317,9 @@ def test_compound_patterns():
         print(f"  Intent: {intent_concepts}")
         print(f"  Expected: {expected_dim}")
 
-        assert expected_dim in intent_concepts, \
-            f"{expected_dim} should be detected for {func_name}"
+        assert (
+            expected_dim in intent_concepts
+        ), f"{expected_dim} should be detected for {func_name}"
         print(f"  ✓ {expected_dim.upper()} correctly identified")
 
     print("\n✓ Compound patterns validated")
@@ -331,8 +349,9 @@ def test_backward_compatibility():
     print(f"V2 Intent: {intent_v2}")
 
     # Both should recognize wisdom
-    assert "wisdom" in intent_v1 or "wisdom" in intent_v2, \
-        "Both parsers should recognize wisdom operations"
+    assert (
+        "wisdom" in intent_v1 or "wisdom" in intent_v2
+    ), "Both parsers should recognize wisdom operations"
 
     print("  ✓ V2 parser maintains core functionality")
     print("\n✓ Backward compatibility validated")
