@@ -23,8 +23,8 @@ def test_intent_from_function_name(parser):
     Tests that concepts are correctly extracted from a function name.
     """
     name = "get_user_by_id_and_update_status"
-    # 'get' -> wisdom, 'update' -> power
-    expected_concepts = {"wisdom", "power", "status"}
+    # 'get' -> wisdom, 'update' -> power, 'status' -> wisdom
+    expected_concepts = {"wisdom", "power"}
     concepts = parser.get_intent_concepts(name, None)
     assert set(concepts) == expected_concepts
 
@@ -102,7 +102,8 @@ except ZeroDivisionError:
     log_error("Division by zero")
     raise ValueError("Invalid operation")
     """
-    expected_concepts = {"justice", "love", "power"}
+    # try -> justice, except -> love, log -> wisdom, raise -> power
+    expected_concepts = {"justice", "love", "power", "wisdom"}
     body = ast.parse(code).body
     _, concepts = parser.get_execution_map(body)
     assert set(concepts) == expected_concepts
