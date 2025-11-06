@@ -581,10 +581,10 @@ If you use this tool in research or production:
 
 ## Quick Links
 
-**Start Here:** [Quick Reference](docs/QUICK_REFERENCE.md) | [User Guide](docs/USER_GUIDE.md) | [Tutorial](docs/TUTORIAL.md)
+**Start Here:** [Quick Reference](docs/QUICK_REFERENCE.md) | [User Guide](docs/USER_GUIDE.md) | [Tutorial](docs/TUTORIAL.md) | [UX Guide](UX_QUICK_REFERENCE.md) ✨
 
 **Theory:** [Philosophy](docs/PHILOSOPHY.md) | [Math Foundation](MATHEMATICAL_FOUNDATION.md) | [Language Semantics](PROGRAMMING_LANGUAGE_SEMANTICS.md)
 
 **Examples:** [Real Bugs](examples/real_world_bugs.py) | [Refactoring](examples/refactoring_journey.py) | [Realistic Samples](examples/realistic_code_samples.py)
 
-**Project:** [Changelog](CHANGELOG.md) | [Contributing](CONTRIBUTING.md) | [License](LICENSE)
+**Project:** [Changelog](CHANGELOG.md) | [Contributing](CONTRIBUTING.md) | [License](LICENSE) | [UX Design](UX_DESIGN_HARMONIOUS.md)
