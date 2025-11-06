@@ -121,7 +121,9 @@ class PythonCodeHarmonizer:
             print(f"Version 1.5 • {self.engine.get_engine_version()}")
             print()
             print("🎯 Checking if your functions DO what their names SAY")
-            print(f"   Threshold: {self.disharmony_threshold} (scores below = harmonious)")
+            print(
+                f"   Threshold: {self.disharmony_threshold} (scores below = harmonious)"
+            )
             print("=" * 70)
 
     def analyze_file(self, file_path: str) -> Dict[str, Dict]:
