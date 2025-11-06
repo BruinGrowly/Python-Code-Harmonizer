@@ -33,18 +33,42 @@ class AST_Semantic_Parser(ast.NodeVisitor):
         self.known_vocabulary = vocabulary
 
         self.intent_keyword_map = {
-            # WISDOM (Information, Truth)
+            # WISDOM (Information, Truth, State Checking)
             "get": "wisdom",
             "read": "wisdom",
             "fetch": "wisdom",
             "query": "wisdom",
             "calculate": "wisdom",
             "analyze": "wisdom",
+            "return": "wisdom",
+            # Boolean predicates - checking state (Wisdom) not enforcing rules (Justice)
+            "is": "wisdom",  # is_valid, is_empty - checking state
+            "is_": "wisdom",  # with underscore
+            "has": "wisdom",  # has_permission - checking existence
+            "has_": "wisdom",  # with underscore
+            "can": "wisdom",  # can_access - checking capability
+            "can_": "wisdom",  # with underscore
+            # Property/state words
+            "status": "wisdom",
+            "state": "wisdom",
+            "value": "wisdom",
+            "valid": "wisdom",  # Note: different from "validate"
+            "needs": "wisdom",  # needs_update - checking need
+            # JUSTICE (Validation, Rules, Enforcement)
             "validate": "justice",
             "check": "justice",
-            "is_": "justice",
-            "return": "wisdom",
-            # POWER (Action, Control)
+            "verify": "justice",
+            "assert": "justice",
+            "try": "justice",
+            "if": "justice",
+            "else": "justice",
+            "for": "justice",
+            "while": "justice",
+            "order": "justice",
+            # Modal verbs that imply rules
+            "should": "justice",
+            "must": "justice",
+            # POWER (Action, Control, Transformation)
             "set": "power",
             "update": "power",
             "create": "power",
@@ -56,22 +80,14 @@ class AST_Semantic_Parser(ast.NodeVisitor):
             "execute": "power",
             "raise": "power",
             "save": "power",
-            # JUSTICE (Order, Rules, Logic)
-            "assert": "justice",
-            "try": "justice",
-            "except": "love",  # Mercy is a form of Love
-            "if": "justice",
-            "else": "justice",
-            "for": "justice",
-            "while": "justice",
-            "order": "justice",
-            # LOVE (Unity, Connection)
+            # LOVE (Unity, Connection, Communication)
             "add": "love",
             "append": "love",
             "join": "love",
             "connect": "love",
             "merge": "love",
             "print": "love",  # Communication is a form of Love
+            "except": "love",  # Mercy/graceful handling is Love
         }
 
         self._node_map: Dict[ast.AST, str] = {}

@@ -63,6 +63,17 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     # Returns are WISDOM (giving information back)
     "return": "wisdom",
     "yield": "wisdom",
+    # Property/state checking (common in @property decorators)
+    "status": "wisdom",  # Checking current state
+    "state": "wisdom",  # Checking current state
+    "value": "wisdom",  # Retrieving value
+    "result": "wisdom",  # Getting result
+    "valid": "wisdom",  # Checking validity state (note: different from "validate")
+    "empty": "wisdom",  # Checking if empty
+    "exists": "wisdom",  # Checking existence
+    "available": "wisdom",  # Checking availability
+    "ready": "wisdom",  # Checking readiness
+    "needs": "wisdom",  # Checking if something is needed (e.g., needs_update)
     # ====================================================================
     # JUSTICE-DOMINANT OPERATIONS (Correctness & Validation)
     # Semantic signature: (L=0.1, J=0.7, P=0.1, W=0.1)
@@ -100,9 +111,11 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "restrict": "justice",
     "approve": "justice",
     # Boolean predicates (is_*, has_*, can_*)
-    "is": "justice",
-    "has": "justice",
-    "can": "justice",
+    # Note: These check state/existence (Wisdom) rather than enforce rules (Justice)
+    "is": "wisdom",  # is_valid, is_empty - checking state
+    "has": "wisdom",  # has_permission - checking existence
+    "can": "wisdom",  # can_access - checking capability
+    # Modal verbs that imply rules/enforcement stay as Justice
     "should": "justice",
     "must": "justice",
     # Ordering & structuring
