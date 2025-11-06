@@ -117,11 +117,11 @@ class PythonCodeHarmonizer:
     def _communicate_startup(self):
         if not self.quiet:
             print("=" * 70)
-            print("Python Code Harmonizer (v1.5) ONLINE")
-            print("Actively guided by the Anchor Point framework.")
-            print(f"Powered By: {self.engine.get_engine_version()}")
-            print("Logical Anchor Point: (S=1, L=1, I=1, E=1)")
-            print(f"Disharmony Threshold: {self.disharmony_threshold}")
+            print("Python Code Harmonizer ⚓ - Finding harmony in your code")
+            print(f"Version 1.5 • {self.engine.get_engine_version()}")
+            print()
+            print("🎯 Checking if your functions DO what their names SAY")
+            print(f"   Threshold: {self.disharmony_threshold} (scores below = harmonious)")
             print("=" * 70)
 
     def analyze_file(self, file_path: str) -> Dict[str, Dict]:
@@ -143,7 +143,7 @@ class PythonCodeHarmonizer:
 
     def _communicate_analysis_complete(self, function_count: int):
         if not self.quiet and function_count > 0:
-            print(f"✓ Analyzed {function_count} function(s)")
+            print(f"✨ Analyzed {function_count} function(s)")
 
     def _load_and_validate_file(self, file_path: str) -> str:
         try:
@@ -151,11 +151,13 @@ class PythonCodeHarmonizer:
                 return f.read()
         except FileNotFoundError:
             if not self.quiet:
-                print(f"ERROR: File not found at '{file_path}'")
+                print(f"⚠️  Couldn't find file: '{file_path}'")
+                print(f"   Let's check the path is correct?")
             return None
         except Exception as e:
             if not self.quiet:
-                print(f"ERROR: Could not read file: {e}")
+                print(f"⚠️  Couldn't read file: {e}")
+                print(f"   Check if the file has proper permissions?")
             return None
 
     def _parse_code_to_ast(self, content: str, file_path: str) -> ast.AST:
@@ -163,7 +165,8 @@ class PythonCodeHarmonizer:
             return ast.parse(content)
         except SyntaxError as e:
             if not self.quiet:
-                print(f"ERROR: Could not parse file. Syntax error on line {e.lineno}")
+                print(f"⚠️  Syntax error on line {e.lineno}")
+                print(f"   Let's fix the syntax first, then we can check harmony!")
             return None
 
     def _analyze_all_functions(self, tree: ast.AST) -> Dict[str, Dict]:
@@ -230,16 +233,35 @@ class PythonCodeHarmonizer:
         if not harmony_report:
             return "No functions found to analyze."
         lines = []
-        lines.append("FUNCTION NAME                | INTENT-EXECUTION DISHARMONY")
+        lines.append("FUNCTION NAME                | HARMONY SCORE")
         lines.append("-----------------------------|--------------------------------")
         sorted_report = sorted(
             harmony_report.items(), key=lambda item: item[1]["score"], reverse=True
         )
+
+        # Count harmony levels for summary
+        excellent_count = 0
+        harmonious_count = 0
+        review_count = 0
+        attention_count = 0
+
         for func_name, data in sorted_report:
             score = data["score"]
-            status = "✓ HARMONIOUS"
-            if score > self.disharmony_threshold:
-                status = f"!! DISHARMONY (Score: {score:.2f})"
+
+            # Determine status with encouraging language
+            if score < self.THRESHOLD_EXCELLENT:
+                status = f"✨ Excellent! ({score:.2f})"
+                excellent_count += 1
+            elif score <= self.disharmony_threshold:
+                status = f"✓ Harmonious ({score:.2f})"
+                harmonious_count += 1
+            elif score <= self.THRESHOLD_MEDIUM:
+                status = f"⚠️  Worth reviewing ({score:.2f})"
+                review_count += 1
+            else:
+                status = f"🚨 Needs attention ({score:.2f})"
+                attention_count += 1
+
             lines.append(f"{func_name:<28} | {status}")
             if score > self.disharmony_threshold:
                 if self.show_semantic_maps:
@@ -255,7 +277,33 @@ class PythonCodeHarmonizer:
                     suggestion = refactorer.suggest_dimensional_split()
                     lines.append(suggestion)
         lines.append("=" * 70)
-        lines.append("Analysis Complete.")
+
+        # Add encouraging summary
+        total = excellent_count + harmonious_count + review_count + attention_count
+        summary_parts = []
+
+        if excellent_count > 0:
+            summary_parts.append(f"✨ {excellent_count} excellent")
+        if harmonious_count > 0:
+            summary_parts.append(f"✓ {harmonious_count} harmonious")
+        if review_count > 0:
+            summary_parts.append(f"⚠️  {review_count} to review")
+        if attention_count > 0:
+            summary_parts.append(f"🚨 {attention_count} need attention")
+
+        lines.append(f"Summary: {', '.join(summary_parts)}")
+
+        # Encouraging message based on results
+        if attention_count == 0 and review_count == 0:
+            lines.append("🎉 Beautiful! Your code is semantically harmonious!")
+        elif attention_count == 0:
+            lines.append("💫 Great work! Just a few minor items to review.")
+        else:
+            lines.append("💡 Found some opportunities to improve semantic harmony.")
+
+        if review_count > 0 or attention_count > 0:
+            lines.append("   Run with --suggest-names for naming suggestions.")
+
         return "\n".join(lines)
 
     def _generate_naming_suggestions(self, func_name: str, data: Dict) -> str:
@@ -396,10 +444,10 @@ def validate_cli_arguments(args: argparse.Namespace, config: Dict) -> List[str]:
             invalid_files.append((file_path, "File not found"))
     if (invalid_files or excluded_files) and args.format == "text":
         for file_path, error in invalid_files:
-            print(f"\nWARNING: Skipping '{file_path}' - {error}", file=sys.stderr)
+            print(f"\n⚠️  Skipping '{file_path}' - {error}", file=sys.stderr)
         if excluded_files:
             print(
-                f"\nINFO: Excluded {len(excluded_files)} file(s) based on config.",
+                f"\n📌 Excluded {len(excluded_files)} file(s) based on your config.",
                 file=sys.stderr,
             )
         print("-" * 70, file=sys.stderr)
@@ -432,7 +480,8 @@ def run_cli():
     config = load_configuration()
     valid_files = validate_cli_arguments(args, config)
     if not valid_files:
-        print("\nERROR: No valid Python files to analyze.", file=sys.stderr)
+        print("\n⚠️  No valid Python files found to analyze.", file=sys.stderr)
+        print("   Try: harmonizer path/to/your/file.py", file=sys.stderr)
         sys.exit(1)
 
     quiet = args.format == "json"
