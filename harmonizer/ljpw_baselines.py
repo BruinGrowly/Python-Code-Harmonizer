@@ -61,7 +61,9 @@ class LJPWBaselines:
     }
 
     @staticmethod
-    def effective_dimensions(L: float, J: float, P: float, W: float) -> Dict[str, float]:
+    def effective_dimensions(
+        L: float, J: float, P: float, W: float
+    ) -> Dict[str, float]:
         """
         Calculate coupling-adjusted effective dimensions.
 
@@ -179,7 +181,9 @@ class LJPWBaselines:
         return math.sqrt((1 - L) ** 2 + (1 - J) ** 2 + (1 - P) ** 2 + (1 - W) ** 2)
 
     @staticmethod
-    def distance_from_natural_equilibrium(L: float, J: float, P: float, W: float) -> float:
+    def distance_from_natural_equilibrium(
+        L: float, J: float, P: float, W: float
+    ) -> float:
         """
         Euclidean distance from Natural Equilibrium.
 

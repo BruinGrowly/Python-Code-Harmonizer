@@ -4,7 +4,7 @@
 [![Version](https://img.shields.io/badge/version-2.0-blue.svg)](CHANGELOG.md)
 [![Python](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/tests-82%20passing-brightgreen.svg)](tests/)
+[![Tests](https://img.shields.io/badge/tests-87%20passing-brightgreen.svg)](tests/)
 [![Framework](https://img.shields.io/badge/framework-mathematically%20proven-success.svg)](MATHEMATICAL_FOUNDATION.md)
 
 **The world's first semantic code debugger with a mathematically proven foundation.**
@@ -443,6 +443,7 @@ It's the **only tool** that:
 - **[Philosophy](docs/PHILOSOPHY.md)** - The Anchor Point and Four Dimensions
 - **[Mathematical Foundation](MATHEMATICAL_FOUNDATION.md)** - Proof that LJPW forms semantic basis
 - **[LJPW Mathematical Baselines](docs/LJPW_MATHEMATICAL_BASELINES.md)** ✨ NEW - Objective baselines with empirical validation
+- **[Baseline Integration Guide](docs/BASELINE_INTEGRATION.md)** 🚀 NEW - How baselines enhance harmonizer scoring (v2.0)
 - **[Programming Language Semantics](PROGRAMMING_LANGUAGE_SEMANTICS.md)** - How code maps to LJPW
 - **[Semantic Programming Language](SEMANTIC_PROGRAMMING_LANGUAGE.md)** - Future language design
 - **[Architecture](docs/ARCHITECTURE.md)** - Technical implementation

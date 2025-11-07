@@ -3,6 +3,8 @@
 """
 Optimized Production-Ready Divine Invitation Semantic Substrate Engine (DIVE-V2)
 Implements all discovered frameworks with enhanced performance and reliability.
+
+Enhanced with LJPW Mathematical Baselines for objective, empirically-validated scoring.
 """
 
 import math
@@ -10,6 +12,13 @@ import re
 from dataclasses import dataclass
 from enum import Enum
 from typing import Dict, List, Optional, Set, Tuple
+
+# Import LJPW baselines for enhanced analysis
+try:
+    from harmonizer.ljpw_baselines import LJPWBaselines, ReferencePoints
+except ImportError:
+    # Fallback if module structure is different
+    from ljpw_baselines import LJPWBaselines, ReferencePoints
 
 
 class Dimension(Enum):
@@ -45,7 +54,7 @@ class Coordinates:
 
 @dataclass
 class SemanticResult:
-    """Complete semantic analysis result"""
+    """Complete semantic analysis result with LJPW baseline metrics"""
 
     coordinates: Coordinates
     distance_from_anchor: float
@@ -55,6 +64,13 @@ class SemanticResult:
     distances: Optional[List[float]] = None
     centroid: Optional[Coordinates] = None
     harmonic_cohesion: Optional[float] = None
+    # LJPW Baseline metrics
+    distance_from_natural_equilibrium: Optional[float] = None
+    composite_score: Optional[float] = None
+    harmonic_mean: Optional[float] = None
+    geometric_mean: Optional[float] = None
+    coupling_aware_sum: Optional[float] = None
+    harmony_index: Optional[float] = None
 
 
 class VocabularyManager:
@@ -389,7 +405,7 @@ class SemanticAnalyzer:
     def _calculate_cluster_metrics(
         self, coords_list: List[Coordinates], concept_count: int
     ) -> SemanticResult:
-        """Calculate optimized cluster metrics"""
+        """Calculate optimized cluster metrics with LJPW baselines"""
         # Calculate centroid using vectorized approach
         love_sum = justice_sum = power_sum = wisdom_sum = 0.0
         for coords in coords_list:
@@ -412,6 +428,15 @@ class SemanticAnalyzer:
         distance_from_anchor = self.vocab.get_distance(self.ANCHOR_POINT, centroid)
         semantic_clarity = self.vocab.get_semantic_clarity(centroid)
 
+        # Calculate LJPW baseline metrics
+        L, J, P, W = centroid.love, centroid.justice, centroid.power, centroid.wisdom
+        distance_from_ne = LJPWBaselines.distance_from_natural_equilibrium(L, J, P, W)
+        composite = LJPWBaselines.composite_score(L, J, P, W)
+        harmonic = LJPWBaselines.harmonic_mean(L, J, P, W)
+        geometric = LJPWBaselines.geometric_mean(L, J, P, W)
+        coupling_sum = LJPWBaselines.coupling_aware_sum(L, J, P, W)
+        harmony_idx = LJPWBaselines.harmony_index(L, J, P, W)
+
         return SemanticResult(
             coordinates=centroid,
             distance_from_anchor=distance_from_anchor,
@@ -421,6 +446,13 @@ class SemanticAnalyzer:
             distances=distances,
             centroid=centroid,
             harmonic_cohesion=harmonic_cohesion,
+            # LJPW baseline metrics
+            distance_from_natural_equilibrium=distance_from_ne,
+            composite_score=composite,
+            harmonic_mean=harmonic,
+            geometric_mean=geometric,
+            coupling_aware_sum=coupling_sum,
+            harmony_index=harmony_idx,
         )
 
 
@@ -555,7 +587,7 @@ class ICEAnalyzer:
         context_words: List[str],
         execution_words: List[str],
     ) -> Dict:
-        """Optimized ICE analysis"""
+        """Optimized ICE analysis with LJPW baseline metrics"""
         # Validate input
         if not any([intent_words, context_words, execution_words]):
             return self._empty_ice_result()
@@ -598,6 +630,40 @@ class ICEAnalyzer:
             intent_result, context_result, execution_result
         )
 
+        # LJPW Baseline-enhanced disharmony metrics
+        # Use coupling-aware metrics for intent-execution alignment
+        intent_coords = intent_result.coordinates
+        exec_coords = execution_result.coordinates
+
+        # Calculate effective dimensions for both (coupling-aware)
+        intent_eff = LJPWBaselines.effective_dimensions(
+            intent_coords.love,
+            intent_coords.justice,
+            intent_coords.power,
+            intent_coords.wisdom,
+        )
+        exec_eff = LJPWBaselines.effective_dimensions(
+            exec_coords.love, exec_coords.justice, exec_coords.power, exec_coords.wisdom
+        )
+
+        # Enhanced disharmony using Natural Equilibrium as reference
+        # Lower distance from NE = more harmonious
+        intent_ne_dist = intent_result.distance_from_natural_equilibrium or 0
+        exec_ne_dist = execution_result.distance_from_natural_equilibrium or 0
+
+        # Baseline-enhanced composite disharmony score
+        # Combines: traditional distance, NE deviation, and composite quality
+        baseline_disharmony = (
+            intent_exec_dist * 0.5  # Traditional intent-execution gap
+            + abs(intent_ne_dist - exec_ne_dist) * 0.3  # NE alignment difference
+            + (
+                2.0
+                - (intent_result.composite_score or 1.0)
+                - (execution_result.composite_score or 1.0)
+            )
+            * 0.2
+        )
+
         return {
             "ice_components": {
                 "intent": intent_result,
@@ -610,6 +676,12 @@ class ICEAnalyzer:
                 "ice_balance": ice_balance,
                 "benevolence_score": benevolence_score,
                 "intent_execution_disharmony": intent_exec_dist,
+                # Baseline-enhanced metrics
+                "baseline_disharmony": baseline_disharmony,
+                "intent_effective_dimensions": intent_eff,
+                "execution_effective_dimensions": exec_eff,
+                "intent_composite_score": intent_result.composite_score,
+                "execution_composite_score": execution_result.composite_score,
             },
             "ice_harmony_level": self._determine_ice_harmony_level(
                 ice_coherence, ice_balance
