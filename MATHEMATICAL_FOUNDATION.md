@@ -454,9 +454,11 @@ This is not metaphor or approximation - it is mathematical structure validated e
 - `test_primitives.py` - Direct validation of four primitives
 - `test_mixing_formula.py` - Validation of linear mixing
 - `MIXING_FORMULA_REPORT.md` - Detailed empirical results
+- `docs/LJPW_MATHEMATICAL_BASELINES.md` - Objective baselines with empirical validation ✨
 
 **Theoretical Foundation:**
 - `docs/PHILOSOPHY.md` - Philosophical framework
+- `docs/LJPW_MATHEMATICAL_BASELINES.md` - Mathematical constants and reference points
 - `docs/ARCHITECTURE.md` - Technical implementation
 
 **Mathematical Tools:**

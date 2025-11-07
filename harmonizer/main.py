@@ -188,9 +188,11 @@ class PythonCodeHarmonizer:
                     context_words=["python", "function", function_name],
                     execution_words=execution_concepts,
                 )
-                disharmony_score = ice_result["ice_metrics"][
-                    "intent_execution_disharmony"
-                ]
+                # Use baseline-enhanced disharmony if available, else fall back to traditional
+                disharmony_score = ice_result["ice_metrics"].get(
+                    "baseline_disharmony",
+                    ice_result["ice_metrics"]["intent_execution_disharmony"],
+                )
                 semantic_map = self.map_generator.generate_map(
                     ice_result, function_name
                 )
@@ -374,6 +376,20 @@ class PythonCodeHarmonizer:
                     "severity": severity,
                     "disharmonious": score > self.disharmony_threshold,
                 }
+                # Add LJPW baseline metrics if available
+                ice_metrics = data.get("ice_result", {}).get("ice_metrics", {})
+                if "baseline_disharmony" in ice_metrics:
+                    function_data["ljpw_baselines"] = {
+                        "baseline_disharmony": round(
+                            ice_metrics["baseline_disharmony"], 4
+                        ),
+                        "intent_composite_score": round(
+                            ice_metrics.get("intent_composite_score", 0), 4
+                        ),
+                        "execution_composite_score": round(
+                            ice_metrics.get("execution_composite_score", 0), 4
+                        ),
+                    }
                 if self.show_semantic_maps:
                     function_data["semantic_map"] = data["semantic_map"]
                 file_data["functions"].append(function_data)
