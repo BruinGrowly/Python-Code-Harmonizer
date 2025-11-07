@@ -442,6 +442,7 @@ It's the **only tool** that:
 ### Deep Dive
 - **[Philosophy](docs/PHILOSOPHY.md)** - The Anchor Point and Four Dimensions
 - **[Mathematical Foundation](MATHEMATICAL_FOUNDATION.md)** - Proof that LJPW forms semantic basis
+- **[LJPW Mathematical Baselines](docs/LJPW_MATHEMATICAL_BASELINES.md)** ✨ NEW - Objective baselines with empirical validation
 - **[Programming Language Semantics](PROGRAMMING_LANGUAGE_SEMANTICS.md)** - How code maps to LJPW
 - **[Semantic Programming Language](SEMANTIC_PROGRAMMING_LANGUAGE.md)** - Future language design
 - **[Architecture](docs/ARCHITECTURE.md)** - Technical implementation
