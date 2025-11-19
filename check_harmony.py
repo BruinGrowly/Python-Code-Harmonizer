@@ -11,54 +11,59 @@ from harmonizer.main import PythonCodeHarmonizer
 from harmonizer.legacy_mapper import LegacyCodeMapper
 from harmonizer.config import ConfigLoader
 
-def check_harmony(target_dir: str = ".", config_path: str = None, verbose: bool = False):
+
+def check_harmony(
+    target_dir: str = ".", config_path: str = None, verbose: bool = False
+):
     print(f"Running LJPW Harmony Check on: {os.path.abspath(target_dir)}")
     print("=" * 60)
-    
+
     # Load config explicitly if provided, otherwise auto-load
-    # Note: LegacyCodeMapper loads config automatically from target_dir, 
+    # Note: LegacyCodeMapper loads config automatically from target_dir,
     # but if we want to override with a specific file, we might need to adjust ConfigLoader.
     # For now, we'll rely on auto-loading from target_dir.
-    
+
     mapper = LegacyCodeMapper(target_dir, quiet=not verbose)
     mapper.analyze_codebase(show_progress=True)
-    
+
     failures = []
     warnings = []
-    
+
     config = mapper.config
     print(f"\n--- CONFIGURATION ---")
     print(f"Max Disharmony: {config.max_disharmony}")
     print(f"Max Imbalance:  {config.max_imbalance}")
     print(f"Min Density:    {config.min_density}")
-    
+
     print("\n--- QUALITY GATES ---")
-    
+
     for file_path, analysis in mapper.file_analyses.items():
         rel_path = os.path.relpath(file_path, target_dir)
-        
+
         # 1. Critical Disharmony Gate
         if analysis.avg_disharmony > config.max_disharmony:
-            failures.append(f"[CRITICAL] {rel_path}: Disharmony {analysis.avg_disharmony:.2f} > {config.max_disharmony}")
-            
+            failures.append(
+                f"[CRITICAL] {rel_path}: Disharmony {analysis.avg_disharmony:.2f} > {config.max_disharmony}"
+            )
+
     # Check Architectural Smells
     for smell in mapper.architectural_smells:
         if smell.smell_type == "Unnatural Imbalance" and smell.severity == "HIGH":
             failures.append(f"[IMBALANCE] {smell.file_path}: {smell.description}")
-            
+
         if smell.smell_type == "Anemic Component" and smell.severity == "HIGH":
             # Treat Anemic Components as warnings for now, unless critical
             warnings.append(f"[ANEMIC] {smell.file_path}: {smell.description}")
-            
+
         if smell.smell_type == "God File" and smell.severity == "HIGH":
-             failures.append(f"[GOD FILE] {smell.file_path}: {smell.description}")
+            failures.append(f"[GOD FILE] {smell.file_path}: {smell.description}")
 
     # Report Results
     if warnings:
         print("\nWARNINGS:")
         for w in warnings:
             print(w)
-            
+
     if failures:
         print("\nFAILURES:")
         for f in failures:
@@ -69,15 +74,21 @@ def check_harmony(target_dir: str = ".", config_path: str = None, verbose: bool 
         print("\nHarmony Check PASSED. The system is in balance.")
         sys.exit(0)
 
+
 def main():
     parser = argparse.ArgumentParser(description="LJPW Harmony Check")
-    parser.add_argument("target", nargs="?", default=".", help="Target directory to analyze")
+    parser.add_argument(
+        "target", nargs="?", default=".", help="Target directory to analyze"
+    )
     parser.add_argument("--config", help="Path to configuration file (optional)")
-    parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output")
-    
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="Enable verbose output"
+    )
+
     args = parser.parse_args()
-    
+
     check_harmony(args.target, args.config, args.verbose)
+
 
 if __name__ == "__main__":
     main()

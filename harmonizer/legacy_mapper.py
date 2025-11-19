@@ -179,7 +179,7 @@ class LegacyCodeMapper:
     def _find_python_files(self) -> List[str]:
         """Recursively find all Python files in codebase, respecting ignore patterns"""
         python_files = []
-        
+
         # Load .harmonizerignore if exists
         ignore_patterns = list(self.config.exclude_patterns)
         ignore_path = os.path.join(self.codebase_path, ".harmonizerignore")
@@ -195,30 +195,36 @@ class LegacyCodeMapper:
                     print(f"Warning: Failed to read .harmonizerignore: {e}")
 
         import fnmatch
-        
+
         for root, dirs, files in os.walk(self.codebase_path):
             # Filter directories in-place
             # 1. Check exact match
             dirs[:] = [d for d in dirs if d not in ignore_patterns]
             # 2. Check glob patterns
-            dirs[:] = [d for d in dirs if not any(fnmatch.fnmatch(d, p) for p in ignore_patterns)]
-            
+            dirs[:] = [
+                d
+                for d in dirs
+                if not any(fnmatch.fnmatch(d, p) for p in ignore_patterns)
+            ]
+
             for file in files:
                 if file.endswith(".py"):
                     # Check file ignore patterns
                     if any(fnmatch.fnmatch(file, p) for p in ignore_patterns):
                         continue
-                        
+
                     # Check relative path ignore patterns (e.g. "tests/legacy/*.py")
-                    rel_path = os.path.relpath(os.path.join(root, file), self.codebase_path)
+                    rel_path = os.path.relpath(
+                        os.path.join(root, file), self.codebase_path
+                    )
                     # Normalize path separators for matching
                     rel_path = rel_path.replace(os.sep, "/")
-                    
+
                     if any(fnmatch.fnmatch(rel_path, p) for p in ignore_patterns):
                         continue
-                        
+
                     python_files.append(os.path.join(root, file))
-                    
+
         return python_files
 
     def _analyze_file(self, file_path: str) -> Optional[FileAnalysis]:
@@ -269,15 +275,15 @@ class LegacyCodeMapper:
         # Or better, assume 'results' contains LOC info if available.
         # For now, we'll use a proxy: Power Score / Function Count
         # Ideally, we'd want raw Power keywords count.
-        
+
         # Let's look at how we can get raw counts.
         # The 'results' dict contains 'ice_result' -> 'ice_components' -> 'execution' -> 'coordinates'
         # It doesn't seem to expose raw keyword counts directly.
         # However, 'avg_p' is the average Power score (0-1).
         # Semantic Density = Power Intensity.
-        
+
         semantic_density = avg_p  # Using avg_p as a proxy for density for now
-        
+
         return FileAnalysis(
             path=file_path,
             coordinates=avg_coords,
@@ -331,7 +337,9 @@ class LegacyCodeMapper:
                         smell_type="High Disharmony",
                         file_path=rel_path,
                         severity=(
-                            "CRITICAL" if analysis.avg_disharmony > self.config.max_disharmony else "HIGH"
+                            "CRITICAL"
+                            if analysis.avg_disharmony > self.config.max_disharmony
+                            else "HIGH"
                         ),
                         description=f"Average disharmony: {analysis.avg_disharmony:.2f} (threshold: {self.config.max_disharmony * 0.7:.2f})",
                         impact=min(1.0, analysis.avg_disharmony / 1.5),
@@ -361,7 +369,9 @@ class LegacyCodeMapper:
                     ArchitecturalSmell(
                         smell_type="Unnatural Imbalance",
                         file_path=rel_path,
-                        severity="HIGH" if dist_ne > self.config.max_imbalance else "MEDIUM",
+                        severity=(
+                            "HIGH" if dist_ne > self.config.max_imbalance else "MEDIUM"
+                        ),
                         description=f"Deviates significantly from Natural Equilibrium (distance: {dist_ne:.2f})",
                         impact=min(1.0, dist_ne),
                         recommendation="Rebalance dimensions towards NE (L=0.62, J=0.41, P=0.72, W=0.69)",
@@ -370,7 +380,10 @@ class LegacyCodeMapper:
 
             # Smell 6: Anemic Component (Low Semantic Density)
             # High function count but very low Power (Action)
-            if analysis.semantic_density < self.config.min_density and analysis.function_count > 10:
+            if (
+                analysis.semantic_density < self.config.min_density
+                and analysis.function_count > 10
+            ):
                 self.architectural_smells.append(
                     ArchitecturalSmell(
                         smell_type="Anemic Component",
@@ -710,32 +723,40 @@ class LegacyCodeMapper:
         # Complexity = 1.0 + (function_count / 20.0) -> 5 functions = 1.25, 20 functions = 2.0
         complexity_score = 1.0 + (analysis.function_count / 20.0)
         simulator = DynamicLJPWv3(complexity_score=complexity_score)
-        
+
         # Run simulation (1 step approx 1 week, so months * 4 steps)
         duration = months * 4
         history = simulator.simulate(analysis.coordinates, duration=duration, dt=0.1)
-        
-        final_l = history['L'][-1]
-        final_j = history['J'][-1]
-        final_p = history['P'][-1]
-        final_w = history['W'][-1]
-        
+
+        final_l = history["L"][-1]
+        final_j = history["J"][-1]
+        final_p = history["P"][-1]
+        final_w = history["W"][-1]
+
         # Calculate projected distance from NE
-        start_dist = LJPWBaselines.distance_from_natural_equilibrium(*analysis.coordinates)
-        end_dist = LJPWBaselines.distance_from_natural_equilibrium(final_l, final_j, final_p, final_w)
-        
+        start_dist = LJPWBaselines.distance_from_natural_equilibrium(
+            *analysis.coordinates
+        )
+        end_dist = LJPWBaselines.distance_from_natural_equilibrium(
+            final_l, final_j, final_p, final_w
+        )
+
         drift = end_dist - start_dist
-        
+
         status = "STABLE"
-        if drift > 0.1: status = "DEGRADING"
-        if drift < -0.1: status = "IMPROVING"
-        
+        if drift > 0.1:
+            status = "DEGRADING"
+        if drift < -0.1:
+            status = "IMPROVING"
+
         return {
             "current_coordinates": analysis.coordinates,
             "projected_coordinates": (final_l, final_j, final_p, final_w),
             "drift": drift,
             "status": status,
-            "risk_level": "HIGH" if end_dist > 0.8 else "MEDIUM" if end_dist > 0.5 else "LOW"
+            "risk_level": (
+                "HIGH" if end_dist > 0.8 else "MEDIUM" if end_dist > 0.5 else "LOW"
+            ),
         }
 
     def analyze_architecture_docs(self, docs_path: Optional[str] = None) -> bool:

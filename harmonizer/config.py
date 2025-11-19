@@ -24,21 +24,32 @@ try:
 except ImportError:
     yaml = None
 
+
 @dataclass
 class HarmonizerConfig:
     # Thresholds
     max_disharmony: float = 1.0
     max_imbalance: float = 0.8
     min_density: float = 0.1
-    
+
     # Paths
-    exclude_patterns: List[str] = field(default_factory=lambda: [
-        "venv", ".venv", "__pycache__", ".git", "build", "dist", ".pytest_cache", "tests"
-    ])
+    exclude_patterns: List[str] = field(
+        default_factory=lambda: [
+            "venv",
+            ".venv",
+            "__pycache__",
+            ".git",
+            "build",
+            "dist",
+            ".pytest_cache",
+            "tests",
+        ]
+    )
     report_output: str = "harmonizer_report.html"
-    
+
     # Analysis
     complexity_weight: float = 0.2  # For dynamic simulation
+
 
 class ConfigLoader:
     @staticmethod
@@ -51,7 +62,7 @@ class ConfigLoader:
         3. Defaults
         """
         config = HarmonizerConfig()
-        
+
         # 1. Try harmonizer.yaml
         yaml_path = os.path.join(target_dir, "harmonizer.yaml")
         if os.path.exists(yaml_path) and yaml:
@@ -77,7 +88,7 @@ class ConfigLoader:
                         print(f"Loaded config from {toml_path}")
             except Exception as e:
                 print(f"Warning: Failed to load {toml_path}: {e}")
-                
+
         return config
 
     @staticmethod
@@ -85,15 +96,21 @@ class ConfigLoader:
         """Update config object with dictionary data"""
         if "thresholds" in data:
             t = data["thresholds"]
-            if "max_disharmony" in t: config.max_disharmony = float(t["max_disharmony"])
-            if "max_imbalance" in t: config.max_imbalance = float(t["max_imbalance"])
-            if "min_density" in t: config.min_density = float(t["min_density"])
-            
+            if "max_disharmony" in t:
+                config.max_disharmony = float(t["max_disharmony"])
+            if "max_imbalance" in t:
+                config.max_imbalance = float(t["max_imbalance"])
+            if "min_density" in t:
+                config.min_density = float(t["min_density"])
+
         if "paths" in data:
             p = data["paths"]
-            if "exclude" in p: config.exclude_patterns = p["exclude"]
-            if "report" in p: config.report_output = p["report"]
-            
+            if "exclude" in p:
+                config.exclude_patterns = p["exclude"]
+            if "report" in p:
+                config.report_output = p["report"]
+
         if "analysis" in data:
             a = data["analysis"]
-            if "complexity_weight" in a: config.complexity_weight = float(a["complexity_weight"])
+            if "complexity_weight" in a:
+                config.complexity_weight = float(a["complexity_weight"])

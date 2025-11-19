@@ -8,76 +8,81 @@ import os
 from typing import Dict, List, Any
 from datetime import datetime
 
+
 class HarmonizerVisualizer:
     """
     Generates a self-contained HTML report with interactive visualizations.
     Uses Chart.js for charts and D3.js for force-directed graphs.
     """
-    
+
     def __init__(self, output_path: str = "harmonizer_report.html"):
         self.output_path = output_path
-        
-    def generate_report(self, 
-                        file_analyses: Dict[str, Any], 
-                        dependency_graph: Dict[str, Any],
-                        project_name: str = "Project Analysis"):
+
+    def generate_report(
+        self,
+        file_analyses: Dict[str, Any],
+        dependency_graph: Dict[str, Any],
+        project_name: str = "Project Analysis",
+    ):
         """
         Generates the HTML report.
-        
+
         Args:
             file_analyses: Dict mapping file paths to analysis data (including LJPW coords)
             dependency_graph: Dict with nodes and links for D3 graph
             project_name: Name of the project
         """
-        
+
         # Prepare data for JavaScript
         js_data = {
             "files": self._prepare_file_data(file_analyses),
             "graph": dependency_graph,
             "timestamp": datetime.now().isoformat(),
-            "project": project_name
+            "project": project_name,
         }
-        
+
         html_content = self._get_html_template(js_data)
-        
+
         with open(self.output_path, "w", encoding="utf-8") as f:
             f.write(html_content)
-            
+
         print(f"Report generated: {os.path.abspath(self.output_path)}")
-        
+
     def _prepare_file_data(self, file_analyses: Dict[str, Any]) -> List[Dict]:
         """Convert python objects to JSON-serializable list"""
         data = []
         for path, analysis in file_analyses.items():
             # Handle both object and dict access (depending on how it's passed)
-            if hasattr(analysis, 'coordinates'):
+            if hasattr(analysis, "coordinates"):
                 coords = analysis.coordinates
                 func_count = analysis.function_count
-                density = getattr(analysis, 'semantic_density', 0.0)
+                density = getattr(analysis, "semantic_density", 0.0)
                 disharmony = analysis.avg_disharmony
             else:
-                coords = analysis.get('coordinates', (0,0,0,0))
-                func_count = analysis.get('function_count', 0)
-                density = analysis.get('semantic_density', 0.0)
-                disharmony = analysis.get('avg_disharmony', 0.0)
-                
-            data.append({
-                "path": path,
-                "name": os.path.basename(path),
-                "l": coords[0],
-                "j": coords[1],
-                "p": coords[2],
-                "w": coords[3],
-                "functions": func_count,
-                "density": density,
-                "disharmony": disharmony
-            })
+                coords = analysis.get("coordinates", (0, 0, 0, 0))
+                func_count = analysis.get("function_count", 0)
+                density = analysis.get("semantic_density", 0.0)
+                disharmony = analysis.get("avg_disharmony", 0.0)
+
+            data.append(
+                {
+                    "path": path,
+                    "name": os.path.basename(path),
+                    "l": coords[0],
+                    "j": coords[1],
+                    "p": coords[2],
+                    "w": coords[3],
+                    "functions": func_count,
+                    "density": density,
+                    "disharmony": disharmony,
+                }
+            )
         return data
 
     def _get_html_template(self, data: Dict) -> str:
         """Returns the full HTML content with embedded data and scripts"""
         json_data = json.dumps(data)
-        
+
         return f"""<!DOCTYPE html>
 <html lang="en">
 <head>

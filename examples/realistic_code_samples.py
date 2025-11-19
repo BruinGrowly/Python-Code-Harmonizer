@@ -3,10 +3,10 @@ Realistic Code Samples for Testing Enhanced Parser
 Demonstrates real-world functions with proper LJPW semantic mapping.
 """
 
-
 # ============================================================================
 # HARMONIOUS FUNCTIONS (Intent matches Execution)
 # ============================================================================
+
 
 def get_user_by_id(user_id):
     """
@@ -59,6 +59,7 @@ def send_welcome_email(user_email):
 # ============================================================================
 # DISHARMONIOUS FUNCTIONS (Intent contradicts Execution)
 # ============================================================================
+
 
 def check_user_permissions(user_token):
     """
@@ -123,6 +124,7 @@ def calculate_and_notify(items):
 # COMPLEX MIXED FUNCTIONS (Multiple dimensions, properly named)
 # ============================================================================
 
+
 def fetch_validate_and_save_user(user_id, updates):
     """
     Fetch user, validate updates, and save changes.
@@ -167,6 +169,7 @@ def process_order_with_notification(order_id):
 # ============================================================================
 # DIMENSION-SPECIFIC EXAMPLES
 # ============================================================================
+
 
 # Pure WISDOM functions
 def calculate_total_price(items):
@@ -220,16 +223,13 @@ def broadcast_system_message(message):
 
 def merge_user_profiles(profile1, profile2):
     """Pure integration - combines data."""
-    return {
-        **profile1,
-        **profile2,
-        "merged_at": datetime.now()
-    }
+    return {**profile1, **profile2, "merged_at": datetime.now()}
 
 
 # ============================================================================
 # Mock objects for testing
 # ============================================================================
+
 
 class Database:
     def query(self, sql):

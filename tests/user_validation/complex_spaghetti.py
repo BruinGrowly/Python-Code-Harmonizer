@@ -1,19 +1,24 @@
 class DataProcessor:
     """Handles data transformation (Wisdom)."""
+
     def process(self, data):
         # Wisdom: Logic/Transform
         return [d.strip().lower() for d in data if d]
 
+
 class DataValidator:
     """Enforces data integrity (Justice)."""
+
     def validate(self, data):
         # Justice: Validation
         if not data:
             raise ValueError("Empty data")
         return True
 
+
 class Application:
     """Orchestrates the flow (Power/Love)."""
+
     def __init__(self):
         self.processor = DataProcessor()
         self.validator = DataValidator()
