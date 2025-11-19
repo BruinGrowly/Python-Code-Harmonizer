@@ -40,6 +40,7 @@ def execute_power_move():
             "dimension_spread": 0.8,
             "max_disharmony": 0.9,
             "min_disharmony": 0.7,
+            "semantic_density": 0.5,
         },
     )
 
