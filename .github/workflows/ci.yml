@@ -40,15 +40,6 @@ jobs:
         run: |
           python -m pytest -v
 
-      - name: Run standalone test files
-        run: |
-          # V2.0: Run new semantic framework tests
-          # Suppress VocabularyManager initialization messages
-          python test_primitives.py 2>/dev/null || python test_primitives.py
-          python test_language_semantics.py 2>/dev/null || python test_language_semantics.py
-          python test_enhanced_parser.py 2>/dev/null || python test_enhanced_parser.py
-          python test_harmonizer_enhanced.py 2>/dev/null || python test_harmonizer_enhanced.py
-
       - name: Check Code Harmony
         run: |
           # v1.2+: Harmony check with automatic exit codes
