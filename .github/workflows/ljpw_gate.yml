@@ -32,11 +32,11 @@ jobs:
       if: always()
       run: |
         # Run validation script to generate report if check fails or passes
-        python run_validation.py
+        python scripts/run_validation.py
         
-    - name: Upload Report
+    - name: Upload Harmony Report
       if: always()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: harmonizer-report
+        name: harmony-report
         path: harmonizer_report.html
