@@ -1,0 +1,8 @@
+# Python Code Harmonizer Ignore File
+venv/
+.git/
+__pycache__/
+build/
+dist/
+.pytest_cache/
+tests/legacy/

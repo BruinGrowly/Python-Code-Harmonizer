@@ -2,16 +2,19 @@
 # -*- coding: utf-8 -*-
 """
 LJPW Mathematical Baselines
-Version 1.0
+Version 4.0
 
 Provides objective, non-arbitrary baselines for LJPW framework implementations.
+Includes both static analysis and a validated, non-linear dynamic simulator.
 
-Based on: docs/LJPW_MATHEMATICAL_BASELINES.md
+Based on: docs/LJPW Mathematical Baselines Reference V4.md
 """
 
 import math
 from dataclasses import dataclass
-from typing import Dict, Tuple
+from typing import Dict, Tuple, List
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 @dataclass
@@ -38,7 +41,7 @@ class ReferencePoints:
 
 
 class LJPWBaselines:
-    """LJPW mathematical baselines and calculations"""
+    """LJPW mathematical baselines and calculations (Static Analysis)"""
 
     # Coupling matrix - Love amplifies other dimensions
     COUPLING_MATRIX = {
@@ -277,6 +280,139 @@ class LJPWBaselines:
             return "Elite - exceptional, Love multiplier engaged"
 
 
+class DynamicLJPWv3:
+    """
+    LJPW v3.0: Empirically-validated, non-linear dynamic simulator.
+    """
+
+    def __init__(self, complexity_score: float = 1.0):
+        """
+        Initialize the LJPW v4.0 Dynamic Model.
+        
+        Args:
+            complexity_score: Multiplier for system energy/potential (default 1.0).
+                            1.0 = Standard script (Settles at NE)
+                            >1.5 = Complex system (Can reach High-Energy)
+        """
+        self.complexity = max(0.5, complexity_score)
+        self.params = self._initialize_parameters()
+        self.NE = ReferencePoints.NATURAL_EQUILIBRIUM
+
+    def _initialize_parameters(self) -> Dict[str, float]:
+        """
+        Initialize system parameters based on LJPW v4.0 specification,
+        dynamically calibrated by complexity score.
+        """
+        # Base parameters (Tuned for NE convergence at complexity=1.0)
+        # Logic: Increased coupling to 0.12 to ensure saturation near 0.6-0.7.
+        
+        base_params = {
+            # Growth rates (Alpha) - Not used directly in standard equations but kept for completeness
+            "alpha_L": 0.0, "alpha_J": 0.0, "alpha_P": 0.0, "alpha_W": 0.0,
+            
+            # Coupling coefficients (Alpha_XY) - Target 0.12 for balance
+            "alpha_LJ": 0.12, "alpha_LP": 0.0, "alpha_LW": 0.12, # L inputs: J, W
+            "alpha_JL": 0.14, "alpha_JP": 0.0, "alpha_JW": 0.14, # J inputs: L, W (boosted slightly)
+            "alpha_PL": 0.12, "alpha_PJ": 0.12, "alpha_PW": 0.0, # P inputs: L, J
+            "alpha_WL": 0.10, "alpha_WJ": 0.10, "alpha_WP": 0.10, # W inputs: L, J, P
+            
+            # Decay rates (Beta) - Target 0.20
+            "beta_L": 0.20,
+            "beta_J": 0.20,
+            "beta_P": 0.20,
+            "beta_W": 0.24, # Higher decay for W because it has 3 inputs
+            
+            # Non-Linear Parameters (v3.0)
+            'K_JL': 0.59,    # Saturation constant for L -> J
+            'gamma_JP': 0.49,# Erosion rate for P -> J
+            'K_JP': 0.71,    # Threshold constant for P -> J
+            'n_JP': 4.1,     # Steepness for P -> J erosion
+        }
+        
+        return self._calibrate_parameters(base_params)
+
+    def _calibrate_parameters(self, params: Dict[str, float]) -> Dict[str, float]:
+        """
+        Scale parameters based on system complexity.
+        Higher complexity = Higher growth potential (Alpha) but harder to maintain (Higher Beta).
+        """
+        # Complexity factor for growth (Logarithmic scaling to prevent explosion)
+        # 1.0 -> 1.0, 10.0 -> ~2.0
+        growth_multiplier = 1.0 + 0.5 * math.log(self.complexity)
+        
+        # Complexity factor for decay (Linear scaling - entropy scales with size)
+        decay_multiplier = 1.0 + 0.1 * (self.complexity - 1.0)
+        
+        calibrated = params.copy()
+        
+        # Scale Alphas (Growth)
+        for key in calibrated:
+            if key.startswith("alpha"):
+                calibrated[key] *= growth_multiplier
+                
+        # Scale Betas (Decay)
+        for key in calibrated:
+            if key.startswith("beta"):
+                calibrated[key] *= decay_multiplier
+                
+        return calibrated
+
+    def _derivatives(self, state):
+        """Calculates the derivatives with non-linear dynamics."""
+        L, J, P, W = state
+        p = self.params
+        
+        # Love equation (remains linear)
+        dL_dt = p['alpha_LJ'] * J + p['alpha_LW'] * W - p['beta_L'] * L
+        
+        # Justice equation (with saturation and threshold effects)
+        L_effect_on_J = p['alpha_JL'] * (L / (p['K_JL'] + L)) # Saturation
+        P_effect_on_J = p['gamma_JP'] * (P**p['n_JP'] / (p['K_JP']**p['n_JP'] + P**p['n_JP'])) * max(0, 1 - W) # Threshold
+        dJ_dt = L_effect_on_J + p['alpha_JW'] * W - P_effect_on_J - p['beta_J'] * J
+        
+        # Power and Wisdom equations (can be similarly enhanced in future versions)
+        dP_dt = p['alpha_PL'] * L + p['alpha_PJ'] * J - p['beta_P'] * P
+        dW_dt = p['alpha_WL'] * L + p['alpha_WJ'] * J + p['alpha_WP'] * P - p['beta_W'] * W
+        
+        return np.array([dL_dt, dJ_dt, dP_dt, dW_dt])
+
+    def _rk4_step(self, state, dt):
+        """Performs a single 4th-order Runge-Kutta integration step."""
+        k1 = self._derivatives(state)
+        k2 = self._derivatives(state + 0.5 * dt * k1)
+        k3 = self._derivatives(state + 0.5 * dt * k2)
+        k4 = self._derivatives(state + dt * k3)
+        return state + (dt / 6.0) * (k1 + 2*k2 + 2*k3 + k4)
+
+    def simulate(self, initial_state: Tuple[float, float, float, float], duration: float, dt: float = 0.01) -> Dict:
+        """Runs the simulation using the more accurate RK4 method."""
+        steps = int(duration / dt)
+        state = np.array(initial_state, dtype=float)
+        
+        history = {'t': [0], 'L': [state[0]], 'J': [state[1]], 'P': [state[2]], 'W': [state[3]]}
+        
+        for i in range(steps):
+            state = self._rk4_step(state, dt)
+            state = np.clip(state, 0, 1.5)
+            
+            history['t'].append((i + 1) * dt)
+            history['L'].append(state[0]); history['J'].append(state[1]); history['P'].append(state[2]); history['W'].append(state[3])
+            
+        return history
+
+    def plot_simulation(self, history: Dict):
+        """Plots the results of a simulation."""
+        plt.style.use('seaborn-v0_8-whitegrid'); fig, ax = plt.subplots(figsize=(12, 7))
+        ax.plot(history['t'], history['L'], label='Love (L)', color='crimson', lw=2)
+        ax.plot(history['t'], history['J'], label='Justice (J)', color='royalblue', lw=2)
+        ax.plot(history['t'], history['P'], label='Power (P)', color='darkgreen', lw=2)
+        ax.plot(history['t'], history['W'], label='Wisdom (W)', color='purple', lw=2)
+        for i, val in enumerate(self.NE):
+            ax.axhline(y=val, color=['crimson', 'royalblue', 'darkgreen', 'purple'][i], linestyle='--', alpha=0.3)
+        ax.set_title("LJPW v3.0 System Evolution (Non-Linear, RK4)"); ax.set_xlabel("Time"); ax.set_ylabel("Dimension Value")
+        ax.set_ylim(0, 1.2); ax.legend(); plt.show()
+
+
 # Convenience functions for quick access
 def get_numerical_equivalents() -> NumericalEquivalents:
     """Get the fundamental LJPW constants"""
@@ -354,3 +490,15 @@ if __name__ == "__main__":
         f"    Composite: {diag_high['metrics']['composite_score']:.2f} "
         f"(+{(diag_high['metrics']['composite_score']/composite - 1)*100:.0f}% improvement)"
     )
+
+    # --- Dynamic Simulation Example ---
+    print("\nLJPW v3.0 Dynamic Simulation: 'Reckless Power' Scenario")
+    print("=" * 60)
+    simulator = DynamicLJPWv3()
+    initial_state = (0.2, 0.3, 0.9, 0.2) # High P, low L, J, W
+    history = simulator.simulate(initial_state, duration=50, dt=0.05)
+    
+    # Print final state
+    final_state = (history['L'][-1], history['J'][-1], history['P'][-1], history['W'][-1])
+    print(f"Initial State: L={initial_state[0]:.2f}, J={initial_state[1]:.2f}, P={initial_state[2]:.2f}, W={initial_state[3]:.2f}")
+    print(f"Final State:   L={final_state[0]:.2f}, J={final_state[1]:.2f}, P={final_state[2]:.2f}, W={final_state[3]:.2f}")

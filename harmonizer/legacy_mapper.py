@@ -17,6 +17,8 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Tuple, Optional
 
 from harmonizer.main import PythonCodeHarmonizer
+from harmonizer.ljpw_baselines import LJPWBaselines, DynamicLJPWv3, ReferencePoints
+from harmonizer.config import ConfigLoader
 
 
 @dataclass
@@ -31,6 +33,7 @@ class FileAnalysis:
     max_disharmony: float = 0.0
     min_disharmony: float = 0.0
     dimension_spread: float = 0.0  # How evenly distributed across dimensions
+    semantic_density: float = 0.0  # Action per Line of Code
 
 
 @dataclass
@@ -129,6 +132,7 @@ class LegacyCodeMapper:
     def __init__(self, codebase_path: str, quiet: bool = False):
         self.codebase_path = codebase_path
         self.harmonizer = PythonCodeHarmonizer(quiet=quiet)
+        self.config = ConfigLoader.load(codebase_path)
         self.file_analyses: Dict[str, FileAnalysis] = {}
         self.architectural_smells: List[ArchitecturalSmell] = []
         self.refactoring_opportunities: List[RefactoringOpportunity] = []
@@ -141,7 +145,7 @@ class LegacyCodeMapper:
     def analyze_codebase(self, show_progress: bool = True) -> Dict:
         """Analyze entire codebase and generate comprehensive report"""
         if show_progress:
-            print(f"🔍 Analyzing codebase: {self.codebase_path}")
+            print(f"Analyzing codebase: {self.codebase_path}")
             print("=" * 70)
 
         # Find all Python files
@@ -160,40 +164,62 @@ class LegacyCodeMapper:
                     self.file_analyses[file_path] = analysis
             except Exception as e:
                 if show_progress:
-                    print(f"⚠️  Skipped {file_path}: {e}")
+                    print(f"Skipped {file_path}: {e}")
 
         if show_progress:
-            print(f"\n✅ Analyzed {len(self.file_analyses)} files successfully")
+            print(f"\nAnalyzed {len(self.file_analyses)} files successfully")
             print("=" * 70)
 
         # Perform advanced analysis
         self._detect_architectural_smells()
         self._identify_refactoring_opportunities()
 
-        return self._generate_comprehensive_report()
+        return self.file_analyses
 
     def _find_python_files(self) -> List[str]:
-        """Find all Python files in codebase"""
-        pattern = os.path.join(self.codebase_path, "**/*.py")
-        files = glob.glob(pattern, recursive=True)
+        """Recursively find all Python files in codebase, respecting ignore patterns"""
+        python_files = []
+        
+        # Load .harmonizerignore if exists
+        ignore_patterns = list(self.config.exclude_patterns)
+        ignore_path = os.path.join(self.codebase_path, ".harmonizerignore")
+        if os.path.exists(ignore_path):
+            try:
+                with open(ignore_path, "r") as f:
+                    for line in f:
+                        line = line.strip()
+                        if line and not line.startswith("#"):
+                            ignore_patterns.append(line)
+            except Exception as e:
+                if not self.quiet:
+                    print(f"Warning: Failed to read .harmonizerignore: {e}")
 
-        # Filter out common directories to skip
-        skip_dirs = {
-            "venv",
-            ".venv",
-            "__pycache__",
-            ".git",
-            "build",
-            "dist",
-            ".pytest_cache",
-        }
-        filtered = []
-
-        for f in files:
-            if not any(skip in f for skip in skip_dirs):
-                filtered.append(f)
-
-        return filtered
+        import fnmatch
+        
+        for root, dirs, files in os.walk(self.codebase_path):
+            # Filter directories in-place
+            # 1. Check exact match
+            dirs[:] = [d for d in dirs if d not in ignore_patterns]
+            # 2. Check glob patterns
+            dirs[:] = [d for d in dirs if not any(fnmatch.fnmatch(d, p) for p in ignore_patterns)]
+            
+            for file in files:
+                if file.endswith(".py"):
+                    # Check file ignore patterns
+                    if any(fnmatch.fnmatch(file, p) for p in ignore_patterns):
+                        continue
+                        
+                    # Check relative path ignore patterns (e.g. "tests/legacy/*.py")
+                    rel_path = os.path.relpath(os.path.join(root, file), self.codebase_path)
+                    # Normalize path separators for matching
+                    rel_path = rel_path.replace(os.sep, "/")
+                    
+                    if any(fnmatch.fnmatch(rel_path, p) for p in ignore_patterns):
+                        continue
+                        
+                    python_files.append(os.path.join(root, file))
+                    
+        return python_files
 
     def _analyze_file(self, file_path: str) -> Optional[FileAnalysis]:
         """Analyze single file and compute semantic coordinates"""
@@ -238,6 +264,20 @@ class LegacyCodeMapper:
         # Calculate dimension spread (how balanced)
         dimension_spread = max(dims.values()) - min(dims.values())
 
+        # Calculate Semantic Density (Power / LOC)
+        # Note: We don't have exact LOC here, but we can estimate from function count * avg function size
+        # Or better, assume 'results' contains LOC info if available.
+        # For now, we'll use a proxy: Power Score / Function Count
+        # Ideally, we'd want raw Power keywords count.
+        
+        # Let's look at how we can get raw counts.
+        # The 'results' dict contains 'ice_result' -> 'ice_components' -> 'execution' -> 'coordinates'
+        # It doesn't seem to expose raw keyword counts directly.
+        # However, 'avg_p' is the average Power score (0-1).
+        # Semantic Density = Power Intensity.
+        
+        semantic_density = avg_p  # Using avg_p as a proxy for density for now
+        
         return FileAnalysis(
             path=file_path,
             coordinates=avg_coords,
@@ -247,6 +287,7 @@ class LegacyCodeMapper:
             min_disharmony=min(all_disharmony) if all_disharmony else 0,
             dominant_dimension=dominant,
             dimension_spread=dimension_spread,
+            semantic_density=semantic_density,
         )
 
     def _detect_architectural_smells(self):
@@ -284,15 +325,15 @@ class LegacyCodeMapper:
                 )
 
             # Smell 3: High Disharmony (semantic bugs)
-            if analysis.avg_disharmony > 0.7:
+            if analysis.avg_disharmony > self.config.max_disharmony * 0.7:
                 self.architectural_smells.append(
                     ArchitecturalSmell(
                         smell_type="High Disharmony",
                         file_path=rel_path,
                         severity=(
-                            "CRITICAL" if analysis.avg_disharmony > 1.0 else "HIGH"
+                            "CRITICAL" if analysis.avg_disharmony > self.config.max_disharmony else "HIGH"
                         ),
-                        description=f"Average disharmony: {analysis.avg_disharmony:.2f} (threshold: 0.7)",
+                        description=f"Average disharmony: {analysis.avg_disharmony:.2f} (threshold: {self.config.max_disharmony * 0.7:.2f})",
                         impact=min(1.0, analysis.avg_disharmony / 1.5),
                         recommendation="Review function names - many don't match implementation",
                     )
@@ -307,9 +348,37 @@ class LegacyCodeMapper:
                         smell_type="Mixed Concerns",
                         file_path=rel_path,
                         severity="MEDIUM",
-                        description=f"File operates in {active_dimensions} semantic dimensions with {analysis.function_count} functions",
-                        impact=0.65,
+                        description=f"File has multiple active dimensions (L={l:.2f}, J={j:.2f}, P={p:.2f}, W={w:.2f})",
+                        impact=0.7,
                         recommendation=f"Split by dimension: L={l:.2f}, J={j:.2f}, P={p:.2f}, W={w:.2f}",
+                    )
+                )
+
+            # Smell 5: Unnatural Imbalance (LJPW v4.0)
+            dist_ne = LJPWBaselines.distance_from_natural_equilibrium(l, j, p, w)
+            if dist_ne > 0.5:
+                self.architectural_smells.append(
+                    ArchitecturalSmell(
+                        smell_type="Unnatural Imbalance",
+                        file_path=rel_path,
+                        severity="HIGH" if dist_ne > self.config.max_imbalance else "MEDIUM",
+                        description=f"Deviates significantly from Natural Equilibrium (distance: {dist_ne:.2f})",
+                        impact=min(1.0, dist_ne),
+                        recommendation="Rebalance dimensions towards NE (L=0.62, J=0.41, P=0.72, W=0.69)",
+                    )
+                )
+
+            # Smell 6: Anemic Component (Low Semantic Density)
+            # High function count but very low Power (Action)
+            if analysis.semantic_density < self.config.min_density and analysis.function_count > 10:
+                self.architectural_smells.append(
+                    ArchitecturalSmell(
+                        smell_type="Anemic Component",
+                        file_path=rel_path,
+                        severity="HIGH",
+                        description=f"High complexity ({analysis.function_count} funcs) but low action (Power: {analysis.semantic_density:.2f} < {self.config.min_density})",
+                        impact=0.8,
+                        recommendation="Component lacks agency. Verify if it's just a data container or if logic leaked elsewhere.",
                     )
                 )
 
@@ -627,6 +696,47 @@ class LegacyCodeMapper:
             dimension_drifts={"L": drift_l, "J": drift_j, "P": drift_p, "W": drift_w},
             stability_score=stability,
         )
+
+    def project_debt_trajectory(self, file_path: str, months: int = 6) -> Dict:
+        """
+        Project future technical debt using LJPW v4.0 Dynamic Model.
+        Simulates how the file's dimensions will evolve if left unchecked.
+        """
+        analysis = self.file_analyses.get(file_path)
+        if not analysis:
+            return {"error": "File not analyzed"}
+
+        # Initialize simulator with complexity score
+        # Complexity = 1.0 + (function_count / 20.0) -> 5 functions = 1.25, 20 functions = 2.0
+        complexity_score = 1.0 + (analysis.function_count / 20.0)
+        simulator = DynamicLJPWv3(complexity_score=complexity_score)
+        
+        # Run simulation (1 step approx 1 week, so months * 4 steps)
+        duration = months * 4
+        history = simulator.simulate(analysis.coordinates, duration=duration, dt=0.1)
+        
+        final_l = history['L'][-1]
+        final_j = history['J'][-1]
+        final_p = history['P'][-1]
+        final_w = history['W'][-1]
+        
+        # Calculate projected distance from NE
+        start_dist = LJPWBaselines.distance_from_natural_equilibrium(*analysis.coordinates)
+        end_dist = LJPWBaselines.distance_from_natural_equilibrium(final_l, final_j, final_p, final_w)
+        
+        drift = end_dist - start_dist
+        
+        status = "STABLE"
+        if drift > 0.1: status = "DEGRADING"
+        if drift < -0.1: status = "IMPROVING"
+        
+        return {
+            "current_coordinates": analysis.coordinates,
+            "projected_coordinates": (final_l, final_j, final_p, final_w),
+            "drift": drift,
+            "status": status,
+            "risk_level": "HIGH" if end_dist > 0.8 else "MEDIUM" if end_dist > 0.5 else "LOW"
+        }
 
     def analyze_architecture_docs(self, docs_path: Optional[str] = None) -> bool:
         """Compare documented architecture with actual implementation"""

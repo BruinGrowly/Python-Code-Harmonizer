@@ -276,6 +276,30 @@ class VocabularyManager:
             "nationalism": {"love", "power", "justice"},
         }
 
+        # Coding-specific vocabulary (Technical Debt Analysis)
+        coding_vocab = {
+            Dimension.LOVE: {
+                "interface", "adapter", "bridge", "proxy", "mediator", "connect", 
+                "collaborate", "integrate", "link", "bind", "relation", "dependency",
+                "import", "include", "package", "module", "namespace", "friend"
+            },
+            Dimension.JUSTICE: {
+                "validate", "assert", "check", "test", "ensure", "verify", "schema", 
+                "type", "lint", "constraint", "rule", "law", "standard", "normalize",
+                "sanitize", "audit", "monitor", "log", "track", "compare", "equal"
+            },
+            Dimension.POWER: {
+                "execute", "run", "build", "deploy", "generate", "create", "delete", 
+                "update", "factory", "builder", "instantiate", "spawn", "kill", 
+                "terminate", "force", "override", "write", "push", "commit", "action"
+            },
+            Dimension.WISDOM: {
+                "analyze", "compute", "calculate", "parse", "transform", "map", 
+                "reduce", "filter", "strategy", "observer", "algorithm", "logic",
+                "reason", "solve", "find", "search", "query", "select", "read"
+            },
+        }
+
         # Build complete keyword map
         for dimension, words in base_vocab.items():
             for word in words:
@@ -293,6 +317,11 @@ class VocabularyManager:
                 self._keyword_map[word] = self._keyword_map.get(
                     first_concept, Dimension.WISDOM
                 )
+
+        for dimension, words in coding_vocab.items():
+            for word in words:
+                if word not in self._keyword_map:
+                    self._keyword_map[word] = dimension
 
         # Print to stderr to avoid breaking JSON output on stdout
         import sys

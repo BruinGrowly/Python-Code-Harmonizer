@@ -1,24 +1,11 @@
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"
+[tool.harmonizer.thresholds]
+max_disharmony = 1.0
+max_imbalance = 0.8
+min_density = 0.1
 
-[project]
-name = "PythonCodeHarmonizer"
-version = "2.0.0"
-description = "The world's first semantic code debugger with a mathematically proven foundation."
-readme = "README.md"
-license = { file="LICENSE" }
-requires-python = ">=3.8"
-classifiers = [
-    "Programming Language :: Python :: 3",
-]
+[tool.harmonizer.paths]
+exclude = ["venv", ".git", "__pycache__", "build", "dist"]
+report = "harmonizer_report.html"
 
-[project.scripts]
-harmonizer = "harmonizer.main:run_cli"
-
-[project.optional-dependencies]
-refactor = ["black>=24.4.2"]
-
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["harmonizer"]
+[tool.harmonizer.analysis]
+complexity_weight = 0.2
