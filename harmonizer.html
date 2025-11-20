@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Code Harmonizer - LJPW v4.0</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-input: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-dim: #64748b;
+            --accent: #38bdf8;
+            --accent-hover: #0ea5e9;
+            --love: #f472b6;
+            --justice: #fbbf24;
+            --power: #ef4444;
+            --wisdom: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --border: #334155;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 30px 20px;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--love), var(--wisdom));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .license-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .panel-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon {
+            font-size: 1.5rem;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 15px;
+            background: var(--bg-input);
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 0.95rem;
+            resize: vertical;
+            transition: border-color 0.2s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        textarea::placeholder {
+            color: var(--text-dim);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            background: var(--bg-input);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-secondary {
+            background: var(--bg-input);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .examples {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .example-btn {
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            background: var(--bg-input);
+        }
+
+        #loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid var(--border);
+            border-top: 4px solid var(--accent);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        #results {
+            display: none;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: var(--bg-input);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .summary-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .summary-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 350px;
+            margin: 25px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .severity-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .severity-excellent {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .severity-low {
+            background: rgba(56, 189, 248, 0.2);
+            color: var(--accent);
+        }
+
+        .severity-medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .severity-high {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-dim);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 40px;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+
+        .privacy-notice {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .privacy-icon {
+            font-size: 1.5rem;
+        }
+
+        details {
+            margin-top: 20px;
+            padding: 15px;
+            background: var(--bg-input);
+            border-radius: 8px;
+        }
+
+        summary {
+            cursor: pointer;
+            font-weight: 600;
+            padding: 10px;
+            user-select: none;
+        }
+
+        summary:hover {
+            color: var(--accent);
+        }
+
+        .help-content {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .help-content h3 {
+            color: var(--text-primary);
+            margin: 15px 0 10px;
+        }
+
+        .help-content ul {
+            margin-left: 20px;
+        }
+
+        .help-content li {
+            margin: 8px 0;
+        }
+
+        code {
+            background: var(--bg-dark);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: var(--accent);
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--error);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            color: var(--error);
+        }
+
+        .function-details {
+            margin-top: 10px;
+            padding: 15px;
+            background: var(--bg-dark);
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+
+        .ljpw-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .ljpw-item {
+            text-align: center;
+            padding: 10px;
+            background: var(--bg-input);
+            border-radius: 6px;
+        }
+
+        .ljpw-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+
+        .ljpw-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .ljpw-love { color: var(--love); }
+        .ljpw-justice { color: var(--justice); }
+        .ljpw-power { color: var(--power); }
+        .ljpw-wisdom { color: var(--wisdom); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Python Code Harmonizer</h1>
+            <p class="subtitle">Semantic Analysis using LJPW v4.0 Framework</p>
+            <span class="license-badge">✨ Free & Open Source (MIT License)</span>
+        </header>
+
+        <div class="main-grid">
+            <!-- Left Panel: Code Input -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <span class="icon">📝</span>
+                        Code Input
+                    </h2>
+                </div>
+
+                <textarea 
+                    id="codeInput" 
+                    placeholder="Paste your Python code here or drag and drop a .py file...
+
+Example:
+def get_user(user_id):
+    db.delete_user(user_id)  # Disharmony!
+    return None"
+                    spellcheck="false"
+                ></textarea>
+
+                <div class="button-group">
+                    <button id="analyzeBtn" onclick="analyzeCode()">
+                        🔍 Analyze Code
+                    </button>
+                    <button class="btn-secondary" onclick="clearCode()">
+                        🗑️ Clear
+                    </button>
+                </div>
+
+                <div class="examples">
+                    <strong style="width: 100%; color: var(--text-secondary); font-size: 0.9rem;">Quick Examples:</strong>
+                    <button class="example-btn btn-secondary" onclick="loadExample('simple')">
+                        Simple Function
+                    </button>
+                    <button class="example-btn btn-secondary" onclick="loadExample('disharmony')">
+                        Disharmonious Code
+                    </button>
+                    <button class="example-btn btn-secondary" onclick="loadExample('complex')">
+                        Complex Example
+                    </button>
+                </div>
+
+                <div class="privacy-notice">
+                    <span class="privacy-icon">🔒</span>
+                    <div>
+                        <strong>Privacy First:</strong> All analysis happens in your browser. 
+                        Your code never leaves your computer.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Results -->
+            <div class="panel">
+                <div class="panel-header">
+                    <h2 class="panel-title">
+                        <span class="icon">📊</span>
+                        Analysis Results
+                    </h2>
+                </div>
+
+                <div id="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <div class="loading-text">Analyzing your code...</div>
+                </div>
+
+                <div id="emptyState" class="empty-state">
+                    <div class="empty-state-icon">⚓</div>
+                    <p>Paste or type Python code on the left and click "Analyze Code" to see results.</p>
+                </div>
+
+                <div id="results">
+                    <div class="summary-cards">
+                        <div class="summary-card">
+                            <div class="summary-value" id="totalFunctions">0</div>
+                            <div class="summary-label">Functions</div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-value" id="harmonious">0</div>
+                            <div class="summary-label">Harmonious</div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-value" id="disharmonious">0</div>
+                            <div class="summary-label">Need Review</div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-value" id="avgScore">0.00</div>
+                            <div class="summary-label">Avg Score</div>
+                        </div>
+                    </div>
+
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+
+                    <h3 style="margin-top: 30px; margin-bottom: 15px;">Function Analysis</h3>
+                    <div style="overflow-x: auto;">
+                        <table id="resultsTable">
+                            <thead>
+                                <tr>
+                                    <th>Function</th>
+                                    <th>Score</th>
+                                    <th>Severity</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsBody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="errorState" style="display: none;">
+                    <div class="error-message">
+                        <strong>⚠️ Analysis Error</strong>
+                        <p id="errorMessage"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="panel">
+            <details>
+                <summary>📖 How to Use & Understanding the Results</summary>
+                <div class="help-content">
+                    <h3>🚀 Quick Start</h3>
+                    <ol>
+                        <li>Paste Python code in the left panel (or click an example)</li>
+                        <li>Click the "Analyze Code" button</li>
+                        <li>View results on the right panel</li>
+                    </ol>
+
+                    <h3>📊 Understanding Scores</h3>
+                    <ul>
+                        <li><strong>0.0 - 0.3:</strong> ✨ Excellent harmony (function name perfectly matches what it does)</li>
+                        <li><strong>0.3 - 0.5:</strong> ✅ Harmonious (good semantic alignment)</li>
+                        <li><strong>0.5 - 0.8:</strong> ⚠️ Medium disharmony (consider reviewing)</li>
+                        <li><strong>0.8+:</strong> 🚨 High disharmony (function name and implementation mismatch)</li>
+                    </ul>
+
+                    <h3>🎯 The LJPW Framework</h3>
+                    <ul>
+                        <li><strong style="color: var(--love);">Love (L):</strong> Care, readability, comments, user-focus</li>
+                        <li><strong style="color: var(--justice);">Justice (J):</strong> Structure, validation, consistency, order</li>
+                        <li><strong style="color: var(--power);">Power (P):</strong> Action, logic, complexity, execution</li>
+                        <li><strong style="color: var(--wisdom);">Wisdom (W):</strong> Abstraction, architecture, patterns, insight</li>
+                    </ul>
+
+                    <h3>💡 What Causes Disharmony?</h3>
+                    <ul>
+                        <li><strong>Name-Action Mismatch:</strong> Function named <code>get_user()</code> but deletes data</li>
+                        <li><strong>Purpose Contradiction:</strong> Function named <code>validate()</code> but modifies state</li>
+                        <li><strong>Semantic Distance:</strong> Function name promises one thing, code does another</li>
+                    </ul>
+
+                    <h3>🔍 Example Issues</h3>
+                    <ul>
+                        <li><code>def get_user(): db.delete()</code> - "get" implies reading, "delete" is destructive</li>
+                        <li><code>def check_valid(): user.save()</code> - "check" implies read-only, but it modifies data</li>
+                        <li><code>def save_data(): return data</code> - "save" implies action, but only returns</li>
+                    </ul>
+
+                    <h3>ℹ️ About This Tool</h3>
+                    <p>
+                        Python Code Harmonizer analyzes the <strong>semantic meaning</strong> of your code. 
+                        It checks if function names match what the code actually does. This helps catch 
+                        logical bugs that traditional linters miss.
+                    </p>
+                    <p style="margin-top: 10px;">
+                        Built with ❤️ using LJPW v4.0 Framework | 
+                        <a href="https://github.com/yourusername/python-code-harmonizer" target="_blank" style="color: var(--accent);">
+                            View on GitHub
+                        </a>
+                    </p>
+                </div>
+            </details>
+        </div>
+
+        <footer>
+            <p>
+                Python Code Harmonizer v1.5 | 
+                <strong>MIT License</strong> - Free for everyone | 
+                Made with <span style="color: var(--love);">♥</span> for the Python community
+            </p>
+            <p style="margin-top: 10px; font-size: 0.9rem;">
+                Powered by the LJPW v4.0 Framework - Treating code as a dynamic system
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Simplified harmonizer logic (JavaScript implementation)
+        // For a full Pyodide implementation, see documentation
+
+        let analysisResults = null;
+        let radarChartInstance = null;
+
+        // LJPW vocabulary (simplified for browser)
+        const vocabulary = {
+            // LOVE dimension words
+            love: ['help', 'support', 'care', 'share', 'connect', 'notify', 'inform', 'welcome', 'greet'],
+            // JUSTICE dimension words
+            justice: ['validate', 'verify', 'check', 'enforce', 'ensure', 'audit', 'inspect', 'filter', 'authorize', 'confirm'],
+            // POWER dimension words
+            power: ['create', 'delete', 'remove', 'update', 'modify', 'execute', 'perform', 'build', 'generate', 'transform', 'process', 'save', 'store', 'insert', 'clear', 'reset'],
+            // WISDOM dimension words
+            wisdom: ['analyze', 'calculate', 'compute', 'evaluate', 'determine', 'predict', 'infer', 'derive', 'optimize', 'solve', 'parse', 'interpret']
+        };
+
+        // Example code snippets
+        const examples = {
+            simple: `def calculate_total(items):
+    """Calculate the total price of items"""
+    return sum(item.price for item in items)
+
+def get_user_by_id(user_id):
+    """Retrieve user from database"""
+    return database.query(user_id)`,
+
+            disharmony: `def get_user(user_id):
+    """This function claims to GET but actually DELETES!"""
+    database.delete_user(user_id)
+    return None
+
+def validate_email(email):
+    """Claims to validate but actually sends email"""
+    send_email(email)
+    return True`,
+
+            complex: `class UserManager:
+    def fetch_user(self, user_id):
+        """Fetch user from database"""
+        user = self.db.query(user_id)
+        if user:
+            return user
+        return None
+    
+    def remove_user(self, user_id):
+        """Remove user from system"""
+        self.db.delete(user_id)
+        self.cache.invalidate(user_id)
+        return True
+    
+    def check_permissions(self, user_id):
+        """Check if user has permissions"""
+        user = self.fetch_user(user_id)
+        return user and user.is_admin`
+        };
+
+        function loadExample(type) {
+            document.getElementById('codeInput').value = examples[type];
+        }
+
+        function clearCode() {
+            document.getElementById('codeInput').value = '';
+            hideResults();
+        }
+
+        function hideResults() {
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'block';
+            document.getElementById('errorState').style.display = 'none';
+        }
+
+        function showError(message) {
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('results').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'none';
+        }
+
+        async function analyzeCode() {
+            const code = document.getElementById('codeInput').value.trim();
+            
+            if (!code) {
+                showError('Please paste some Python code first!');
+                return;
+            }
+
+            // Show loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'none';
+            document.getElementById('results').style.display = 'none';
+
+            // Disable button
+            const btn = document.getElementById('analyzeBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Analyzing...';
+
+            try {
+                // Simulate processing time
+                await new Promise(resolve => setTimeout(resolve, 800));
+
+                // Parse and analyze
+                const results = await performAnalysis(code);
+                
+                if (results.functions.length === 0) {
+                    showError('No functions found in the code. Make sure you have valid Python function definitions.');
+                    return;
+                }
+
+                // Display results
+                displayResults(results);
+                
+            } catch (error) {
+                showError('Error analyzing code: ' + error.message);
+                console.error(error);
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+                btn.disabled = false;
+                btn.textContent = '🔍 Analyze Code';
+            }
+        }
+
+        async function performAnalysis(code) {
+            // Simple Python function parser
+            const functionRegex = /def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*\):/g;
+            const functions = [];
+            let match;
+
+            while ((match = functionRegex.exec(code)) !== null) {
+                const funcName = match[1];
+                const funcStart = match.index;
+                
+                // Extract function body (simple approach)
+                const lines = code.substring(funcStart).split('\n');
+                let body = [];
+                let inFunction = false;
+                let indent = null;
+                
+                for (let line of lines) {
+                    if (line.trim().startsWith('def ')) {
+                        inFunction = true;
+                        continue;
+                    }
+                    if (inFunction) {
+                        if (indent === null && line.trim()) {
+                            indent = line.search(/\S/);
+                        }
+                        if (indent !== null && line.search(/\S/) <= indent && line.trim()) {
+                            if (line.search(/\S/) < indent) {
+                                break;
+                            }
+                        }
+                        body.push(line);
+                    }
+                }
+
+                // Analyze function
+                const analysis = analyzeFunction(funcName, body.join('\n'));
+                functions.push({
+                    name: funcName,
+                    ...analysis
+                });
+            }
+
+            return { functions };
+        }
+
+        function analyzeFunction(funcName, body) {
+            // Calculate LJPW coordinates based on name and body
+            const nameWords = funcName.toLowerCase().split('_');
+            const bodyLower = body.toLowerCase();
+
+            let l = 0, j = 0, p = 0, w = 0;
+            let counts = { love: 0, justice: 0, power: 0, wisdom: 0 };
+
+            // Analyze function name
+            for (let word of nameWords) {
+                for (let [dim, words] of Object.entries(vocabulary)) {
+                    if (words.includes(word)) {
+                        counts[dim] += 0.5;
+                    }
+                }
+            }
+
+            // Analyze function body
+            for (let [dim, words] of Object.entries(vocabulary)) {
+                for (let word of words) {
+                    const regex = new RegExp('\\b' + word + '\\b', 'gi');
+                    const matches = bodyLower.match(regex);
+                    if (matches) {
+                        counts[dim] += matches.length * 0.3;
+                    }
+                }
+            }
+
+            // Normalize
+            const total = Object.values(counts).reduce((a, b) => a + b, 0);
+            if (total > 0) {
+                l = counts.love / total;
+                j = counts.justice / total;
+                p = counts.power / total;
+                w = counts.wisdom / total;
+            } else {
+                // Default to balanced
+                l = j = p = w = 0.25;
+            }
+
+            // Calculate disharmony (simplified)
+            // Check for obvious mismatches
+            let disharmony = 0;
+            
+            // Check for get/retrieve vs delete/remove mismatch
+            const isGetName = nameWords.some(w => ['get', 'fetch', 'retrieve', 'find', 'query', 'select'].includes(w));
+            const hasDelete = /\b(delete|remove|drop|erase|clear)\b/i.test(body);
+            if (isGetName && hasDelete) {
+                disharmony += 1.2; // High disharmony
+            }
+
+            // Check for check/validate vs modify mismatch
+            const isCheckName = nameWords.some(w => ['check', 'validate', 'verify', 'test', 'inspect'].includes(w));
+            const hasModify = /\b(save|update|modify|set|insert|create|delete|remove)\b/i.test(body);
+            if (isCheckName && hasModify) {
+                disharmony += 0.8; // Medium-high disharmony
+            }
+
+            // Calculate distance from natural equilibrium (0.62, 0.41, 0.72, 0.69)
+            const ne = { love: 0.62, justice: 0.41, power: 0.72, wisdom: 0.69 };
+            const distance = Math.sqrt(
+                Math.pow(l - ne.love, 2) +
+                Math.pow(j - ne.justice, 2) +
+                Math.pow(p - ne.power, 2) +
+                Math.pow(w - ne.wisdom, 2)
+            );
+
+            // Combine distance with specific mismatches
+            const score = disharmony > 0 ? disharmony : distance * 0.5;
+
+            return {
+                score: score,
+                ljpw: { love: l, justice: j, power: p, wisdom: w },
+                severity: getSeverity(score)
+            };
+        }
+
+        function getSeverity(score) {
+            if (score < 0.3) return 'excellent';
+            if (score < 0.5) return 'low';
+            if (score < 0.8) return 'medium';
+            return 'high';
+        }
+
+        function displayResults(results) {
+            const { functions } = results;
+
+            // Calculate summary
+            const harmonious = functions.filter(f => f.score <= 0.5).length;
+            const disharmonious = functions.length - harmonious;
+            const avgScore = functions.reduce((sum, f) => sum + f.score, 0) / functions.length;
+
+            // Calculate average LJPW
+            const avgL = functions.reduce((sum, f) => sum + f.ljpw.love, 0) / functions.length;
+            const avgJ = functions.reduce((sum, f) => sum + f.ljpw.justice, 0) / functions.length;
+            const avgP = functions.reduce((sum, f) => sum + f.ljpw.power, 0) / functions.length;
+            const avgW = functions.reduce((sum, f) => sum + f.ljpw.wisdom, 0) / functions.length;
+
+            // Update summary cards
+            document.getElementById('totalFunctions').textContent = functions.length;
+            document.getElementById('harmonious').textContent = harmonious;
+            document.getElementById('disharmonious').textContent = disharmonious;
+            document.getElementById('avgScore').textContent = avgScore.toFixed(2);
+
+            // Update radar chart
+            updateRadarChart(avgL, avgJ, avgP, avgW);
+
+            // Update table
+            const tbody = document.getElementById('resultsBody');
+            tbody.innerHTML = '';
+            
+            // Sort by score (highest first)
+            functions.sort((a, b) => b.score - a.score);
+
+            for (let func of functions) {
+                const row = tbody.insertRow();
+                
+                // Function name
+                const cellName = row.insertCell();
+                cellName.textContent = func.name;
+                cellName.style.fontFamily = "'Courier New', monospace";
+                
+                // Score
+                const cellScore = row.insertCell();
+                cellScore.textContent = func.score.toFixed(2);
+                
+                // Severity
+                const cellSeverity = row.insertCell();
+                const badge = document.createElement('span');
+                badge.className = `severity-badge severity-${func.severity}`;
+                badge.textContent = func.severity.charAt(0).toUpperCase() + func.severity.slice(1);
+                cellSeverity.appendChild(badge);
+                
+                // Status
+                const cellStatus = row.insertCell();
+                if (func.score <= 0.5) {
+                    cellStatus.textContent = '✅ Harmonious';
+                    cellStatus.style.color = 'var(--success)';
+                } else {
+                    cellStatus.textContent = '⚠️ Review';
+                    cellStatus.style.color = 'var(--warning)';
+                }
+            }
+
+            // Show results
+            document.getElementById('results').style.display = 'block';
+            document.getElementById('emptyState').style.display = 'none';
+        }
+
+        function updateRadarChart(l, j, p, w) {
+            const ctx = document.getElementById('radarChart').getContext('2d');
+
+            if (radarChartInstance) {
+                radarChartInstance.destroy();
+            }
+
+            radarChartInstance = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Love (Care)', 'Justice (Order)', 'Power (Action)', 'Wisdom (Insight)'],
+                    datasets: [{
+                        label: 'Your Code',
+                        data: [l, j, p, w],
+                        backgroundColor: 'rgba(56, 189, 248, 0.2)',
+                        borderColor: '#38bdf8',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#38bdf8',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#38bdf8'
+                    }, {
+                        label: 'Natural Equilibrium',
+                        data: [0.62, 0.41, 0.72, 0.69],
+                        backgroundColor: 'rgba(148, 163, 184, 0.1)',
+                        borderColor: '#94a3b8',
+                        borderWidth: 2,
+                        borderDash: [5, 5],
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 1.0,
+                            ticks: {
+                                stepSize: 0.2,
+                                color: '#94a3b8',
+                                backdropColor: 'transparent'
+                            },
+                            grid: {
+                                color: '#334155'
+                            },
+                            pointLabels: {
+                                color: '#cbd5e1',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#cbd5e1',
+                                font: {
+                                    size: 11
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: '#1e293b',
+                            titleColor: '#f8fafc',
+                            bodyColor: '#cbd5e1',
+                            borderColor: '#334155',
+                            borderWidth: 1
+                        }
+                    }
+                }
+            });
+        }
+
+        // Drag and drop support
+        const textarea = document.getElementById('codeInput');
+        
+        textarea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            textarea.style.borderColor = 'var(--accent)';
+        });
+
+        textarea.addEventListener('dragleave', () => {
+            textarea.style.borderColor = 'var(--border)';
+        });
+
+        textarea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            textarea.style.borderColor = 'var(--border)';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                if (file.name.endsWith('.py')) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        textarea.value = event.target.result;
+                    };
+                    reader.readAsText(file);
+                } else {
+                    showError('Please drop a Python (.py) file');
+                }
+            }
+        });
+
+        // Initialize
+        hideResults();
+    </script>
+</body>
+</html>

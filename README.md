@@ -6,6 +6,30 @@ The Python Code Harmonizer is a next-generation static analysis and visualizatio
 
 ![LJPW Dashboard](examples/ljpw_v4_demo_plot.png)
 
+## 🌐 Try It in Your Browser!
+
+**No installation needed!** Use our standalone web app:
+
+👉 **[Download harmonizer.html](harmonizer.html)** and open it in any browser
+
+**Features:**
+- ✨ Zero setup - just download and open
+- 🔒 100% private - all analysis happens in your browser
+- 📱 Works offline after first load
+- 🎯 Beautiful visualizations with LJPW radar charts
+- 🚀 Drag-and-drop Python files or paste code
+- 💾 Free forever (MIT License)
+
+**Perfect for:**
+- Quick code reviews
+- Learning semantic analysis
+- Teaching code quality
+- Personal development
+
+[**📖 Web App Usage Guide**](docs/WEB_APP_USAGE.md)
+
+---
+
 ## Key Features
 
 ### 1. 🌌 Dynamic Physics Model (LJPW v4.0)
@@ -32,11 +56,25 @@ Prevent entropy decay with built-in quality gates.
 
 ## Installation
 
+### Option 1: Web App (Recommended for Quick Use)
+No installation needed! Download `harmonizer.html` and open in your browser.
+
+### Option 2: CLI Tool (For CI/CD and Advanced Use)
 ```bash
 pip install -r requirements.txt
 ```
 
 ## Usage
+
+### Web App Usage
+1. Download `harmonizer.html`
+2. Open in any modern browser
+3. Paste Python code or drag-and-drop files
+4. View instant analysis with visualizations
+
+See [Web App Usage Guide](docs/WEB_APP_USAGE.md) for details.
+
+### CLI Tool Usage
 
 ### 1. Generate Visual Report
 Analyze your codebase and generate an interactive HTML dashboard:
