@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Tuple, Optional
 
 from harmonizer.main import PythonCodeHarmonizer
-from harmonizer.ljpw_baselines import LJPWBaselines, DynamicLJPWv3
+from harmonizer.ljpw_baselines import LJPWBaselines, DynamicLJPWv4
 from harmonizer.config import ConfigLoader
 
 
@@ -720,7 +720,7 @@ class LegacyCodeMapper:
         # Initialize simulator with complexity score
         # Complexity = 1.0 + (function_count / 20.0) -> 5 functions = 1.25, 20 functions = 2.0
         complexity_score = 1.0 + (analysis.function_count / 20.0)
-        simulator = DynamicLJPWv3(complexity_score=complexity_score)
+        simulator = DynamicLJPWv4(complexity_score=complexity_score)
 
         # Run simulation (1 step approx 1 week, so months * 4 steps)
         duration = months * 4

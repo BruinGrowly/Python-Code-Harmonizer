@@ -18,7 +18,7 @@ project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_root)
 
 from harmonizer.main import PythonCodeHarmonizer
-from harmonizer.ljpw_baselines import DynamicLJPWv3, LJPWBaselines
+from harmonizer.ljpw_baselines import DynamicLJPWv4, LJPWBaselines
 from harmonizer.dependency_engine import DependencyEngine
 from harmonizer.visualizer import HarmonizerVisualizer
 
@@ -69,7 +69,7 @@ def analyze_and_simulate(file_path, harmonizer):
     complexity_score = 1.0 + (function_count * 0.2)
     print(f"  Complexity Score: {complexity_score:.2f}")
 
-    simulator = DynamicLJPWv3(complexity_score=complexity_score)
+    simulator = DynamicLJPWv4(complexity_score=complexity_score)
 
     print("  Running Dynamic Simulation (50 steps)...")
     initial_state = (avg_l, avg_j, avg_p, avg_w)

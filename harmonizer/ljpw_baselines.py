@@ -280,9 +280,9 @@ class LJPWBaselines:
             return "Elite - exceptional, Love multiplier engaged"
 
 
-class DynamicLJPWv3:
+class DynamicLJPWv4:
     """
-    LJPW v3.0: Empirically-validated, non-linear dynamic simulator.
+    LJPW v4.0: Empirically-validated, non-linear dynamic simulator.
     """
 
     def __init__(self, complexity_score: float = 1.0):
@@ -330,7 +330,7 @@ class DynamicLJPWv3:
             "beta_J": 0.20,
             "beta_P": 0.20,
             "beta_W": 0.24,  # Higher decay for W because it has 3 inputs
-            # Non-Linear Parameters (v3.0)
+            # Non-Linear Parameters (v4.0)
             "K_JL": 0.59,  # Saturation constant for L -> J
             "gamma_JP": 0.49,  # Erosion rate for P -> J
             "K_JP": 0.71,  # Threshold constant for P -> J
@@ -445,7 +445,7 @@ class DynamicLJPWv3:
                 linestyle="--",
                 alpha=0.3,
             )
-        ax.set_title("LJPW v3.0 System Evolution (Non-Linear, RK4)")
+        ax.set_title("LJPW v4.0 System Evolution (Non-Linear, RK4)")
         ax.set_xlabel("Time")
         ax.set_ylabel("Dimension Value")
         ax.set_ylim(0, 1.2)
@@ -532,9 +532,9 @@ if __name__ == "__main__":
     )
 
     # --- Dynamic Simulation Example ---
-    print("\nLJPW v3.0 Dynamic Simulation: 'Reckless Power' Scenario")
+    print("\nLJPW v4.0 Dynamic Simulation: 'Reckless Power' Scenario")
     print("=" * 60)
-    simulator = DynamicLJPWv3()
+    simulator = DynamicLJPWv4()
     initial_state = (0.2, 0.3, 0.9, 0.2)  # High P, low L, J, W
     history = simulator.simulate(initial_state, duration=50, dt=0.05)
 

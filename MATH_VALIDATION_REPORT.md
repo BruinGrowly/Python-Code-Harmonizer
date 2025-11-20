@@ -250,7 +250,7 @@ The v4.0 dynamic model should converge to NE from most initial conditions. Howev
 - Stability would require eigenvalue analysis of Jacobian
 - Documentation claims this has been validated
 
-**Recommendation:** Run `DynamicLJPWv3.simulate()` with various initial conditions to empirically verify convergence.
+**Recommendation:** Run `DynamicLJPWv4.simulate()` with various initial conditions to empirically verify convergence.
 
 ---
 
@@ -297,7 +297,7 @@ Each serves a different analytical purpose.
 ```python
 def test_natural_equilibrium_stability():
     """Verify NE is a stable fixed point"""
-    simulator = DynamicLJPWv3()
+    simulator = DynamicLJPWv4()
     
     # Test from various initial conditions
     initial_states = [
