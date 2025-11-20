@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 # Add parent directory to path to import harmonizer
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from harmonizer.ljpw_baselines import DynamicLJPWv3, ReferencePoints
+from harmonizer.ljpw_baselines import DynamicLJPWv4, ReferencePoints
 
 
 def run_demo():
@@ -27,7 +27,7 @@ def run_demo():
     print("-" * 60)
 
     # Initialize simulator with v4.0 calibrated parameters
-    simulator = DynamicLJPWv3()
+    simulator = DynamicLJPWv4()
 
     # Initial State: High Power (0.9), Low Wisdom (0.2), Low Love (0.2), Moderate Justice (0.5)
     initial_state = (0.2, 0.5, 0.9, 0.2)
@@ -85,7 +85,7 @@ def run_demo():
             alpha=0.3,
         )
 
-    ax.set_title("LJPW v3.0 System Evolution (Non-Linear, RK4)")
+    ax.set_title("LJPW v4.0 System Evolution (Non-Linear, RK4)")
     ax.set_xlabel("Time")
     ax.set_ylabel("Dimension Value")
     ax.set_ylim(0, 1.2)

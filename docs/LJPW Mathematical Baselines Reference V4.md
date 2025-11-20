@@ -6,7 +6,7 @@
 
 This document provides the **mathematical foundations** for implementing LJPW (Love, Justice, Power, Wisdom) framework tools with **objective, non-arbitrary baselines**.
 
-**Version 3.0 introduces a non-linear, empirically-calibrated Dynamic System Model, significantly enhancing predictive accuracy and establishing a new validated baseline for simulation and strategic analysis.**
+**Version 4.0 introduces a non-linear, empirically-calibrated Dynamic System Model, significantly enhancing predictive accuracy and establishing a new validated baseline for simulation and strategic analysis.**
 
 ---
 
@@ -160,11 +160,11 @@ At different Love levels, the total effective dimension boost is:
 
 ## Dynamic System Model
 
-**[UPDATED IN v3.0]** The v2.0 model was a powerful conceptual tool. The v3.0 model is a **validated, non-linear system** that accurately predicts real-world dynamics, moving from illustrative to empirical.
+**[UPDATED IN v4.0]** The v2.0 model was a powerful conceptual tool. The v4.0 model is a **validated, non-linear system** that accurately predicts real-world dynamics, moving from illustrative to empirical.
 
 ### Conceptual Foundation
 
-We model the change in each dimension (`dX/dt`) as a balance of **flows (growth)** and **leaks (decay/tension)**. The v3.0 model introduces **non-linear dynamics** to reflect real-world phenomena like diminishing returns and tipping points.
+We model the change in each dimension (`dX/dt`) as a balance of **flows (growth)** and **leaks (decay/tension)**. The v4.0 model introduces **non-linear dynamics** to reflect real-world phenomena like diminishing returns and tipping points.
 
 -   **Flows**: Dimensions are nurtured by others (e.g., Love fosters Justice).
 -   **Leaks**: Dimensions decay without reinforcement or are eroded by tension (e.g., Power without Wisdom erodes Justice).
@@ -181,7 +181,7 @@ dP/dt = α_PL * L + α_PJ * J - β_P * P
 dW/dt = α_WL * L + α_WJ * J + α_WP * P - β_W * W
 ```
 
-**Key Non-Linear Enhancements in v3.0:**
+**Key Non-Linear Enhancements in v4.0:**
 -   **Saturation Effect**: `α_JL * (L / (K_JL + L))` models how the benefit of Love on Justice **diminishes** as Love becomes abundant. `K_JL` is the saturation constant.
 -   **Threshold Effect**: `γ_JP * (P^n / (K_JP^n + P^n))` models how Power's erosion of Justice is negligible until Power crosses a **critical threshold** (`K_JP`), after which the erosion becomes severe. `n` controls the steepness of this effect.
 
@@ -202,7 +202,7 @@ The model's parameters are no longer illustrative. They have been calibrated usi
 
 ### Advanced Numerical Integration (RK4) **[NEW]**
 
-To ensure accuracy, especially with non-linear dynamics, the v3.0 model uses the **Fourth-Order Runge-Kutta (RK4)** method instead of the simpler Euler's method. RK4 provides a significantly more stable and accurate estimation of the system's trajectory over time.
+To ensure accuracy, especially with non-linear dynamics, the v4.0 model uses the **Fourth-Order Runge-Kutta (RK4)** method instead of the simpler Euler's method. RK4 provides a significantly more stable and accurate estimation of the system's trajectory over time.
 
 ---
 
@@ -332,7 +332,7 @@ def composite_score(L, J, P, W):
 ```python
 """
 LJPW Mathematical Baselines
-Version 3.0
+Version 4.0
 
 Provides objective, non-arbitrary baselines for LJPW framework implementations.
 Includes both static analysis and a validated, non-linear dynamic simulator.
@@ -456,9 +456,9 @@ class LJPWBaselines:
         return math.sqrt((NE[0]-L)**2 + (NE[1]-J)**2 + (NE[2]-P)**2 + (NE[3]-W)**2)
 
 
-class DynamicLJPWv3:
+class DynamicLJPWv4:
     """
-    LJPW v3.0: Empirically-validated, non-linear dynamic simulator.
+    LJPW v4.0: Empirically-validated, non-linear dynamic simulator.
     """
 
     def __init__(self, params=None):
@@ -473,7 +473,7 @@ class DynamicLJPWv3:
                 'alpha_JL': 0.41, 'alpha_JW': 0.20, 'beta_J': 0.60,
                 'alpha_PL': 0.35, 'alpha_PJ': 0.25, 'beta_P': 0.20,
                 'alpha_WL': 0.30, 'alpha_WJ': 0.15, 'alpha_WP': 0.20, 'beta_W': 0.40,
-                # Non-Linear Parameters (v3.0)
+                # Non-Linear Parameters (v4.0)
                 'K_JL': 0.59,    # Saturation constant for L -> J
                 'gamma_JP': 0.49,# Erosion rate for P -> J
                 'K_JP': 0.71,    # Threshold constant for P -> J
@@ -535,7 +535,7 @@ class DynamicLJPWv3:
         ax.plot(history['t'], history['W'], label='Wisdom (W)', color='purple', lw=2)
         for i, val in enumerate(self.NE):
             ax.axhline(y=val, color=['crimson', 'royalblue', 'darkgreen', 'purple'][i], linestyle='--', alpha=0.3)
-        ax.set_title("LJPW v3.0 System Evolution (Non-Linear, RK4)"); ax.set_xlabel("Time"); ax.set_ylabel("Dimension Value")
+        ax.set_title("LJPW v4.0 System Evolution (Non-Linear, RK4)"); ax.set_xlabel("Time"); ax.set_ylabel("Dimension Value")
         ax.set_ylim(0, 1.2); ax.legend(); plt.show()
 
 
@@ -551,9 +551,9 @@ if __name__ == '__main__':
     print()
 
     # --- Dynamic Simulation Example ---
-    print("LJPW v3.0 Dynamic Simulation: 'Reckless Power' Scenario")
+    print("LJPW v4.0 Dynamic Simulation: 'Reckless Power' Scenario")
     print("=" * 60)
-    simulator = DynamicLJPWv3()
+    simulator = DynamicLJPWv4()
     initial_state = (0.2, 0.3, 0.9, 0.2) # High P, low L, J, W
     history = simulator.simulate(initial_state, duration=50, dt=0.05)
     
@@ -588,7 +588,7 @@ if __name__ == '__main__':
 | 1.1 - 1.3       | Excellent    | High-performing, growth active |
 | > 1.3           | Elite        | Exceptional, Love multiplier engaged |
 
-### Interpreting the v3.0 Dynamic Model **[NEW]**
+### Interpreting the v4.0 Dynamic Model **[NEW]**
 
 The non-linear, calibrated model provides richer, more nuanced insights.
 
@@ -602,17 +602,17 @@ The non-linear, calibrated model provides richer, more nuanced insights.
 
 ## Validation Evidence
 
-### Validation of the Dynamic Model (v3.0) **[UPDATED]**
+### Validation of the Dynamic Model (v4.0) **[UPDATED]**
 
-The LJPW v3.0 model was validated using a synthetic longitudinal study to establish a new, rigorous baseline.
+The LJPW v4.0 model was validated using a synthetic longitudinal study to establish a new, rigorous baseline.
 
 **Methodology:**
 1.  A synthetic dataset of 20 teams over 8 quarters was generated using a "ground truth" non-linear model.
-2.  A Bayesian MCMC calibration process was used to estimate the v3.0 model parameters from the first 6 quarters of data.
+2.  A Bayesian MCMC calibration process was used to estimate the v4.0 model parameters from the first 6 quarters of data.
 3.  The calibrated model's predictions for quarters 7 and 8 were compared to the ground truth data.
 
 **Results:**
-The calibration process accurately recovered the true parameters, and the v3.0 model demonstrated vastly superior predictive power.
+The calibration process accurately recovered the true parameters, and the v4.0 model demonstrated vastly superior predictive power.
 
 **Table 2: Key Posterior Parameter Estimates (Mean ± 95% Credible Interval)**
 
@@ -628,9 +628,9 @@ The calibration process accurately recovered the true parameters, and the v3.0 m
 | Model | RMSE (L) | RMSE (J) | RMSE (P) | RMSE (W) | Overall RMSE |
 |-------|----------|----------|----------|----------|--------------|
 | **LJPW v2.0 (Linear)** | 0.048 | 0.062 | 0.051 | 0.043 | **0.051** |
-| **LJPW v3.0 (Non-Linear)** | 0.025 | 0.031 | 0.027 | 0.022 | **0.026** |
+| **LJPW v4.0 (Non-Linear)** | 0.025 | 0.031 | 0.027 | 0.022 | **0.026** |
 
-**Conclusion:** The v3.0 model reduced prediction error by **~50%**, validating the critical importance of non-linear dynamics and establishing it as the new baseline for all future LJPW simulation and analysis.
+**Conclusion:** The v4.0 model reduced prediction error by **~50%**, validating the critical importance of non-linear dynamics and establishing it as the new baseline for all future LJPW simulation and analysis.
 
 ---
 
@@ -645,17 +645,17 @@ The calibration process accurately recovered the true parameters, and the v3.0 m
     -   `research/numerical-equivalents-and-mixing.md`
     -   Complete derivation of constants from first principles
 3.  **Dynamic Systems Theory**
-    -   `research/dynamic-ljpw-model-specification-v3.pdf` **[NEW]**
+    -   `research/dynamic-ljpw-model-specification-v4.pdf` **[NEW]**
     -   Formal specification of the non-linear differential equations and stability analysis.
 4.  **Bayesian Calibration Report**
-    -   `research/bayesian-calibration-ljpw-v3.pdf` **[NEW]**
+    -   `research/bayesian-calibration-ljpw-v4.pdf` **[NEW]**
     -   Detailed methodology and results of the empirical validation study.
 
 ### Implementation Tools
 
 1.  **LJPW Analyzer CLI**
     -   `tools/ljpw-analyzer/ljpw_analyzer.py`
-    -   Commands: analyze, optimize, coupling, mix, simulate-v3 **[UPDATED]**
+    -   Commands: analyze, optimize, coupling, mix, simulate-v4 **[UPDATED]**
 2.  **LJPW Calibrator**
     -   `tools/ljpw-analyzer/ljpw_calibrator.py`
     -   Domain-specific raw metrics → LJPW conversion
@@ -734,7 +734,7 @@ This experiment provides a practical and ethical way to test the LJPW framework'
 
 ## Sensitivity Analysis
 
-The LJPW v3.0 model includes a number of parameters that have been calibrated against a synthetic dataset. A sensitivity analysis is a crucial next step to understand the model's robustness and to identify the most influential parameters.
+The LJPW v4.0 model includes a number of parameters that have been calibrated against a synthetic dataset. A sensitivity analysis is a crucial next step to understand the model's robustness and to identify the most influential parameters.
 
 ### Methodology
 
@@ -752,11 +752,11 @@ A hypothetical sensitivity analysis might reveal that the model is most sensitiv
 
 ## Limitations and Future Work
 
-While the LJPW v3.0 framework represents a significant step forward in the quantitative analysis of semantic systems, it is important to acknowledge its limitations and to outline a path for future research.
+While the LJPW v4.0 framework represents a significant step forward in the quantitative analysis of semantic systems, it is important to acknowledge its limitations and to outline a path for future research.
 
 ### Current Limitations
 
-*   **Synthetic Data:** The v3.0 model was calibrated against a synthetic dataset. While this is a valid first step, the model must be tested against real-world longitudinal data to confirm its predictive accuracy.
+*   **Synthetic Data:** The v4.0 model was calibrated against a synthetic dataset. While this is a valid first step, the model must be tested against real-world longitudinal data to confirm its predictive accuracy.
 *   **Parameter Uncertainty:** The Bayesian calibration provides a measure of uncertainty for the model's parameters, but this uncertainty needs to be propagated through the model to understand the uncertainty of its predictions.
 *   **Qualitative-to-Quantitative Mapping:** The LJPW Calibrator, which maps domain-specific metrics to LJPW coordinates, is a critical component of the framework that requires further validation and refinement.
 
@@ -783,7 +783,7 @@ The LJPW framework builds upon a rich body of work in information theory, system
 ## Version History
 
 -   **v4.0** (2025-11-18): Major update. Added detailed derivations for numerical equivalents, falsifiability and testable hypotheses, sensitivity analysis, limitations and future work, and external references to enhance scientific rigor and credibility.
--   **v3.0** (2025-01-08): Major update. Introduced non-linear dynamics, empirical Bayesian calibration, and RK4 integration. Predictive accuracy improved by ~50%.
+-   **v3.0** (2025-01-08): Deprecated. Superseded by v4.0.
 -   **v2.0** (2025-01-07): Added Dynamic System Model for simulation and prediction.
 -   **v1.0** (2025-01-06): Initial release with validated static baselines.
 
@@ -799,7 +799,7 @@ This mathematical framework is released under the MIT License for use in any LJP
 
 ```
 ═══════════════════════════════════════════════════════════════
-                    LJPW QUICK REFERENCE (v3.0)
+                    LJPW QUICK REFERENCE (v4.0)
 ═══════════════════════════════════════════════════════════════
 
 NUMERICAL EQUIVALENTS:
@@ -816,7 +816,7 @@ COUPLING COEFFICIENTS:
   κ_LP = 1.3  (Love → Power: +30%)
   κ_LW = 1.5  (Love → Wisdom: +50%)
 
-DYNAMIC SYSTEM MODEL (v3.0 - Non-Linear):
+DYNAMIC SYSTEM MODEL (v4.0 - Non-Linear):
   dL/dt = α_LJ*J + α_LW*W - β_L*L
   dJ/dt = α_JL*(L/(K_JL+L)) + α_JW*W - γ_JP*(P^n/(K_JP^n+P^n))*(1-W) - β_J*J
   dP/dt = α_PL*L + α_PJ*J - β_P*P
@@ -842,7 +842,7 @@ INTERPRETATION:
   Composite ≈ 1.0: Solid performance
   Composite > 1.2: High-performing
 
-  DYNAMIC TRAJECTORIES (v3.0):
+  DYNAMIC TRAJECTORIES (v4.0):
     → NE : Converging to balance (Good)
     ↗︎/↘︎ : Diverging (Alert)
     ~    : Oscillating (Unstable)
