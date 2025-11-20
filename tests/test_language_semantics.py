@@ -266,9 +266,7 @@ def test_programming_paradigms():
         expected_value = coord_dict[expected_dim]
 
         # Expected dimension should be significant
-        assert (
-            expected_value >= 0.25
-        ), f"{expected_dim} should be significant for {paradigm}"
+        assert expected_value >= 0.25, f"{expected_dim} should be significant for {paradigm}"
 
         print(f"✓ {expected_dim.upper()} emphasis confirmed ({expected_value:.3f})")
 
@@ -298,8 +296,7 @@ def test_code_quality_correlation():
 
         # Calculate simple distance
         distance = sum(
-            abs(a - b)
-            for a, b in zip(intent_result.coordinates, exec_result.coordinates)
+            abs(a - b) for a, b in zip(intent_result.coordinates, exec_result.coordinates)
         )
 
         print(f"  {intent} → {execution}: distance = {distance:.3f}")
@@ -320,8 +317,7 @@ def test_code_quality_correlation():
         exec_result = engine.analyze_text(execution)
 
         distance = sum(
-            abs(a - b)
-            for a, b in zip(intent_result.coordinates, exec_result.coordinates)
+            abs(a - b) for a, b in zip(intent_result.coordinates, exec_result.coordinates)
         )
 
         print(f"  {intent} → {execution}: distance = {distance:.3f}")
@@ -357,9 +353,7 @@ def test_language_universality():
 
     # All should be Wisdom-dominant
     for i, op in enumerate(wisdom_operations):
-        assert (
-            wisdom_values[i] > 0.5
-        ), f"All wisdom operations should be Wisdom-dominant: {op}"
+        assert wisdom_values[i] > 0.5, f"All wisdom operations should be Wisdom-dominant: {op}"
 
     # Variance should be low (similar semantic meaning)
     avg_wisdom = sum(wisdom_values) / len(wisdom_values)

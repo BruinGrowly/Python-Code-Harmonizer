@@ -226,9 +226,7 @@ class TestDistances:
     def test_distance_from_ne_at_ne(self):
         """Distance is 0 at Natural Equilibrium"""
         ne = ReferencePoints.NATURAL_EQUILIBRIUM
-        distance = LJPWBaselines.distance_from_natural_equilibrium(
-            ne[0], ne[1], ne[2], ne[3]
-        )
+        distance = LJPWBaselines.distance_from_natural_equilibrium(ne[0], ne[1], ne[2], ne[3])
         assert abs(distance) < 0.0001
 
 

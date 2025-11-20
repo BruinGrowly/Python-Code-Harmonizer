@@ -102,9 +102,7 @@ class PythonCodeHarmonizer:
     ):
         self.config = config if config else {}
         self.engine = dive.DivineInvitationSemanticEngine(config=self.config)
-        self.parser = AST_Semantic_Parser(
-            vocabulary=self.engine.vocabulary.all_keywords
-        )
+        self.parser = AST_Semantic_Parser(vocabulary=self.engine.vocabulary.all_keywords)
         self.map_generator = SemanticMapGenerator()
         self.naming_engine = SemanticNamingEngine()
         self.disharmony_threshold = disharmony_threshold
@@ -121,9 +119,7 @@ class PythonCodeHarmonizer:
             print(f"Version 1.5 • {self.engine.get_engine_version()}")
             print()
             print("🎯 Checking if your functions DO what their names SAY")
-            print(
-                f"   Threshold: {self.disharmony_threshold} (scores below = harmonious)"
-            )
+            print(f"   Threshold: {self.disharmony_threshold} (scores below = harmonious)")
             print("=" * 70)
 
     def analyze_file(self, file_path: str) -> Dict[str, Dict]:
@@ -177,12 +173,8 @@ class PythonCodeHarmonizer:
             if isinstance(node, ast.FunctionDef):
                 function_name = node.name
                 docstring = ast.get_docstring(node)
-                intent_concepts = self.parser.get_intent_concepts(
-                    function_name, docstring
-                )
-                execution_map, execution_concepts = self.parser.get_execution_map(
-                    node.body
-                )
+                intent_concepts = self.parser.get_intent_concepts(function_name, docstring)
+                execution_map, execution_concepts = self.parser.get_execution_map(node.body)
                 ice_result = self.engine.perform_ice_analysis(
                     intent_words=intent_concepts,
                     context_words=["python", "function", function_name],
@@ -193,9 +185,7 @@ class PythonCodeHarmonizer:
                     "baseline_disharmony",
                     ice_result["ice_metrics"]["intent_execution_disharmony"],
                 )
-                semantic_map = self.map_generator.generate_map(
-                    ice_result, function_name
-                )
+                semantic_map = self.map_generator.generate_map(ice_result, function_name)
                 harmony_report[function_name] = {
                     "score": disharmony_score,
                     "ice_result": ice_result,
@@ -231,9 +221,7 @@ class PythonCodeHarmonizer:
         else:
             return 0
 
-    def format_report(
-        self, harmony_report: Dict[str, Dict], suggest_refactor: bool = False
-    ) -> str:
+    def format_report(self, harmony_report: Dict[str, Dict], suggest_refactor: bool = False) -> str:
         if not harmony_report:
             return "No functions found to analyze."
         lines = []
@@ -269,15 +257,11 @@ class PythonCodeHarmonizer:
             lines.append(f"{func_name:<28} | {status}")
             if score > self.disharmony_threshold:
                 if self.show_semantic_maps:
-                    lines.append(
-                        self.map_generator.format_text_map(data["semantic_map"], score)
-                    )
+                    lines.append(self.map_generator.format_text_map(data["semantic_map"], score))
                 if self.suggest_names:
                     lines.append(self._generate_naming_suggestions(func_name, data))
                 if suggest_refactor:
-                    refactorer = Refactorer(
-                        data["function_node"], data["execution_map"]
-                    )
+                    refactorer = Refactorer(data["function_node"], data["execution_map"])
                     suggestion = refactorer.suggest_dimensional_split()
                     lines.append(suggestion)
         lines.append("=" * 70)
@@ -379,9 +363,7 @@ class PythonCodeHarmonizer:
                 ice_metrics = data.get("ice_result", {}).get("ice_metrics", {})
                 if "baseline_disharmony" in ice_metrics:
                     function_data["ljpw_baselines"] = {
-                        "baseline_disharmony": round(
-                            ice_metrics["baseline_disharmony"], 4
-                        ),
+                        "baseline_disharmony": round(ice_metrics["baseline_disharmony"], 4),
                         "intent_composite_score": round(
                             ice_metrics.get("intent_composite_score", 0), 4
                         ),
@@ -415,12 +397,8 @@ def parse_cli_arguments() -> argparse.Namespace:
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("files", nargs="+", help="Python file(s) to analyze")
-    parser.add_argument(
-        "--format", choices=["text", "json"], default="text", help="Output format"
-    )
-    parser.add_argument(
-        "--threshold", type=float, default=0.5, help="Disharmony threshold"
-    )
+    parser.add_argument("--format", choices=["text", "json"], default="text", help="Output format")
+    parser.add_argument("--threshold", type=float, default=0.5, help="Disharmony threshold")
     parser.add_argument(
         "--suggest-refactor",
         action="store_true",
@@ -437,9 +415,7 @@ def parse_cli_arguments() -> argparse.Namespace:
         default=3,
         help="Number of naming suggestions to show (default: 3).",
     )
-    parser.add_argument(
-        "--version", action="version", version="Python Code Harmonizer v1.5"
-    )
+    parser.add_argument("--version", action="version", version="Python Code Harmonizer v1.5")
     return parser.parse_args()
 
 
@@ -485,9 +461,7 @@ def execute_analysis(
         exit_code = harmonizer.get_highest_severity_code(report)
         highest_exit_code = max(highest_exit_code, exit_code)
         if output_format == "text":
-            formatted = harmonizer.format_report(
-                report, suggest_refactor=suggest_refactor
-            )
+            formatted = harmonizer.format_report(report, suggest_refactor=suggest_refactor)
             harmonizer.output_report(formatted)
     return all_reports, highest_exit_code
 

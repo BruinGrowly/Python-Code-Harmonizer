@@ -380,9 +380,7 @@ class SemanticNamingEngine:
         """Get the dominant dimension from coordinates"""
         return CoordinateUtils.get_dominant_dimension(CoordinateUtils.to_tuple(coords))
 
-    def _get_dominant_dimension_from_tuple(
-        self, coords: Tuple[float, float, float, float]
-    ) -> str:
+    def _get_dominant_dimension_from_tuple(self, coords: Tuple[float, float, float, float]) -> str:
         """Get dominant dimension from tuple"""
         return CoordinateUtils.get_dominant_dimension(coords)
 
@@ -427,8 +425,6 @@ if __name__ == "__main__":
 
     print("\n" + "=" * 60)
     print("Suggestions with multiple objects:")
-    multi_suggestions = engine.suggest_with_multiple_objects(
-        coords, top_verbs=3, top_objects=3
-    )
+    multi_suggestions = engine.suggest_with_multiple_objects(coords, top_verbs=3, top_objects=3)
     for name, score, explanation in multi_suggestions[:10]:
         print(f"  {name:30s} {score:.3f} - {explanation}")

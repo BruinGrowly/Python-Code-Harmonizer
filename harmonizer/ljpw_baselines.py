@@ -65,9 +65,7 @@ class LJPWBaselines:
     }
 
     @staticmethod
-    def effective_dimensions(
-        L: float, J: float, P: float, W: float
-    ) -> Dict[str, float]:
+    def effective_dimensions(L: float, J: float, P: float, W: float) -> Dict[str, float]:
         """
         Calculate coupling-adjusted effective dimensions.
 
@@ -185,9 +183,7 @@ class LJPWBaselines:
         return math.sqrt((1 - L) ** 2 + (1 - J) ** 2 + (1 - P) ** 2 + (1 - W) ** 2)
 
     @staticmethod
-    def distance_from_natural_equilibrium(
-        L: float, J: float, P: float, W: float
-    ) -> float:
+    def distance_from_natural_equilibrium(L: float, J: float, P: float, W: float) -> float:
         """
         Euclidean distance from Natural Equilibrium.
 
@@ -198,9 +194,7 @@ class LJPWBaselines:
             Distance (0.0 to ~2.0)
         """
         NE = ReferencePoints.NATURAL_EQUILIBRIUM
-        return math.sqrt(
-            (NE[0] - L) ** 2 + (NE[1] - J) ** 2 + (NE[2] - P) ** 2 + (NE[3] - W) ** 2
-        )
+        return math.sqrt((NE[0] - L) ** 2 + (NE[1] - J) ** 2 + (NE[2] - P) ** 2 + (NE[3] - W) ** 2)
 
     @staticmethod
     def full_diagnostic(L: float, J: float, P: float, W: float) -> Dict:
@@ -223,9 +217,7 @@ class LJPWBaselines:
             "effective_dimensions": eff,
             "distances": {
                 "from_anchor": baselines.distance_from_anchor(L, J, P, W),
-                "from_natural_equilibrium": baselines.distance_from_natural_equilibrium(
-                    L, J, P, W
-                ),
+                "from_natural_equilibrium": baselines.distance_from_natural_equilibrium(L, J, P, W),
             },
             "metrics": {
                 "harmonic_mean": baselines.harmonic_mean(L, J, P, W),
@@ -385,9 +377,7 @@ class DynamicLJPWv4:
 
         # Power and Wisdom equations (can be similarly enhanced in future versions)
         dP_dt = p["alpha_PL"] * L + p["alpha_PJ"] * J - p["beta_P"] * P
-        dW_dt = (
-            p["alpha_WL"] * L + p["alpha_WJ"] * J + p["alpha_WP"] * P - p["beta_W"] * W
-        )
+        dW_dt = p["alpha_WL"] * L + p["alpha_WJ"] * J + p["alpha_WP"] * P - p["beta_W"] * W
 
         return np.array([dL_dt, dJ_dt, dP_dt, dW_dt])
 
@@ -434,9 +424,7 @@ class DynamicLJPWv4:
         plt.style.use("seaborn-v0_8-whitegrid")
         fig, ax = plt.subplots(figsize=(12, 7))
         ax.plot(history["t"], history["L"], label="Love (L)", color="crimson", lw=2)
-        ax.plot(
-            history["t"], history["J"], label="Justice (J)", color="royalblue", lw=2
-        )
+        ax.plot(history["t"], history["J"], label="Justice (J)", color="royalblue", lw=2)
         ax.plot(history["t"], history["P"], label="Power (P)", color="darkgreen", lw=2)
         ax.plot(history["t"], history["W"], label="Wisdom (W)", color="purple", lw=2)
         for i, val in enumerate(self.NE):

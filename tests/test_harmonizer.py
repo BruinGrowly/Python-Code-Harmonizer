@@ -120,9 +120,7 @@ def test_file_exclusion_with_config(temp_config_file):
         f.write("print('excluded')")
 
     config = load_configuration()
-    args = argparse.Namespace(
-        files=["should_be_included.py", "test_excluded.py"], format="text"
-    )
+    args = argparse.Namespace(files=["should_be_included.py", "test_excluded.py"], format="text")
 
     valid_files = validate_cli_arguments(args, config)
 
@@ -148,8 +146,5 @@ def test_custom_vocabulary_with_config(temp_config_file):
     # identified as disharmonious because its execution contains a mix of
     # Power (raise) and Love (print). The test is updated to reflect this
     # new, more precise level of analysis.
-    assert (
-        report["deprecate_old_api"]["score"]
-        > harmonizer_with_config.disharmony_threshold
-    )
+    assert report["deprecate_old_api"]["score"] > harmonizer_with_config.disharmony_threshold
     os.unlink(filepath)

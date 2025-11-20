@@ -78,9 +78,7 @@ class FunctionGenealogy:
     snapshots: List[GitCommitSnapshot] = field(default_factory=list)
     total_drift: float = 0.0  # Total semantic drift
     drift_rate: float = 0.0  # Drift per commit
-    major_changes: List[Tuple[str, str, float]] = field(
-        default_factory=list
-    )  # (hash, date, drift)
+    major_changes: List[Tuple[str, str, float]] = field(default_factory=list)  # (hash, date, drift)
 
 
 @dataclass
@@ -93,9 +91,7 @@ class SemanticDrift:
     time_span_days: int
     total_drift: float
     drift_per_day: float
-    dimension_drifts: Dict[str, float] = field(
-        default_factory=dict
-    )  # L, J, P, W individual drifts
+    dimension_drifts: Dict[str, float] = field(default_factory=dict)  # L, J, P, W individual drifts
     stability_score: float = 1.0  # 1.0 = stable, 0.0 = highly volatile
 
 
@@ -199,11 +195,7 @@ class LegacyCodeMapper:
             # 1. Check exact match
             dirs[:] = [d for d in dirs if d not in ignore_patterns]
             # 2. Check glob patterns
-            dirs[:] = [
-                d
-                for d in dirs
-                if not any(fnmatch.fnmatch(d, p) for p in ignore_patterns)
-            ]
+            dirs[:] = [d for d in dirs if not any(fnmatch.fnmatch(d, p) for p in ignore_patterns)]
 
             for file in files:
                 if file.endswith(".py"):
@@ -212,9 +204,7 @@ class LegacyCodeMapper:
                         continue
 
                     # Check relative path ignore patterns (e.g. "tests/legacy/*.py")
-                    rel_path = os.path.relpath(
-                        os.path.join(root, file), self.codebase_path
-                    )
+                    rel_path = os.path.relpath(os.path.join(root, file), self.codebase_path)
                     # Normalize path separators for matching
                     rel_path = rel_path.replace(os.sep, "/")
 
@@ -243,9 +233,7 @@ class LegacyCodeMapper:
 
             if execution_result:
                 coords = execution_result.coordinates
-                all_coords.append(
-                    (coords.love, coords.justice, coords.power, coords.wisdom)
-                )
+                all_coords.append((coords.love, coords.justice, coords.power, coords.wisdom))
 
             disharmony = data.get("score", 0)
             all_disharmony.append(disharmony)
@@ -367,9 +355,7 @@ class LegacyCodeMapper:
                     ArchitecturalSmell(
                         smell_type="Unnatural Imbalance",
                         file_path=rel_path,
-                        severity=(
-                            "HIGH" if dist_ne > self.config.max_imbalance else "MEDIUM"
-                        ),
+                        severity=("HIGH" if dist_ne > self.config.max_imbalance else "MEDIUM"),
                         description=f"Deviates significantly from Natural Equilibrium (distance: {dist_ne:.2f})",
                         impact=min(1.0, dist_ne),
                         recommendation="Rebalance dimensions towards NE (L=0.62, J=0.41, P=0.72, W=0.69)",
@@ -378,10 +364,7 @@ class LegacyCodeMapper:
 
             # Smell 6: Anemic Component (Low Semantic Density)
             # High function count but very low Power (Action)
-            if (
-                analysis.semantic_density < self.config.min_density
-                and analysis.function_count > 10
-            ):
+            if analysis.semantic_density < self.config.min_density and analysis.function_count > 10:
                 self.architectural_smells.append(
                     ArchitecturalSmell(
                         smell_type="Anemic Component",
@@ -412,9 +395,7 @@ class LegacyCodeMapper:
                 continue  # Skip well-harmonized files
 
             # Calculate impact score
-            impact_score = (
-                analysis.avg_disharmony * 0.6 + analysis.function_count / 100 * 0.4
-            )
+            impact_score = analysis.avg_disharmony * 0.6 + analysis.function_count / 100 * 0.4
 
             # Estimate complexity reduction
             complexity_reduction = min(80, int((analysis.avg_disharmony - 0.3) * 100))
@@ -436,14 +417,10 @@ class LegacyCodeMapper:
                 suggestions.append("Clarify file purpose - currently lacks clear focus")
             else:
                 dim_name = analysis.dominant_dimension
-                suggestions.append(
-                    f"Strengthen {dim_name} focus (currently {dominant_val:.0%})"
-                )
+                suggestions.append(f"Strengthen {dim_name} focus (currently {dominant_val:.0%})")
 
             if analysis.max_disharmony > 1.0:
-                suggestions.append(
-                    "Fix critical disharmony functions first (score > 1.0)"
-                )
+                suggestions.append("Fix critical disharmony functions first (score > 1.0)")
 
             self.refactoring_opportunities.append(
                 RefactoringOpportunity(
@@ -462,9 +439,7 @@ class LegacyCodeMapper:
         outliers = self._find_outliers()
 
         if self.file_analyses:
-            overall_disharmony = mean(
-                [f.avg_disharmony for f in self.file_analyses.values()]
-            )
+            overall_disharmony = mean([f.avg_disharmony for f in self.file_analyses.values()])
         else:
             overall_disharmony = 0.0
 
@@ -519,11 +494,7 @@ class LegacyCodeMapper:
             bar_length = int(avg_disharmony * 10)
             bar = "█" * bar_length + "░" * (10 - bar_length)
 
-            rel_dir = (
-                os.path.relpath(dir_name, self.codebase_path)
-                if dir_name != "."
-                else "."
-            )
+            rel_dir = os.path.relpath(dir_name, self.codebase_path) if dir_name != "." else "."
             heatmap.append(f"\n{rel_dir}/")
             heatmap.append(f"  {bar} ({avg_disharmony:.2f})")
 
@@ -534,15 +505,11 @@ class LegacyCodeMapper:
                 ):
                     file_bar_length = int(analysis.avg_disharmony * 10)
                     file_bar = "█" * file_bar_length + "░" * (10 - file_bar_length)
-                    heatmap.append(
-                        f"    {filename:30s} {file_bar} ({analysis.avg_disharmony:.2f})"
-                    )
+                    heatmap.append(f"    {filename:30s} {file_bar} ({analysis.avg_disharmony:.2f})")
 
         return "\n".join(heatmap)
 
-    def analyze_git_history(
-        self, max_commits: int = 50, show_progress: bool = True
-    ) -> bool:
+    def analyze_git_history(self, max_commits: int = 50, show_progress: bool = True) -> bool:
         """Analyze git history to track semantic drift"""
         if show_progress and not self.quiet:
             print(f"\n🕒 Analyzing git history (last {max_commits} commits)...")
@@ -569,9 +536,7 @@ class LegacyCodeMapper:
                 text=True,
                 check=True,
             )
-            commits = [
-                line.split("|") for line in result.stdout.strip().split("\n") if line
-            ]
+            commits = [line.split("|") for line in result.stdout.strip().split("\n") if line]
         except subprocess.CalledProcessError:
             if show_progress and not self.quiet:
                 print("⚠️  Failed to get git history")
@@ -618,9 +583,7 @@ class LegacyCodeMapper:
                 # Write to temp file and analyze
                 import tempfile
 
-                with tempfile.NamedTemporaryFile(
-                    mode="w", suffix=".py", delete=False
-                ) as f:
+                with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as f:
                     f.write(result.stdout)
                     temp_path = f.name
 
@@ -664,9 +627,7 @@ class LegacyCodeMapper:
                                     ),
                                     author=author,
                                     coordinates=(avg_l, avg_j, avg_p, avg_w),
-                                    disharmony=(
-                                        mean(all_disharmony) if all_disharmony else 0.0
-                                    ),
+                                    disharmony=(mean(all_disharmony) if all_disharmony else 0.0),
                                 )
                             )
                 finally:
@@ -732,9 +693,7 @@ class LegacyCodeMapper:
         final_w = history["W"][-1]
 
         # Calculate projected distance from NE
-        start_dist = LJPWBaselines.distance_from_natural_equilibrium(
-            *analysis.coordinates
-        )
+        start_dist = LJPWBaselines.distance_from_natural_equilibrium(*analysis.coordinates)
         end_dist = LJPWBaselines.distance_from_natural_equilibrium(
             final_l, final_j, final_p, final_w
         )
@@ -752,9 +711,7 @@ class LegacyCodeMapper:
             "projected_coordinates": (final_l, final_j, final_p, final_w),
             "drift": drift,
             "status": status,
-            "risk_level": (
-                "HIGH" if end_dist > 0.8 else "MEDIUM" if end_dist > 0.5 else "LOW"
-            ),
+            "risk_level": ("HIGH" if end_dist > 0.8 else "MEDIUM" if end_dist > 0.5 else "LOW"),
         }
 
     def analyze_architecture_docs(self, docs_path: Optional[str] = None) -> bool:
@@ -780,9 +737,7 @@ class LegacyCodeMapper:
             docs_path = doc_files[0]
 
         if not self.quiet:
-            print(
-                f"\n📖 Analyzing architecture documentation: {os.path.basename(docs_path)}"
-            )
+            print(f"\n📖 Analyzing architecture documentation: {os.path.basename(docs_path)}")
 
         # Read documentation
         try:
@@ -828,9 +783,7 @@ class LegacyCodeMapper:
 
             if doc_coords:
                 # Calculate alignment (inverse of distance)
-                distance = (
-                    sum((doc_coords[i] - actual[i]) ** 2 for i in range(4)) ** 0.5
-                )
+                distance = sum((doc_coords[i] - actual[i]) ** 2 for i in range(4)) ** 0.5
                 alignment = max(0.0, 1.0 - distance)
 
                 discrepancies = []
@@ -852,9 +805,7 @@ class LegacyCodeMapper:
                     )
             else:
                 alignment = 0.5  # Unknown
-                discrepancies = [
-                    "Could not infer semantic coordinates from documentation"
-                ]
+                discrepancies = ["Could not infer semantic coordinates from documentation"]
 
             self.architecture_docs.append(
                 ArchitectureDoc(
@@ -868,9 +819,7 @@ class LegacyCodeMapper:
             )
 
         if not self.quiet:
-            print(
-                f"✅ Compared {len(self.architecture_docs)} documented components with reality"
-            )
+            print(f"✅ Compared {len(self.architecture_docs)} documented components with reality")
 
         return True
 
@@ -966,9 +915,7 @@ class LegacyCodeMapper:
             debt_type = []
 
             if analysis.avg_disharmony > 0.7:
-                base_hours += (
-                    analysis.function_count * 0.5
-                )  # 30 min per function to fix
+                base_hours += analysis.function_count * 0.5  # 30 min per function to fix
                 debt_type.append("High Disharmony")
 
             if analysis.function_count > 30:
@@ -1123,17 +1070,13 @@ class LegacyCodeMapper:
         output.append("=" * 90)
 
         # Sort by drift amount
-        sorted_drifts = sorted(
-            self.semantic_drifts, key=lambda x: x.total_drift, reverse=True
-        )[:10]
+        sorted_drifts = sorted(self.semantic_drifts, key=lambda x: x.total_drift, reverse=True)[:10]
 
         for drift in sorted_drifts:
             output.append(f"\n{drift.file_path}")
 
             # Create drift bar
-            drift_normalized = min(
-                1.0, drift.total_drift / 2.0
-            )  # Cap at 2.0 for visualization
+            drift_normalized = min(1.0, drift.total_drift / 2.0)  # Cap at 2.0 for visualization
             bar_length = int(drift_normalized * 40)
             bar = "█" * bar_length + "░" * (40 - bar_length)
 
@@ -1183,9 +1126,7 @@ class LegacyCodeMapper:
             by_type[debt.debt_type]["count"] += 1
 
         output.append("\nBy Debt Type:")
-        for debt_type, stats in sorted(
-            by_type.items(), key=lambda x: x[1]["cost"], reverse=True
-        ):
+        for debt_type, stats in sorted(by_type.items(), key=lambda x: x[1]["cost"], reverse=True):
             percentage = (stats["cost"] / total_cost * 100) if total_cost > 0 else 0
             bar_length = int(percentage / 100 * 40)
             bar = "█" * bar_length + "░" * (40 - bar_length)
@@ -1259,7 +1200,9 @@ class LegacyCodeMapper:
         for dimension in ["Love", "Justice", "Power", "Wisdom"]:
             if dimension in viz_data["clusters"]:
                 files = viz_data["clusters"][dimension]
-                clusters_html += f"<div class='cluster'><h3>{dimension} Cluster ({len(files)} files)</h3>"
+                clusters_html += (
+                    f"<div class='cluster'><h3>{dimension} Cluster ({len(files)} files)</h3>"
+                )
 
                 for file_data in files[:5]:  # Top 5
                     clusters_html += f"""
@@ -1277,9 +1220,9 @@ class LegacyCodeMapper:
 
         # Generate files HTML
         files_html = ""
-        for file_data in sorted(
-            viz_data["files"], key=lambda x: x["disharmony"], reverse=True
-        )[:20]:
+        for file_data in sorted(viz_data["files"], key=lambda x: x["disharmony"], reverse=True)[
+            :20
+        ]:
             dim_class = file_data["dominant"].lower()
             files_html += f"""
             <div class='file-card {dim_class}'>
@@ -1310,9 +1253,7 @@ class LegacyCodeMapper:
 
         return output_file
 
-    def print_report(
-        self, report: Dict, show_heatmap: bool = True, show_smells: bool = True
-    ):
+    def print_report(self, report: Dict, show_heatmap: bool = True, show_smells: bool = True):
         """Print comprehensive human-readable report"""
         print("\n")
         print("=" * 70)
@@ -1331,14 +1272,10 @@ class LegacyCodeMapper:
             avg_p = mean([f.coordinates[2] for f in files])
             avg_w = mean([f.coordinates[3] for f in files])
 
-            icon = {"Love": "💛", "Justice": "⚖️", "Power": "⚡", "Wisdom": "📚"}[
-                dimension
-            ]
+            icon = {"Love": "💛", "Justice": "⚖️", "Power": "⚡", "Wisdom": "📚"}[dimension]
 
             print(f"\n{icon} {dimension.upper()} CLUSTER ({len(files)} files)")
-            print(
-                f"   Avg Coordinates: L={avg_l:.2f}, J={avg_j:.2f}, P={avg_p:.2f}, W={avg_w:.2f}"
-            )
+            print(f"   Avg Coordinates: L={avg_l:.2f}, J={avg_j:.2f}, P={avg_p:.2f}, W={avg_w:.2f}")
             print("   Files:")
 
             sorted_files = sorted(files, key=lambda f: f.avg_disharmony, reverse=True)
@@ -1380,9 +1317,7 @@ class LegacyCodeMapper:
 
         # Architectural smells
         if show_smells and self.architectural_smells:
-            print(
-                f"\n🚨 ARCHITECTURAL SMELLS ({len(self.architectural_smells)} detected)"
-            )
+            print(f"\n🚨 ARCHITECTURAL SMELLS ({len(self.architectural_smells)} detected)")
             print("=" * 70)
 
             # Group by severity
@@ -1455,22 +1390,16 @@ class LegacyCodeMapper:
 
         # Architecture Documentation Alignment
         if self.architecture_docs:
-            print(
-                f"\n📖 ARCHITECTURE DOCS VS REALITY ({len(self.architecture_docs)} components)"
-            )
+            print(f"\n📖 ARCHITECTURE DOCS VS REALITY ({len(self.architecture_docs)} components)")
             print("=" * 70)
 
             # Show misalignments
-            misaligned = [
-                doc for doc in self.architecture_docs if doc.alignment_score < 0.7
-            ]
+            misaligned = [doc for doc in self.architecture_docs if doc.alignment_score < 0.7]
 
             if misaligned:
                 print(f"\n⚠️  {len(misaligned)} components have docs/reality mismatch:")
                 for doc in misaligned[:5]:
-                    print(
-                        f"\n  {doc.component_name} (alignment: {doc.alignment_score:.0%})"
-                    )
+                    print(f"\n  {doc.component_name} (alignment: {doc.alignment_score:.0%})")
                     print(f"    Documented: {doc.documented_purpose}")
                     if doc.discrepancies:
                         for disc in doc.discrepancies[:2]:
@@ -1486,9 +1415,7 @@ class LegacyCodeMapper:
             total_hours = sum(d.estimated_hours for d in self.architectural_debts)
             total_cost = sum(d.estimated_cost_usd for d in self.architectural_debts)
 
-            print(
-                f"\nTotal Estimated Debt: {total_hours:.1f} hours (${total_cost:,.0f})"
-            )
+            print(f"\nTotal Estimated Debt: {total_hours:.1f} hours (${total_cost:,.0f})")
 
             # Group by priority
             by_priority = defaultdict(list)
@@ -1507,9 +1434,7 @@ class LegacyCodeMapper:
                     f"\n{priority} ({len(debts)} files) - {priority_hours:.1f}hrs (${priority_cost:,.0f}):"
                 )
 
-                for debt in sorted(
-                    debts, key=lambda x: x.estimated_cost_usd, reverse=True
-                )[:3]:
+                for debt in sorted(debts, key=lambda x: x.estimated_cost_usd, reverse=True)[:3]:
                     print(f"  • {debt.file_path}")
                     print(f"    Type: {debt.debt_type}")
                     print(
@@ -1533,26 +1458,18 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Legacy Code Mapper - Complete Semantic Codebase Analysis with Git History, Architecture Docs, and Debt Estimation"
     )
-    parser.add_argument(
-        "path", nargs="?", default="harmonizer", help="Path to codebase to analyze"
-    )
-    parser.add_argument(
-        "--no-heatmap", action="store_true", help="Skip complexity heatmap"
-    )
+    parser.add_argument("path", nargs="?", default="harmonizer", help="Path to codebase to analyze")
+    parser.add_argument("--no-heatmap", action="store_true", help="Skip complexity heatmap")
     parser.add_argument(
         "--no-smells", action="store_true", help="Skip architectural smell detection"
     )
-    parser.add_argument(
-        "--no-git", action="store_true", help="Skip git history analysis"
-    )
+    parser.add_argument("--no-git", action="store_true", help="Skip git history analysis")
     parser.add_argument(
         "--no-docs",
         action="store_true",
         help="Skip architecture documentation analysis",
     )
-    parser.add_argument(
-        "--no-debt", action="store_true", help="Skip architectural debt estimation"
-    )
+    parser.add_argument("--no-debt", action="store_true", help="Skip architectural debt estimation")
     parser.add_argument(
         "--git-commits",
         type=int,
@@ -1573,9 +1490,7 @@ if __name__ == "__main__":
         action="store_true",
         help="Export interactive HTML visualization",
     )
-    parser.add_argument(
-        "--semantic-map", action="store_true", help="Show 3D semantic map (ASCII)"
-    )
+    parser.add_argument("--semantic-map", action="store_true", help="Show 3D semantic map (ASCII)")
     parser.add_argument(
         "--drift-timeline",
         action="store_true",
@@ -1605,9 +1520,7 @@ if __name__ == "__main__":
 
     # Advanced analyses
     if enable_git:
-        mapper.analyze_git_history(
-            max_commits=args.git_commits, show_progress=not args.quiet
-        )
+        mapper.analyze_git_history(max_commits=args.git_commits, show_progress=not args.quiet)
 
     if enable_docs:
         mapper.analyze_architecture_docs(docs_path=args.docs_path)
@@ -1616,9 +1529,7 @@ if __name__ == "__main__":
         mapper.estimate_architectural_debt(hourly_rate=args.hourly_rate)
 
     # Generate report
-    mapper.print_report(
-        report, show_heatmap=not args.no_heatmap, show_smells=not args.no_smells
-    )
+    mapper.print_report(report, show_heatmap=not args.no_heatmap, show_smells=not args.no_smells)
 
     # Advanced visualizations
     if args.semantic_map or args.full:

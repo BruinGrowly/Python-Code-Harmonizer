@@ -77,9 +77,7 @@ def test_semantic_clarity(engine):
     # A "spiky" concept has high std dev, and thus low clarity.  # noqa: E501
     # The engine defines clarity as dimensional balance.
     specialized_concept = Coordinates(1.0, 0.0, 0.0, 0.0)
-    assert engine.get_semantic_clarity(specialized_concept) == pytest.approx(
-        0.13397, abs=1e-5
-    )
+    assert engine.get_semantic_clarity(specialized_concept) == pytest.approx(0.13397, abs=1e-5)
 
     # A perfectly balanced concept has zero standard deviation, and thus perfect clarity.
     perfectly_balanced = Coordinates(0.25, 0.25, 0.25, 0.25)

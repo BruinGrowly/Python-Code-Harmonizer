@@ -75,7 +75,9 @@ def test_basic_primaries():
 
     # Assert that primaries are reasonably pure
     avg_purity = sum(r["avg_purity"] for r in results.values()) / len(results)
-    assert avg_purity > 0.5, f"Primary concepts should have average purity > 0.5, got {avg_purity:.3f}"
+    assert (
+        avg_purity > 0.5
+    ), f"Primary concepts should have average purity > 0.5, got {avg_purity:.3f}"
 
 
 def test_simple_mixtures():
@@ -143,17 +145,15 @@ def test_simple_mixtures():
         avg_error = sum(errors) / len(errors)
         success = avg_error < 0.3
 
-        results.append(
-            {"name": test["name"], "avg_error": avg_error, "success": success}
-        )
+        results.append({"name": test["name"], "avg_error": avg_error, "success": success})
 
-        print(
-            f"  Average Error: {avg_error:.3f} {'✅ SUCCESS' if success else '❌ FAILED'}"
-        )
+        print(f"  Average Error: {avg_error:.3f} {'✅ SUCCESS' if success else '❌ FAILED'}")
 
     # Assert that at least some mixtures work reasonably well
     avg_error = sum(r["avg_error"] for r in results) / len(results)
-    assert avg_error < 0.6, f"Average error for simple mixtures should be < 0.6, got {avg_error:.3f}"
+    assert (
+        avg_error < 0.6
+    ), f"Average error for simple mixtures should be < 0.6, got {avg_error:.3f}"
 
 
 def test_complex_mixtures():
@@ -214,17 +214,15 @@ def test_complex_mixtures():
         avg_error = sum(errors) / len(errors)
         success = avg_error < 0.4  # More lenient threshold for weighted mixtures
 
-        results.append(
-            {"name": test["name"], "avg_error": avg_error, "success": success}
-        )
+        results.append({"name": test["name"], "avg_error": avg_error, "success": success})
 
-        print(
-            f"  Average Error: {avg_error:.3f} {'✅ SUCCESS' if success else '❌ FAILED'}"
-        )
+        print(f"  Average Error: {avg_error:.3f} {'✅ SUCCESS' if success else '❌ FAILED'}")
 
     # Assert that weighted mixtures work reasonably well
     avg_error = sum(r["avg_error"] for r in results) / len(results)
-    assert avg_error < 0.7, f"Average error for weighted mixtures should be < 0.7, got {avg_error:.3f}"
+    assert (
+        avg_error < 0.7
+    ), f"Average error for weighted mixtures should be < 0.7, got {avg_error:.3f}"
 
 
 def test_balanced_mixture():
@@ -262,36 +260,28 @@ def test_balanced_mixture():
     avg_error = sum(errors) / len(errors)
     success = avg_error < 0.3
 
-    print(
-        f"\n  Average Error: {avg_error:.3f} {'✅ SUCCESS' if success else '❌ FAILED'}"
-    )
+    print(f"\n  Average Error: {avg_error:.3f} {'✅ SUCCESS' if success else '❌ FAILED'}")
 
     # Assert that balanced mixture has reasonable error
     # Balanced mixtures are harder to predict, so we use a more lenient threshold
     assert avg_error < 0.7, f"Balanced mixture average error should be < 0.7, got {avg_error:.3f}"
 
 
-def generate_summary(
-    primary_results, simple_results, weighted_results, balanced_result
-):
+def generate_summary(primary_results, simple_results, weighted_results, balanced_result):
     """Generate final summary of all tests"""
     print("\n" + "=" * 70)
     print("FINAL SUMMARY")
     print("=" * 70)
 
     # Primary purity
-    avg_purity = sum(r["avg_purity"] for r in primary_results.values()) / len(
-        primary_results
-    )
+    avg_purity = sum(r["avg_purity"] for r in primary_results.values()) / len(primary_results)
     print(f"\n1. Primary Purity: {avg_purity:.3f}")
     print(
         f"   {'✅ PASS' if avg_purity > 0.7 else '❌ FAIL'} - Primaries are {'pure enough' if avg_purity > 0.7 else 'too mixed'}"
     )
 
     # Simple mixtures
-    simple_success_rate = sum(1 for r in simple_results if r["success"]) / len(
-        simple_results
-    )
+    simple_success_rate = sum(1 for r in simple_results if r["success"]) / len(simple_results)
     avg_simple_error = sum(r["avg_error"] for r in simple_results) / len(simple_results)
     print("\n2. Simple Mixtures:")
     print(f"   Success Rate: {simple_success_rate:.1%}")
@@ -299,12 +289,8 @@ def generate_summary(
     print(f"   {'✅ PASS' if simple_success_rate >= 0.5 else '❌ FAIL'}")
 
     # Weighted mixtures
-    weighted_success_rate = sum(1 for r in weighted_results if r["success"]) / len(
-        weighted_results
-    )
-    avg_weighted_error = sum(r["avg_error"] for r in weighted_results) / len(
-        weighted_results
-    )
+    weighted_success_rate = sum(1 for r in weighted_results if r["success"]) / len(weighted_results)
+    avg_weighted_error = sum(r["avg_error"] for r in weighted_results) / len(weighted_results)
     print("\n3. Weighted Mixtures:")
     print(f"   Success Rate: {weighted_success_rate:.1%}")
     print(f"   Average Error: {avg_weighted_error:.3f}")
