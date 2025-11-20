@@ -72,9 +72,7 @@ def test_dimensional_split_refactoring(parser, db_mock):
 
     # Find the generated functions in the new module
     generated_funcs = {
-        node.name: node
-        for node in suggestion_ast.body
-        if isinstance(node, ast.FunctionDef)
+        node.name: node for node in suggestion_ast.body if isinstance(node, ast.FunctionDef)
     }
 
     # Check for the presence of all expected functions

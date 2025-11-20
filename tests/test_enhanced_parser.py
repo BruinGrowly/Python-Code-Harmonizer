@@ -6,8 +6,9 @@ Validates that programming constructs correctly map to LJPW dimensions.
 """
 
 import ast
-from harmonizer.divine_invitation_engine_V2 import DivineInvitationSemanticEngine
+
 from harmonizer.ast_semantic_parser_v2 import AST_Semantic_Parser_V2
+from harmonizer.divine_invitation_engine_V2 import DivineInvitationSemanticEngine
 
 
 def test_wisdom_operations():
@@ -41,9 +42,7 @@ def test_wisdom_operations():
         print(f"  Intent concepts: {intent_concepts}")
 
         # Verify WISDOM is in intent
-        assert (
-            "wisdom" in intent_concepts
-        ), f"WISDOM should be in intent for {func_name}"
+        assert "wisdom" in intent_concepts, f"WISDOM should be in intent for {func_name}"
         print(f"  ✓ WISDOM detected in intent")
 
     print("\n✓ All WISDOM operations validated")
@@ -88,9 +87,7 @@ def test_justice_operations():
         print(f"  Intent concepts: {intent_concepts}")
 
         # Verify JUSTICE is in intent
-        assert (
-            "justice" in intent_concepts
-        ), f"JUSTICE should be in intent for {func_name}"
+        assert "justice" in intent_concepts, f"JUSTICE should be in intent for {func_name}"
         print(f"  ✓ JUSTICE detected in intent")
 
     print("\n✓ All JUSTICE operations validated")
@@ -282,9 +279,7 @@ def test_execution_detection():
         print(f"  Expected: {case['expected']}")
 
         for expected_dim in case["expected"]:
-            assert (
-                expected_dim in exec_concepts
-            ), f"{expected_dim} should be detected in execution"
+            assert expected_dim in exec_concepts, f"{expected_dim} should be detected in execution"
             print(f"  ✓ {expected_dim.upper()} detected")
 
     print("\n✓ Execution detection validated")
@@ -317,9 +312,7 @@ def test_compound_patterns():
         print(f"  Intent: {intent_concepts}")
         print(f"  Expected: {expected_dim}")
 
-        assert (
-            expected_dim in intent_concepts
-        ), f"{expected_dim} should be detected for {func_name}"
+        assert expected_dim in intent_concepts, f"{expected_dim} should be detected for {func_name}"
         print(f"  ✓ {expected_dim.upper()} correctly identified")
 
     print("\n✓ Compound patterns validated")

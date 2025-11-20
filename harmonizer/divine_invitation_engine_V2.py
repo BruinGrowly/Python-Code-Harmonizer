@@ -380,9 +380,7 @@ class VocabularyManager:
         for word, domains in enhanced_vocab.items():
             if word not in self._keyword_map and domains:
                 first_concept = next(iter(domains))
-                self._keyword_map[word] = self._keyword_map.get(
-                    first_concept, Dimension.WISDOM
-                )
+                self._keyword_map[word] = self._keyword_map.get(first_concept, Dimension.WISDOM)
 
         for dimension, words in coding_vocab.items():
             for word in words:
@@ -488,9 +486,7 @@ class SemanticAnalyzer:
         empty_coords = Coordinates(0.0, 0.0, 0.0, 0.0)
         return SemanticResult(
             coordinates=empty_coords,
-            distance_from_anchor=self.vocab.get_distance(
-                self.ANCHOR_POINT, empty_coords
-            ),
+            distance_from_anchor=self.vocab.get_distance(self.ANCHOR_POINT, empty_coords),
             semantic_clarity=0.0,
             concept_count=0,
             confidence=0.0,
@@ -510,9 +506,7 @@ class SemanticAnalyzer:
             wisdom_sum += coords.wisdom
 
         n = len(coords_list)
-        centroid = Coordinates(
-            love_sum / n, justice_sum / n, power_sum / n, wisdom_sum / n
-        )
+        centroid = Coordinates(love_sum / n, justice_sum / n, power_sum / n, wisdom_sum / n)
 
         # Calculate distances and cohesion
         distances = [self.vocab.get_distance(c, centroid) for c in coords_list]
@@ -558,9 +552,7 @@ class MathematicalInferenceEngine:
         self.vocab = vocab_manager
         self.analyzer = analyzer
 
-    def infer_unknown_meaning(
-        self, unknown_word: str, context_words: List[str]
-    ) -> SemanticResult:
+    def infer_unknown_meaning(self, unknown_word: str, context_words: List[str]) -> SemanticResult:
         """Optimized meaning inference"""
         context_result = self.analyzer.analyze_concept_cluster(context_words)
 
@@ -609,8 +601,7 @@ class GeopoliticalAnalyzer:
 
         # Weighted combination (70% recent, 30% historical)
         combined_coords = Coordinates(
-            love=(actions_result.coordinates.love * 0.7)
-            + (history_result.coordinates.love * 0.3),
+            love=(actions_result.coordinates.love * 0.7) + (history_result.coordinates.love * 0.3),
             justice=(actions_result.coordinates.justice * 0.7)
             + (history_result.coordinates.justice * 0.3),
             power=(actions_result.coordinates.power * 0.7)
@@ -621,9 +612,7 @@ class GeopoliticalAnalyzer:
 
         return self._determine_posture(combined_coords, entity_name, entity_type)
 
-    def _determine_posture(
-        self, coords: Coordinates, entity_name: str, entity_type: str
-    ) -> Dict:
+    def _determine_posture(self, coords: Coordinates, entity_name: str, entity_type: str) -> Dict:
         """Optimized posture determination"""
         distance = self.vocab.get_distance(self.ANCHOR_POINT, coords)
         clarity = self.vocab.get_semantic_clarity(coords)
@@ -651,9 +640,7 @@ class GeopoliticalAnalyzer:
         if distance < 0.5:
             posture_type = "Balanced Leadership (Harmonized)"
         elif distance > 1.5:
-            posture_type = (
-                f"Chaotic / Destabilized ({dominant_dim.value.title()} Focus)"
-            )
+            posture_type = f"Chaotic / Destabilized ({dominant_dim.value.title()} Focus)"
 
         return {
             "entity_name": entity_name,
@@ -704,9 +691,7 @@ class ICEAnalyzer:
         )
 
         # Calculate ICE metrics
-        avg_disharmony = (
-            intent_context_dist + intent_exec_dist + context_exec_dist
-        ) / 3.0
+        avg_disharmony = (intent_context_dist + intent_exec_dist + context_exec_dist) / 3.0
         ice_coherence = max(0.0, 1.0 - (avg_disharmony / 2.0))
 
         avg_dist_from_anchor = (
@@ -721,9 +706,7 @@ class ICEAnalyzer:
         ) / 2.0
 
         # Calculate ICE coordinate
-        ice_coord = self._calculate_ice_coordinate(
-            intent_result, context_result, execution_result
-        )
+        ice_coord = self._calculate_ice_coordinate(intent_result, context_result, execution_result)
 
         # LJPW Baseline-enhanced disharmony metrics
         # Use coupling-aware metrics for intent-execution alignment
@@ -778,9 +761,7 @@ class ICEAnalyzer:
                 "intent_composite_score": intent_result.composite_score,
                 "execution_composite_score": execution_result.composite_score,
             },
-            "ice_harmony_level": self._determine_ice_harmony_level(
-                ice_coherence, ice_balance
-            ),
+            "ice_harmony_level": self._determine_ice_harmony_level(ice_coherence, ice_balance),
         }
 
     def _calculate_ice_coordinate(
@@ -788,11 +769,7 @@ class ICEAnalyzer:
     ) -> Coordinates:  # noqa: E501
         """Calculate ICE coordinate from components"""
         return Coordinates(
-            love=(
-                intent.coordinates.love
-                + context.coordinates.love
-                + execution.coordinates.love
-            )
+            love=(intent.coordinates.love + context.coordinates.love + execution.coordinates.love)
             / 3,
             justice=(
                 intent.coordinates.justice
@@ -801,9 +778,7 @@ class ICEAnalyzer:
             )
             / 3,
             power=(
-                intent.coordinates.power
-                + context.coordinates.power
-                + execution.coordinates.power
+                intent.coordinates.power + context.coordinates.power + execution.coordinates.power
             )
             / 3,
             wisdom=(
@@ -928,14 +903,10 @@ class DivineInvitationSemanticEngine:
         self.semantic_analyzer = SemanticAnalyzer(self.vocabulary, self.ANCHOR_POINT)
 
         # Build specialized sub-engines
-        self.inference_engine = MathematicalInferenceEngine(
-            self.vocabulary, self.semantic_analyzer
-        )
+        self.inference_engine = MathematicalInferenceEngine(self.vocabulary, self.semantic_analyzer)
         self.ice_analyzer = ICEAnalyzer(self.vocabulary, self.semantic_analyzer)
         self.phi_optimizer = PhiOptimizer(self.vocabulary, self.semantic_analyzer)
-        self.geopolitical_analyzer = GeopoliticalAnalyzer(
-            self.vocabulary, self.semantic_analyzer
-        )
+        self.geopolitical_analyzer = GeopoliticalAnalyzer(self.vocabulary, self.semantic_analyzer)
 
     def get_engine_version(self) -> str:
         return self.ENGINE_VERSION
@@ -993,9 +964,7 @@ class DivineInvitationSemanticEngine:
         execution_words: List[str],
     ) -> Dict:
         """Perform ICE framework analysis"""
-        return self.ice_analyzer.analyze_ice(
-            intent_words, context_words, execution_words
-        )
+        return self.ice_analyzer.analyze_ice(intent_words, context_words, execution_words)
 
     def perform_phi_optimization(self, concepts: List[str]) -> Dict:
         """Perform phi-enhanced optimization"""

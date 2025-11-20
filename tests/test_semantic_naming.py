@@ -6,8 +6,9 @@ Comprehensive tests for the SemanticNamingEngine
 """
 
 import pytest
-from harmonizer.semantic_naming import SemanticNamingEngine
+
 from harmonizer.divine_invitation_engine_V2 import Coordinates
+from harmonizer.semantic_naming import SemanticNamingEngine
 
 
 @pytest.fixture(scope="module")
@@ -72,9 +73,7 @@ class TestSuggestionGeneration:
         # Should suggest justice verbs like validate, verify, check
         names = [s[0] for s in suggestions]
         assert any(
-            verb in name
-            for verb in ["validate", "verify", "check", "ensure"]
-            for name in names
+            verb in name for verb in ["validate", "verify", "check", "ensure"] for name in names
         )
 
     def test_suggest_names_wisdom_dominant(self, naming_engine):
@@ -223,9 +222,7 @@ class TestCoordinateExplanations:
         explanation = naming_engine.explain_coordinates(coords)
 
         assert "power" in explanation.lower()
-        assert (
-            "action" in explanation.lower() or "transformation" in explanation.lower()
-        )
+        assert "action" in explanation.lower() or "transformation" in explanation.lower()
 
     def test_explain_coordinates_balanced(self, naming_engine):
         """Test explanation for balanced coordinates"""
@@ -370,9 +367,7 @@ class TestIntegrationWithDIVE:
         dive_engine = DivineInvitationSemanticEngine()
         result = dive_engine.analyze_text("validate user input")
 
-        suggestions = naming_engine.suggest_names(
-            result.coordinates, context="input", top_n=3
-        )
+        suggestions = naming_engine.suggest_names(result.coordinates, context="input", top_n=3)
 
         # Verify we get valid suggestions
         assert len(suggestions) == 3

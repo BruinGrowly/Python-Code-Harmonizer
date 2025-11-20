@@ -21,8 +21,8 @@ import re
 from typing import Dict, List, Optional, Set, Tuple
 
 from harmonizer.programming_constructs_vocabulary import (
-    PROGRAMMING_VERBS,
     COMPOUND_PATTERNS,
+    PROGRAMMING_VERBS,
 )
 
 
@@ -73,9 +73,7 @@ class AST_Semantic_Parser_V2(ast.NodeVisitor):
         else:
             return self._split_camel_case(name)
 
-    def _map_word_to_concept(
-        self, word: str, context: str = "default"
-    ) -> Optional[str]:
+    def _map_word_to_concept(self, word: str, context: str = "default") -> Optional[str]:
         """
         Map a word to its semantic dimension.
 
@@ -121,9 +119,7 @@ class AST_Semantic_Parser_V2(ast.NodeVisitor):
                     return COMPOUND_PATTERNS[compound]
         return None
 
-    def get_intent_concepts(
-        self, function_name: str, docstring: Optional[str]
-    ) -> List[str]:
+    def get_intent_concepts(self, function_name: str, docstring: Optional[str]) -> List[str]:
         """
         Parse function name and docstring to extract semantic intent.
 
@@ -158,15 +154,11 @@ class AST_Semantic_Parser_V2(ast.NodeVisitor):
 
         # Fallback to words in vocabulary
         if not concepts and name_words:
-            concepts.update(
-                [word for word in name_words if word in self.known_vocabulary]
-            )
+            concepts.update([word for word in name_words if word in self.known_vocabulary])
 
         return list(concepts)
 
-    def get_execution_map(
-        self, body: List[ast.AST]
-    ) -> Tuple[Dict[ast.AST, str], List[str]]:
+    def get_execution_map(self, body: List[ast.AST]) -> Tuple[Dict[ast.AST, str], List[str]]:
         """
         Parse function body to map AST nodes to semantic dimensions.
 

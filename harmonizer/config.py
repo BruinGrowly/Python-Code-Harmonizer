@@ -5,7 +5,7 @@ Loads settings from pyproject.toml or harmonizer.yaml.
 
 import os
 from dataclasses import dataclass, field
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 # Try to import tomli for TOML parsing
 try:

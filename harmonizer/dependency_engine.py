@@ -5,8 +5,8 @@ Dependency Engine - Analyzes the "Gravity" of code modules.
 
 import ast
 import os
-from typing import Dict, List, Set
 from dataclasses import dataclass
+from typing import Dict, List, Set
 
 
 @dataclass

@@ -4,9 +4,9 @@ Direct test of the 4 semantic primitives: LOVE, JUSTICE, POWER, WISDOM
 """
 
 from harmonizer.divine_invitation_engine_V2 import (
-    DivineInvitationSemanticEngine,
     Coordinates,
     Dimension,
+    DivineInvitationSemanticEngine,
 )
 
 
@@ -33,9 +33,7 @@ def test_primitives():
     print("   Text: 'justice truth fairness law order'")
     print(f"   Coordinates: {justice_result.coordinates}")
     print(f"   JUSTICE value: {justice_result.coordinates.justice:.3f}")
-    assert (
-        justice_result.coordinates.justice > 0.8
-    ), "JUSTICE dimension should be dominant"
+    assert justice_result.coordinates.justice > 0.8, "JUSTICE dimension should be dominant"
     print("   ✓ JUSTICE primitive working correctly")
 
     # Test 3: POWER primitive

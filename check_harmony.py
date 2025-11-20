@@ -16,12 +16,18 @@ def check_harmony(
     print(f"Running LJPW Harmony Check on: {os.path.abspath(target_dir)}")
     print("=" * 60)
 
-    # Load config explicitly if provided, otherwise auto-load
-    # Note: LegacyCodeMapper loads config automatically from target_dir,
-    # but if we want to override with a specific file, we might need to adjust ConfigLoader.
-    # For now, we'll rely on auto-loading from target_dir.
-
+    # If analyzing a subdirectory, find project root for config
+    # Otherwise use target_dir
+    project_root = os.getcwd() if target_dir != "." else target_dir
+    
+    # Create mapper - it will load config from project_root
     mapper = LegacyCodeMapper(target_dir, quiet=not verbose)
+    
+    # If we're in project root, use config from there
+    if os.path.exists(os.path.join(project_root, "pyproject.toml")):
+        from harmonizer.config import ConfigLoader
+        mapper.config = ConfigLoader.load(project_root)
+    
     mapper.analyze_codebase(show_progress=True)
 
     failures = []

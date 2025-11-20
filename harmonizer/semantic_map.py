@@ -156,9 +156,7 @@ class SemanticMapGenerator:
         """Generate human-readable interpretation of the semantic drift."""
         if intent_dim == exec_dim:
             # Check for significant deltas even if dominant dimension is the same
-            significant_deltas = [
-                (dim, delta) for dim, delta in deltas.items() if abs(delta) > 0.3
-            ]
+            significant_deltas = [(dim, delta) for dim, delta in deltas.items() if abs(delta) > 0.3]
             if significant_deltas:
                 changes = ", ".join(
                     [
@@ -179,25 +177,19 @@ class SemanticMapGenerator:
             f"({exec_meaning})."
         )
 
-    def _generate_recommendations(
-        self, intent_dim: str, exec_dim: str, function_name: str
-    ) -> list:
+    def _generate_recommendations(self, intent_dim: str, exec_dim: str, function_name: str) -> list:
         """Generate actionable recommendations based on semantic drift."""
         recommendations = []
 
         if intent_dim == exec_dim:
-            recommendations.append(
-                f"✓ Function is semantically aligned in {intent_dim} domain"
-            )
+            recommendations.append(f"✓ Function is semantically aligned in {intent_dim} domain")
             return recommendations
 
         # Get expected vs actual behaviors
         intent_behaviors = self.DIMENSION_BEHAVIORS.get(intent_dim.lower(), [])
         exec_behaviors = self.DIMENSION_BEHAVIORS.get(exec_dim.lower(), [])
 
-        recommendations.append(
-            f"Consider renaming to reflect {exec_dim} domain operations"
-        )
+        recommendations.append(f"Consider renaming to reflect {exec_dim} domain operations")
 
         recommendations.append(f"Expected behaviors: {', '.join(intent_behaviors[:3])}")
 
@@ -226,9 +218,7 @@ class SemanticMapGenerator:
         lines.append("")
         lines.append("📍 SEMANTIC TRAJECTORY MAP:")
         lines.append("┌" + "─" * 70 + "┐")
-        lines.append(
-            "│ Dimension    Intent   Execution   Δ        Interpretation       │"
-        )
+        lines.append("│ Dimension    Intent   Execution   Δ        Interpretation       │")
         lines.append("├" + "─" * 70 + "┤")
 
         deltas = semantic_map["trajectory"]["deltas"]

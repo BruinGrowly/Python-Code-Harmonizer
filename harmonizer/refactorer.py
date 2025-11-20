@@ -27,9 +27,7 @@ class Refactorer:
     concrete refactoring strategies.
     """
 
-    def __init__(
-        self, function_node: ast.FunctionDef, execution_map: Dict[ast.AST, str]
-    ):
+    def __init__(self, function_node: ast.FunctionDef, execution_map: Dict[ast.AST, str]):
         self.function_node = function_node
         self.execution_map = execution_map
 
@@ -50,8 +48,7 @@ class Refactorer:
             new_functions.append(new_func)
             # Handle 'self' for method calls
             is_method = (
-                self.function_node.args.args
-                and self.function_node.args.args[0].arg == "self"
+                self.function_node.args.args and self.function_node.args.args[0].arg == "self"
             )
             if is_method:
                 call_func = ast.Attribute(
@@ -60,14 +57,12 @@ class Refactorer:
                     ctx=ast.Load(),
                 )
                 call_args = [
-                    ast.Name(id=arg.arg, ctx=ast.Load())
-                    for arg in self.function_node.args.args[1:]
+                    ast.Name(id=arg.arg, ctx=ast.Load()) for arg in self.function_node.args.args[1:]
                 ]
             else:
                 call_func = ast.Name(id=new_func_name, ctx=ast.Load())
                 call_args = [
-                    ast.Name(id=arg.arg, ctx=ast.Load())
-                    for arg in self.function_node.args.args
+                    ast.Name(id=arg.arg, ctx=ast.Load()) for arg in self.function_node.args.args
                 ]
 
             new_body_calls.append(
@@ -94,9 +89,7 @@ class Refactorer:
 
         # Format the generated code using black
         try:
-            final_code = black.format_str(
-                unformatted_code, mode=black.FileMode()
-            ).strip()
+            final_code = black.format_str(unformatted_code, mode=black.FileMode()).strip()
         except black.NothingChanged:
             final_code = unformatted_code.strip()
 
@@ -115,9 +108,7 @@ class Refactorer:
             groups[dimension].append(node)
         return groups
 
-    def _create_new_function(
-        self, name: str, body_nodes: List[ast.AST]
-    ) -> ast.FunctionDef:
+    def _create_new_function(self, name: str, body_nodes: List[ast.AST]) -> ast.FunctionDef:
         """Creates a new function definition from a list of body nodes."""
         return ast.FunctionDef(
             name=name,
