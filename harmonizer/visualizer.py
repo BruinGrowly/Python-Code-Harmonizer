@@ -103,7 +103,7 @@ class HarmonizerVisualizer:
             --power: #ef4444;
             --wisdom: #3b82f6;
         }}
-        
+
         body {{
             font-family: 'Inter', system-ui, sans-serif;
             background-color: var(--bg-color);
@@ -111,70 +111,70 @@ class HarmonizerVisualizer:
             margin: 0;
             padding: 20px;
         }}
-        
+
         .container {{
             max_width: 1400px;
             margin: 0 auto;
         }}
-        
+
         header {{
             margin-bottom: 30px;
             border-bottom: 1px solid #334155;
             padding-bottom: 20px;
         }}
-        
+
         h1 {{ margin: 0; font-size: 2rem; }}
         .subtitle {{ color: var(--text-secondary); margin-top: 5px; }}
-        
+
         .grid {{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 20px;
             margin-bottom: 30px;
         }}
-        
+
         .card {{
             background-color: var(--card-bg);
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }}
-        
+
         .card h2 {{ margin-top: 0; font-size: 1.2rem; color: var(--accent); }}
-        
+
         #galaxy-graph {{
             width: 100%;
             height: 600px;
             background-color: #020617;
             border-radius: 8px;
         }}
-        
+
         table {{
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
         }}
-        
+
         th, td {{
             text-align: left;
             padding: 12px;
             border-bottom: 1px solid #334155;
         }}
-        
+
         th {{ color: var(--text-secondary); font-weight: 600; }}
-        
+
         .badge {{
             padding: 4px 8px;
             border-radius: 4px;
             font-size: 0.8rem;
             font-weight: bold;
         }}
-        
+
         .badge-love {{ background: rgba(244, 114, 182, 0.2); color: var(--love); }}
         .badge-justice {{ background: rgba(251, 191, 36, 0.2); color: var(--justice); }}
         .badge-power {{ background: rgba(239, 68, 68, 0.2); color: var(--power); }}
         .badge-wisdom {{ background: rgba(59, 130, 246, 0.2); color: var(--wisdom); }}
-        
+
     </style>
 </head>
 <body>
@@ -183,7 +183,7 @@ class HarmonizerVisualizer:
             <h1>LJPW Code Harmony Report</h1>
             <div class="subtitle">Generated on {datetime.now().strftime("%Y-%m-%d %H:%M")}</div>
         </header>
-        
+
         <div class="grid">
             <div class="card">
                 <h2>System Balance (Average)</h2>
@@ -194,16 +194,16 @@ class HarmonizerVisualizer:
                 <canvas id="scatterChart"></canvas>
             </div>
         </div>
-        
+
         <div class="card" style="margin-bottom: 30px;">
             <h2>Dependency Galaxy (Gravitational Pull)</h2>
             <div id="galaxy-graph"></div>
             <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 10px;">
-                Nodes are sized by Mass (Complexity). Links show imports. 
+                Nodes are sized by Mass (Complexity). Links show imports.
                 Colors represent dominant LJPW dimension.
             </p>
         </div>
-        
+
         <div class="card">
             <h2>File Analysis</h2>
             <div style="overflow-x: auto;">
@@ -228,13 +228,13 @@ class HarmonizerVisualizer:
 
     <script>
         const data = {json_data};
-        
+
         // --- 1. Radar Chart ---
         const avgL = data.files.reduce((sum, f) => sum + f.l, 0) / data.files.length;
         const avgJ = data.files.reduce((sum, f) => sum + f.j, 0) / data.files.length;
         const avgP = data.files.reduce((sum, f) => sum + f.p, 0) / data.files.length;
         const avgW = data.files.reduce((sum, f) => sum + f.w, 0) / data.files.length;
-        
+
         new Chart(document.getElementById('radarChart'), {{
             type: 'radar',
             data: {{
@@ -267,7 +267,7 @@ class HarmonizerVisualizer:
                 plugins: {{ legend: {{ labels: {{ color: '#cbd5e1' }} }} }}
             }}
         }});
-        
+
         // --- 2. Scatter Chart (Density vs Complexity) ---
         new Chart(document.getElementById('scatterChart'), {{
             type: 'scatter',
@@ -286,12 +286,12 @@ class HarmonizerVisualizer:
             }},
             options: {{
                 scales: {{
-                    x: {{ 
+                    x: {{
                         title: {{ display: true, text: 'Complexity (Function Count)', color: '#94a3b8' }},
                         grid: {{ color: '#334155' }},
                         ticks: {{ color: '#94a3b8' }}
                     }},
-                    y: {{ 
+                    y: {{
                         title: {{ display: true, text: 'Semantic Density (Power/LOC)', color: '#94a3b8' }},
                         grid: {{ color: '#334155' }},
                         ticks: {{ color: '#94a3b8' }}
@@ -307,27 +307,27 @@ class HarmonizerVisualizer:
                 }}
             }}
         }});
-        
+
         // --- 3. D3 Force Graph ---
         const width = document.getElementById('galaxy-graph').clientWidth;
         const height = 600;
-        
+
         const svg = d3.select("#galaxy-graph").append("svg")
             .attr("width", width)
             .attr("height", height);
-            
+
         const simulation = d3.forceSimulation(data.graph.nodes)
             .force("link", d3.forceLink(data.graph.links).id(d => d.id).distance(100))
             .force("charge", d3.forceManyBody().strength(-300))
             .force("center", d3.forceCenter(width / 2, height / 2));
-            
+
         const link = svg.append("g")
             .selectAll("line")
             .data(data.graph.links)
             .enter().append("line")
             .attr("stroke", "#475569")
             .attr("stroke-width", 1);
-            
+
         const node = svg.append("g")
             .selectAll("circle")
             .data(data.graph.nodes)
@@ -348,43 +348,43 @@ class HarmonizerVisualizer:
                 .on("start", dragstarted)
                 .on("drag", dragged)
                 .on("end", dragended));
-                
+
         node.append("title").text(d => d.id);
-        
+
         simulation.on("tick", () => {{
             link
                 .attr("x1", d => d.source.x)
                 .attr("y1", d => d.source.y)
                 .attr("x2", d => d.target.x)
                 .attr("y2", d => d.target.y);
-                
+
             node
                 .attr("cx", d => d.x)
                 .attr("cy", d => d.y);
         }});
-        
+
         function dragstarted(event, d) {{
             if (!event.active) simulation.alphaTarget(0.3).restart();
             d.fx = d.x;
             d.fy = d.y;
         }}
-        
+
         function dragged(event, d) {{
             d.fx = event.x;
             d.fy = event.y;
         }}
-        
+
         function dragended(event, d) {{
             if (!event.active) simulation.alphaTarget(0);
             d.fx = null;
             d.fy = null;
         }}
-        
+
         // --- 4. Populate Table ---
         const tbody = document.querySelector('#fileTable tbody');
         data.files.forEach(f => {{
             const tr = document.createElement('tr');
-            
+
             const max = Math.max(f.l, f.j, f.p, f.w);
             let domClass = '';
             let domName = '';
@@ -392,7 +392,7 @@ class HarmonizerVisualizer:
             else if (max === f.j) {{ domClass = 'badge-justice'; domName = 'Justice'; }}
             else if (max === f.p) {{ domClass = 'badge-power'; domName = 'Power'; }}
             else {{ domClass = 'badge-wisdom'; domName = 'Wisdom'; }}
-            
+
             tr.innerHTML = `
                 <td>${{f.name}}</td>
                 <td><span class="badge ${{domClass}}">${{domName}}</span></td>

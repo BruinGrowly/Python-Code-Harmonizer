@@ -7,9 +7,7 @@ Enforces semantic quality standards for the codebase.
 import sys
 import os
 import argparse
-from harmonizer.main import PythonCodeHarmonizer
 from harmonizer.legacy_mapper import LegacyCodeMapper
-from harmonizer.config import ConfigLoader
 
 
 def check_harmony(
@@ -30,7 +28,7 @@ def check_harmony(
     warnings = []
 
     config = mapper.config
-    print(f"\n--- CONFIGURATION ---")
+    print("\n--- CONFIGURATION ---")
     print(f"Max Disharmony: {config.max_disharmony}")
     print(f"Max Imbalance:  {config.max_imbalance}")
     print(f"Min Density:    {config.min_density}")
