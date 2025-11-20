@@ -3,6 +3,7 @@
 import argparse
 import os
 import tempfile
+
 import pytest
 
 from harmonizer.main import (

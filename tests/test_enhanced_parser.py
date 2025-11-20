@@ -6,8 +6,9 @@ Validates that programming constructs correctly map to LJPW dimensions.
 """
 
 import ast
-from harmonizer.divine_invitation_engine_V2 import DivineInvitationSemanticEngine
+
 from harmonizer.ast_semantic_parser_v2 import AST_Semantic_Parser_V2
+from harmonizer.divine_invitation_engine_V2 import DivineInvitationSemanticEngine
 
 
 def test_wisdom_operations():

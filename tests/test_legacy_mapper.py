@@ -1,6 +1,7 @@
 import os
 import sys
-from harmonizer.legacy_mapper import LegacyCodeMapper, ArchitecturalSmell
+
+from harmonizer.legacy_mapper import ArchitecturalSmell, LegacyCodeMapper
 from harmonizer.ljpw_baselines import LJPWBaselines
 
 

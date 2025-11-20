@@ -8,15 +8,15 @@ generates complexity heatmaps, and provides refactoring recommendations.
 
 import os
 import subprocess
-from datetime import datetime
-from statistics import mean
 from collections import defaultdict
 from dataclasses import dataclass, field
-from typing import Dict, List, Tuple, Optional
+from datetime import datetime
+from statistics import mean
+from typing import Dict, List, Optional, Tuple
 
-from harmonizer.main import PythonCodeHarmonizer
-from harmonizer.ljpw_baselines import LJPWBaselines, DynamicLJPWv4
 from harmonizer.config import ConfigLoader
+from harmonizer.ljpw_baselines import DynamicLJPWv4, LJPWBaselines
+from harmonizer.main import PythonCodeHarmonizer
 
 
 @dataclass

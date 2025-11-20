@@ -7,8 +7,9 @@ Uses the validated mixing formula to suggest optimal function names.
 """
 
 from typing import List, Tuple
+
+from harmonizer.coordinate_utils import CoordinateUtils
 from harmonizer.divine_invitation_engine_V2 import Coordinates
-import math
 
 
 class SemanticNamingEngine:
@@ -355,25 +356,11 @@ class SemanticNamingEngine:
         """
         # Convert Coordinates to tuple if needed
         if isinstance(coords1, Coordinates):
-            vec1 = (coords1.love, coords1.justice, coords1.power, coords1.wisdom)
+            vec1 = CoordinateUtils.to_tuple(coords1)
         else:
             vec1 = coords1
 
-        vec2 = coords2
-
-        # Calculate dot product
-        dot_product = sum(a * b for a, b in zip(vec1, vec2))
-
-        # Calculate magnitudes
-        mag1 = math.sqrt(sum(a * a for a in vec1))
-        mag2 = math.sqrt(sum(b * b for b in vec2))
-
-        # Avoid division by zero
-        if mag1 == 0 or mag2 == 0:
-            return 0.0
-
-        # Cosine similarity
-        return dot_product / (mag1 * mag2)
+        return CoordinateUtils.cosine_similarity(vec1, coords2)
 
     def _generate_explanation(
         self,
@@ -391,21 +378,13 @@ class SemanticNamingEngine:
 
     def _get_dominant_dimension(self, coords: Coordinates) -> str:
         """Get the dominant dimension from coordinates"""
-        values = {
-            "love": coords.love,
-            "justice": coords.justice,
-            "power": coords.power,
-            "wisdom": coords.wisdom,
-        }
-        return max(values, key=values.get)
+        return CoordinateUtils.get_dominant_dimension(CoordinateUtils.to_tuple(coords))
 
     def _get_dominant_dimension_from_tuple(
         self, coords: Tuple[float, float, float, float]
     ) -> str:
         """Get dominant dimension from tuple"""
-        dimensions = ["love", "justice", "power", "wisdom"]
-        max_idx = coords.index(max(coords))
-        return dimensions[max_idx]
+        return CoordinateUtils.get_dominant_dimension(coords)
 
     def explain_coordinates(self, coordinates: Coordinates) -> str:
         """Generate human-readable explanation of semantic coordinates"""

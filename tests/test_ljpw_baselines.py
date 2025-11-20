@@ -7,6 +7,7 @@ Validates the mathematical baseline calculations and interpretations.
 """
 
 import math
+
 import pytest
 
 from harmonizer.ljpw_baselines import (

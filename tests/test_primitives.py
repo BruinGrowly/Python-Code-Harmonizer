@@ -4,9 +4,9 @@ Direct test of the 4 semantic primitives: LOVE, JUSTICE, POWER, WISDOM
 """
 
 from harmonizer.divine_invitation_engine_V2 import (
-    DivineInvitationSemanticEngine,
     Coordinates,
     Dimension,
+    DivineInvitationSemanticEngine,
 )
 
 

@@ -21,8 +21,8 @@ import re
 from typing import Dict, List, Optional, Set, Tuple
 
 from harmonizer.programming_constructs_vocabulary import (
-    PROGRAMMING_VERBS,
     COMPOUND_PATTERNS,
+    PROGRAMMING_VERBS,
 )
 
 

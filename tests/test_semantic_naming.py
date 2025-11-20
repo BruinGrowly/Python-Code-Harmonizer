@@ -6,8 +6,9 @@ Comprehensive tests for the SemanticNamingEngine
 """
 
 import pytest
-from harmonizer.semantic_naming import SemanticNamingEngine
+
 from harmonizer.divine_invitation_engine_V2 import Coordinates
+from harmonizer.semantic_naming import SemanticNamingEngine
 
 
 @pytest.fixture(scope="module")

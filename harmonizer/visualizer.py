@@ -5,8 +5,8 @@ Harmonizer Visualizer - Generates interactive HTML dashboards for LJPW analysis.
 
 import json
 import os
-from typing import Dict, List, Any
 from datetime import datetime
+from typing import Any, Dict, List
 
 
 class HarmonizerVisualizer:

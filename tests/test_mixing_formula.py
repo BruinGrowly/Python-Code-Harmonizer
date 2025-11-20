@@ -4,11 +4,12 @@ Empirical Testing of Universal Semantic Mixing Formula
 Using REAL data from the Python Code Harmonizer semantic engine.
 """
 
-from harmonizer.divine_invitation_engine_V2 import (
-    DivineInvitationSemanticEngine,
-    Coordinates,
-)
 import math
+
+from harmonizer.divine_invitation_engine_V2 import (
+    Coordinates,
+    DivineInvitationSemanticEngine,
+)
 
 
 def universal_semantic_mix(primary_weights):
@@ -72,7 +73,9 @@ def test_basic_primaries():
         }
         print(f"  Average Purity: {avg_purity:.3f} [{results[dimension]['status']}]")
 
-    return results
+    # Assert that primaries are reasonably pure
+    avg_purity = sum(r["avg_purity"] for r in results.values()) / len(results)
+    assert avg_purity > 0.5, f"Primary concepts should have average purity > 0.5, got {avg_purity:.3f}"
 
 
 def test_simple_mixtures():
@@ -148,7 +151,9 @@ def test_simple_mixtures():
             f"  Average Error: {avg_error:.3f} {'✅ SUCCESS' if success else '❌ FAILED'}"
         )
 
-    return results
+    # Assert that at least some mixtures work reasonably well
+    avg_error = sum(r["avg_error"] for r in results) / len(results)
+    assert avg_error < 0.6, f"Average error for simple mixtures should be < 0.6, got {avg_error:.3f}"
 
 
 def test_complex_mixtures():
@@ -217,7 +222,9 @@ def test_complex_mixtures():
             f"  Average Error: {avg_error:.3f} {'✅ SUCCESS' if success else '❌ FAILED'}"
         )
 
-    return results
+    # Assert that weighted mixtures work reasonably well
+    avg_error = sum(r["avg_error"] for r in results) / len(results)
+    assert avg_error < 0.7, f"Average error for weighted mixtures should be < 0.7, got {avg_error:.3f}"
 
 
 def test_balanced_mixture():
@@ -259,7 +266,9 @@ def test_balanced_mixture():
         f"\n  Average Error: {avg_error:.3f} {'✅ SUCCESS' if success else '❌ FAILED'}"
     )
 
-    return {"avg_error": avg_error, "success": success}
+    # Assert that balanced mixture has reasonable error
+    # Balanced mixtures are harder to predict, so we use a more lenient threshold
+    assert avg_error < 0.7, f"Balanced mixture average error should be < 0.7, got {avg_error:.3f}"
 
 
 def generate_summary(
