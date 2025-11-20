@@ -154,12 +154,12 @@ class PythonCodeHarmonizer:
         except FileNotFoundError:
             if not self.quiet:
                 print(f"⚠️  Couldn't find file: '{file_path}'")
-                print(f"   Let's check the path is correct?")
+                print("   Let's check the path is correct?")
             return None
         except Exception as e:
             if not self.quiet:
                 print(f"⚠️  Couldn't read file: {e}")
-                print(f"   Check if the file has proper permissions?")
+                print("   Check if the file has proper permissions?")
             return None
 
     def _parse_code_to_ast(self, content: str, file_path: str) -> ast.AST:
@@ -168,7 +168,7 @@ class PythonCodeHarmonizer:
         except SyntaxError as e:
             if not self.quiet:
                 print(f"⚠️  Syntax error on line {e.lineno}")
-                print(f"   Let's fix the syntax first, then we can check harmony!")
+                print("   Let's fix the syntax first, then we can check harmony!")
             return None
 
     def _analyze_all_functions(self, tree: ast.AST) -> Dict[str, Dict]:
@@ -283,7 +283,6 @@ class PythonCodeHarmonizer:
         lines.append("=" * 70)
 
         # Add encouraging summary
-        total = excellent_count + harmonious_count + review_count + attention_count
         summary_parts = []
 
         if excellent_count > 0:

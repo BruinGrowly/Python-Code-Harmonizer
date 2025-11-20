@@ -7,17 +7,15 @@ generates complexity heatmaps, and provides refactoring recommendations.
 """
 
 import os
-import glob
 import subprocess
-import json
 from datetime import datetime
-from statistics import mean, stdev
+from statistics import mean
 from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Dict, List, Tuple, Optional
 
 from harmonizer.main import PythonCodeHarmonizer
-from harmonizer.ljpw_baselines import LJPWBaselines, DynamicLJPWv3, ReferencePoints
+from harmonizer.ljpw_baselines import LJPWBaselines, DynamicLJPWv3
 from harmonizer.config import ConfigLoader
 
 
@@ -313,7 +311,7 @@ class LegacyCodeMapper:
                         severity="HIGH" if analysis.function_count > 50 else "MEDIUM",
                         description=f"File has {analysis.function_count} functions (threshold: 30)",
                         impact=min(1.0, analysis.function_count / 100),
-                        recommendation=f"Split into smaller, focused modules by semantic dimension",
+                        recommendation="Split into smaller, focused modules by semantic dimension",
                     )
                 )
 
@@ -918,17 +916,17 @@ class LegacyCodeMapper:
             "understand",
         ]
 
-        l = sum(1 for kw in love_keywords if kw in text_lower)
-        j = sum(1 for kw in justice_keywords if kw in text_lower)
-        p = sum(1 for kw in power_keywords if kw in text_lower)
-        w = sum(1 for kw in wisdom_keywords if kw in text_lower)
+        love_count = sum(1 for kw in love_keywords if kw in text_lower)
+        justice_count = sum(1 for kw in justice_keywords if kw in text_lower)
+        power_count = sum(1 for kw in power_keywords if kw in text_lower)
+        wisdom_count = sum(1 for kw in wisdom_keywords if kw in text_lower)
 
-        total = l + j + p + w
+        total = love_count + justice_count + power_count + wisdom_count
         if total == 0:
             return None
 
         # Normalize
-        return (l / total, j / total, p / total, w / total)
+        return (love_count / total, justice_count / total, power_count / total, wisdom_count / total)
 
     def estimate_architectural_debt(self, hourly_rate: float = 150.0):
         """Estimate architectural debt in hours and dollars"""
@@ -1336,7 +1334,7 @@ class LegacyCodeMapper:
             print(
                 f"   Avg Coordinates: L={avg_l:.2f}, J={avg_j:.2f}, P={avg_p:.2f}, W={avg_w:.2f}"
             )
-            print(f"   Files:")
+            print("   Files:")
 
             sorted_files = sorted(files, key=lambda f: f.avg_disharmony, reverse=True)
             for file in sorted_files[:5]:
@@ -1359,7 +1357,7 @@ class LegacyCodeMapper:
                 print(f"     - {rel_path:40s} L={l:.2f} J={j:.2f} P={p:.2f} W={w:.2f}")
 
         # Overall metrics
-        print(f"\n📊 OVERALL METRICS")
+        print("\n📊 OVERALL METRICS")
         print(f"   Total files analyzed: {report['total_files']}")
         print(f"   Average disharmony: {report['overall_disharmony']:.2f}")
 
@@ -1403,7 +1401,7 @@ class LegacyCodeMapper:
 
         # Refactoring opportunities
         if self.refactoring_opportunities:
-            print(f"\n💡 REFACTORING OPPORTUNITIES (Top 5)")
+            print("\n💡 REFACTORING OPPORTUNITIES (Top 5)")
             print("=" * 70)
 
             top_opportunities = sorted(
@@ -1419,7 +1417,7 @@ class LegacyCodeMapper:
                 )
                 print(f"   {opp.description}")
                 if opp.suggested_actions:
-                    print(f"   Actions:")
+                    print("   Actions:")
                     for action in opp.suggested_actions:
                         print(f"     → {action}")
 
@@ -1477,7 +1475,7 @@ class LegacyCodeMapper:
 
         # Architectural Debt
         if self.architectural_debts:
-            print(f"\n💰 ARCHITECTURAL DEBT ESTIMATION")
+            print("\n💰 ARCHITECTURAL DEBT ESTIMATION")
             print("=" * 70)
 
             total_hours = sum(d.estimated_hours for d in self.architectural_debts)
@@ -1525,7 +1523,6 @@ class LegacyCodeMapper:
 
 
 if __name__ == "__main__":
-    import sys
     import argparse
 
     parser = argparse.ArgumentParser(

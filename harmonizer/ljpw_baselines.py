@@ -12,7 +12,7 @@ Based on: docs/LJPW Mathematical Baselines Reference V4.md
 
 import math
 from dataclasses import dataclass
-from typing import Dict, Tuple, List
+from typing import Dict, Tuple
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -506,8 +506,8 @@ if __name__ == "__main__":
 
     print("Recommendations:")
     print(f"  • Primary issue: Low Love (L={L:.2f})")
-    print(f"  • Impact: Limiting growth potential (coupling not engaged)")
-    print(f"  • Action: Improve naming clarity, documentation, usability")
+    print("  • Impact: Limiting growth potential (coupling not engaged)")
+    print("  • Action: Improve naming clarity, documentation, usability")
     print()
 
     # Show Love's amplification effect

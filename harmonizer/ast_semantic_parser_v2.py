@@ -22,9 +22,7 @@ from typing import Dict, List, Optional, Set, Tuple
 
 from harmonizer.programming_constructs_vocabulary import (
     PROGRAMMING_VERBS,
-    CONTROL_FLOW_KEYWORDS,
     COMPOUND_PATTERNS,
-    get_semantic_dimension,
 )
 
 
