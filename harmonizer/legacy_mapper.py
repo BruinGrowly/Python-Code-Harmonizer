@@ -926,7 +926,12 @@ class LegacyCodeMapper:
             return None
 
         # Normalize
-        return (love_count / total, justice_count / total, power_count / total, wisdom_count / total)
+        return (
+            love_count / total,
+            justice_count / total,
+            power_count / total,
+            wisdom_count / total,
+        )
 
     def estimate_architectural_debt(self, hourly_rate: float = 150.0):
         """Estimate architectural debt in hours and dollars"""
