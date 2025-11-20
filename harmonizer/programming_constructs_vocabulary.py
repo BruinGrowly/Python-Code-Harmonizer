@@ -190,9 +190,7 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "deactivate": "power",
     # Processing
     "process": "power",
-    "handle": "power",
     "apply": "power",
-    "render": "power",
     "compile": "power",
     # Raising errors is POWER (forcing exception)
     "raise": "power",
@@ -227,7 +225,6 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     # Composition & building relationships
     "compose": "love",
     "assemble": "love",
-    "aggregate": "love",
     "collect": "love",
     "gather": "love",
     # Sharing & distribution
@@ -258,7 +255,7 @@ PROGRAMMING_VERBS: Dict[str, str] = {
     "include": "love",
     "incorporate": "love",
     # Exception handling is LOVE (mercy, graceful degradation)
-    "handle": "love",
+    # Note: "handle" is in CONTEXT_DEPENDENT_VERBS with default="love"
     "catch": "love",
     "except": "love",
     "recover": "love",
@@ -290,6 +287,14 @@ CONTEXT_DEPENDENT_VERBS = {
     "handle": {
         "default": "love",  # Handling exceptions gracefully
         "events": "power",  # Event handling/processing
+    },
+    "render": {
+        "default": "love",  # Rendering output/display (communication to user)
+        "compile": "power",  # Rendering in compilation context
+    },
+    "aggregate": {
+        "default": "wisdom",  # Aggregating data (computation)
+        "compose": "love",  # Aggregating in composition context
     },
 }
 

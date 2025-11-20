@@ -15,10 +15,10 @@ from typing import Dict, List, Optional, Set, Tuple
 
 # Import LJPW baselines for enhanced analysis
 try:
-    from harmonizer.ljpw_baselines import LJPWBaselines, ReferencePoints
+    from harmonizer.ljpw_baselines import LJPWBaselines
 except ImportError:
     # Fallback if module structure is different
-    from ljpw_baselines import LJPWBaselines, ReferencePoints
+    from ljpw_baselines import LJPWBaselines
 
 
 class Dimension(Enum):

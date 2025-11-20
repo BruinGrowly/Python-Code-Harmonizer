@@ -4,9 +4,8 @@ Loads settings from pyproject.toml or harmonizer.yaml.
 """
 
 import os
-import sys
 from dataclasses import dataclass, field
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any
 
 # Try to import tomli for TOML parsing
 try:
