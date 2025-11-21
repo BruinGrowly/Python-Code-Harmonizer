@@ -50,7 +50,21 @@ Prevent entropy decay with built-in quality gates.
 -   **GitHub Action**: Ready-to-use workflow in `.github/workflows/ljpw_gate.yml`.
 -   **Pre-commit Hook**: Local checks via `.pre-commit-config.yaml`.
 
-### 4. ⚙️ Developer Experience
+### 4. 🔬 Relationship Analysis
+Validate that your system exhibits healthy LJPW coupling patterns.
+-   **Pattern Validation**: Check if Love amplifies, Power is constrained
+-   **Proportion Analysis**: Verify scale-invariant ratios
+-   **Structural Health**: Diagnose relationship issues vs. magnitude issues
+
+```python
+from harmonizer.relationship_analyzer import analyze_system_relationships
+
+result = analyze_system_relationships(L=0.5, J=0.3, P=0.7, W=0.6)
+print(f"Health: {result['overall_health']:.0%}")
+# Provides actionable recommendations
+```
+
+### 5. ⚙️ Developer Experience
 -   **Configurable**: Customize thresholds in `pyproject.toml` or `harmonizer.yaml`.
 -   **Ignore System**: Exclude files using `.harmonizerignore`.
 
@@ -106,10 +120,32 @@ exclude = ["venv", "tests"]
 
 ## The LJPW Framework
 
+### The Four Dimensions
+
 -   **Love (L)**: Care, readability, comments, user-focus.
 -   **Justice (J)**: Structure, types, tests, consistency.
 -   **Power (P)**: Action, logic, complexity, performance.
 -   **Wisdom (W)**: Abstraction, architecture, patterns, insight.
+
+### Scale Invariance & Relationship Structure
+
+**Key Insight**: *The relationships between dimensions are more important than their absolute values.*
+
+The LJPW Framework exhibits **scale invariance** - the same proportional relationships (L:J:P:W ≈ 1.5:1:1.7:1.7) define healthy systems at any scale:
+
+-   **Small team**: (6, 4, 7, 7) developers
+-   **Medium project**: (62, 41, 72, 69) metrics
+-   **Large organization**: (618, 414, 718, 693) person-hours
+
+**Coupling Structure** encodes how dimensions interact:
+-   **Love amplifies** other dimensions (multiplier effect)
+-   **Power must be constrained** (channeled through Love/Wisdom)
+-   **Justice supports Wisdom** (truth-seeking flows to understanding)
+-   **Asymmetry is fundamental** (giving ≠ receiving)
+
+This structural universality makes the framework applicable across domains: code quality, team dynamics, organizational health, and ecosystems.
+
+**Learn more**: See [Relationship Insight Analysis](RELATIONSHIP_INSIGHT_SYNTHESIS.md)
 
 ## Project Structure
 

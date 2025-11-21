@@ -271,6 +271,119 @@ class LJPWBaselines:
             return "Excellent - high-performing, growth active"
         else:
             return "Elite - exceptional, Love multiplier engaged"
+    
+    @staticmethod
+    def validate_coupling_structure() -> Dict[str, bool]:
+        """
+        Validate that the coupling matrix exhibits expected relationship patterns.
+        
+        This validates the "grammar of semantic interaction":
+        - Love amplifies (κ_L→* > 1)
+        - Power constrains (κ_P→* < 1)
+        - Justice supports Wisdom (κ_JW > κ_JP)
+        - Asymmetry is present (κ_ij ≠ κ_ji)
+        
+        Returns:
+            Dict with validation results for each pattern
+        """
+        cm = LJPWBaselines.COUPLING_MATRIX
+        
+        # Check Love amplifies
+        love_amplifies = (
+            cm['LJ'] > 1.0 and
+            cm['LP'] > 1.0 and
+            cm['LW'] > 1.0
+        )
+        
+        # Check Power constrains
+        power_constrains = (
+            cm['PL'] < 1.0 and
+            cm['PJ'] < 1.0 and
+            cm['PW'] < 1.0
+        )
+        
+        # Check Justice supports Wisdom more than Power
+        justice_wisdom = cm['JW'] > cm['JP']
+        
+        # Check asymmetry (giving ≠ receiving)
+        asymmetry = (
+            abs(cm['LJ'] - cm['JL']) > 0.1 and
+            abs(cm['LP'] - cm['PL']) > 0.1 and
+            abs(cm['PJ'] - cm['JP']) > 0.1
+        )
+        
+        return {
+            'love_amplifies': love_amplifies,
+            'power_constrains': power_constrains,
+            'justice_supports_wisdom': justice_wisdom,
+            'asymmetry_present': asymmetry,
+            'all_patterns_valid': all([
+                love_amplifies,
+                power_constrains,
+                justice_wisdom,
+                asymmetry
+            ])
+        }
+    
+    @staticmethod
+    def check_proportions(L: float, J: float, P: float, W: float, tolerance: float = 0.3) -> Dict[str, any]:
+        """
+        Check if L:J:P:W proportions match Natural Equilibrium (scale-invariant check).
+        
+        This validates the core insight: "relationships between constants matter more
+        than the constants themselves." The same proportions define harmony at any scale.
+        
+        Args:
+            L, J, P, W: Current dimension values (any scale)
+            tolerance: Allowed deviation from ideal ratios (default 0.3 = 30%)
+        
+        Returns:
+            Dict with proportion analysis
+        """
+        NE = ReferencePoints.NATURAL_EQUILIBRIUM
+        
+        # Calculate current ratios (scale-invariant)
+        if J <= 0:
+            return {
+                'proportions_healthy': False,
+                'error': 'Justice dimension cannot be zero'
+            }
+        
+        current_ratios = {
+            'L/J': L / J,
+            'P/J': P / J,
+            'W/J': W / J,
+        }
+        
+        # Expected ratios from Natural Equilibrium
+        expected_ratios = {
+            'L/J': NE[0] / NE[1],  # 1.492
+            'P/J': NE[2] / NE[1],  # 1.734
+            'W/J': NE[3] / NE[1],  # 1.673
+        }
+        
+        # Check deviations
+        deviations = {}
+        checks = {}
+        
+        for key in expected_ratios:
+            expected = expected_ratios[key]
+            actual = current_ratios[key]
+            deviation = abs(actual - expected) / expected
+            deviations[key] = deviation
+            checks[key] = deviation < tolerance
+        
+        all_pass = all(checks.values())
+        
+        return {
+            'proportions_healthy': all_pass,
+            'current_ratios': current_ratios,
+            'expected_ratios': expected_ratios,
+            'deviations': deviations,
+            'checks': checks,
+            'summary': 'Proportions match Natural Equilibrium (scale-invariant)' if all_pass 
+                      else f'Proportions deviate from Natural Equilibrium'
+        }
 
 
 class DynamicLJPWv4:

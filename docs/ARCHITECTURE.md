@@ -406,7 +406,134 @@ def visit_Raise(self, node: ast.Raise):
 
 ---
 
-### 3. Harmonizer Main
+### 3. LJPW Baselines
+
+**File:** `harmonizer/ljpw_baselines.py`
+
+**Purpose:** Mathematical foundations and reference points for LJPW framework
+
+#### Key Features
+
+**Numerical Equivalents**:
+- L (Love): φ⁻¹ = 0.618034
+- J (Justice): √2-1 = 0.414214  
+- P (Power): e-2 = 0.718282
+- W (Wisdom): ln(2) = 0.693147
+
+**Reference Points**:
+- Natural Equilibrium: (0.618, 0.414, 0.718, 0.693)
+- Anchor Point: (1.0, 1.0, 1.0, 1.0)
+
+**Coupling Matrix**: Defines how dimensions interact (amplify/constrain)
+
+**New in v4.1**: Relationship validation methods
+```python
+# Validate coupling structure patterns
+LJPWBaselines.validate_coupling_structure()
+# → Checks Love amplifies, Power constrains, etc.
+
+# Check scale-invariant proportions
+LJPWBaselines.check_proportions(L, J, P, W)
+# → Validates L:J:P:W ratios match Natural Equilibrium
+```
+
+---
+
+### 4. Relationship Analyzer **[NEW]**
+
+**File:** `harmonizer/relationship_analyzer.py`
+
+**Purpose:** Validates LJPW relationship patterns and structural health
+
+#### Core Insight
+
+Based on the discovery: *"Relationships between constants are more important than constants themselves"*
+
+This tool validates the **grammar of semantic interaction** - the patterns that define healthy LJPW systems.
+
+#### Key Classes
+
+**RelationshipAnalyzer**
+```python
+class RelationshipAnalyzer:
+    """Analyzes whether a system exhibits healthy LJPW relationship patterns"""
+    
+    def check_proportions(L, J, P, W, tolerance=0.3):
+        """Check if L:J:P:W ratios match Natural Equilibrium (scale-invariant)"""
+        # Validates proportional relationships
+        # Works at any scale
+    
+    def check_coupling_character(coupling_matrix):
+        """Check if coupling exhibits expected patterns"""
+        # Love amplifies (κ_L→* > 1)
+        # Power constrains (κ_P→* < 1)
+        # Justice supports Wisdom (κ_JW > κ_JP)
+    
+    def check_asymmetry(coupling_matrix):
+        """Check if coupling is properly asymmetric"""
+        # κ_ij ≠ κ_ji (giving ≠ receiving)
+    
+    def full_relationship_diagnostic(L, J, P, W, coupling_matrix=None):
+        """Complete structural health analysis"""
+        # Returns comprehensive diagnostic with recommendations
+```
+
+#### Usage Pattern
+
+```python
+from harmonizer.relationship_analyzer import analyze_system_relationships
+
+# Analyze any system (at any scale)
+result = analyze_system_relationships(
+    L=50, J=30, P=70, W=65  # Any magnitude
+)
+
+print(f"Overall Health: {result['overall_health']:.0%}")
+print(f"Proportions: {'✓' if result['health_scores']['proportions'] else '✗'}")
+print(f"Love amplifies: {'✓' if result['health_scores']['love_amplifies'] else '✗'}")
+
+for rec in result['recommendations']:
+    print(f"  {rec}")
+```
+
+#### Health Checks
+
+1. **Proportions** (scale-invariant)
+   - L/J ≈ 1.49
+   - P/J ≈ 1.73
+   - W/J ≈ 1.67
+
+2. **Coupling Character**
+   - Love amplifies (generosity pattern)
+   - Power constrains (restraint pattern)
+   - Justice supports Wisdom
+
+3. **Asymmetry**
+   - Love gives more than receives
+   - Power receives more than gives
+   - Directional flow preserved
+
+#### Output Example
+
+```
+Overall Health: 80%
+Interpretation: Good: Most relationship patterns are healthy
+
+Health Breakdown:
+  ✗ proportions: 0% (L/P deviates by 74%)
+  ✓ love_amplifies: 100%
+  ✓ power_constrains: 100%
+  ✓ justice_supports_wisdom: 100%
+  ✓ asymmetry: 100%
+
+Recommendations:
+  ⚠️ Adjust proportions: L/P deviates from Natural Equilibrium
+  ✓ Coupling structure is healthy
+```
+
+---
+
+### 5. Harmonizer Main
 
 **File:** `src/harmonizer/main.py` (197 lines)
 
