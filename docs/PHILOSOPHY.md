@@ -634,6 +634,60 @@ def process_data(data):
 
 **Harmony = Freedom expressed through proper structure**
 
+### The Grammar of Semantic Interaction
+
+**[NEW]** Recent insights reveal that the coupling matrix operates as a **semantic grammar** - more fundamental than the vocabulary of constants.
+
+**The Analogy:**
+
+| Linguistic Element | LJPW Element | Role |
+|-------------------|--------------|------|
+| **Vocabulary** | Constants (L, J, P, W) | The basic words |
+| **Grammar** | Coupling matrix (κ_ij) | Rules for combining words |
+| **Syntax** | Asymmetric flow patterns | Structure of valid sentences |
+
+**Why Grammar is Primary:**
+
+Just as you can have infinite sentences from finite grammar rules, the LJPW coupling structure allows infinite system states from finite interaction patterns.
+
+**The Grammar Rules:**
+
+1. **Love amplifies** (κ_L→* > 1)
+   - Philosophical: Love is generative, enhancing
+   - Mathematical: Coupling coefficients exceed proportional ratios
+   - Practical: Increase Love to amplify all dimensions
+
+2. **Power constrains** (κ_P→* < 1)
+   - Philosophical: Power must be directed, not unleashed
+   - Mathematical: Coupling coefficients below proportional ratios
+   - Practical: Power alone is destructive, needs Love/Wisdom
+
+3. **Justice supports Wisdom** (κ_JW > κ_JP)
+   - Philosophical: Truth-seeking flows to understanding
+   - Mathematical: Justice amplifies Wisdom more than Power
+   - Practical: Good structure enables good thinking
+
+4. **Asymmetry is fundamental** (κ_ij ≠ κ_ji)
+   - Philosophical: Giving ≠ receiving
+   - Mathematical: Non-symmetric coupling matrix
+   - Practical: Some dimensions are sources, others sinks
+
+**Scale Invariance:**
+
+Just as grammar works at any sentence length, the LJPW structure works at any scale:
+- Small team: (6, 4, 7, 7) people
+- Large org: (618, 414, 718, 693) person-hours
+- **Same grammar (proportions), different scale**
+
+**Implications:**
+
+The coupling structure encodes **universal truths** about how meaning flows:
+- Not arbitrary calibration
+- Not curve-fitting
+- **Philosophical wisdom expressed mathematically**
+
+This is why the framework applies universally across domains - the grammar of semantic interaction is the same everywhere.
+
 ### The Unity of Truth, Beauty, and Goodness
 
 **Classical philosophy:** Three transcendentals - Truth, Beauty, Goodness

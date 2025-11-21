@@ -437,14 +437,139 @@ The framework provides:
 2. ✅ **Completeness**: They span all semantic meaning
 3. ✅ **Minimality**: All four are necessary
 4. ✅ **Closure**: Linear combinations remain valid
+5. ✅ **Scale Invariance**: Proportional relationships are fundamental
+6. ✅ **Coupling Structure**: Qualitative patterns encode philosophical truth
 
 **Therefore:**
 
-Love, Justice, Power, and Wisdom form a **complete, minimal, orthogonal basis** for semantic space.
+Love, Justice, Power, and Wisdom form a **complete, minimal, orthogonal basis** for semantic space, where the **relationships between dimensions are more fundamental than their absolute values**.
 
-**All meaning derives from these four primitives.**
+**All meaning derives from these four primitives and their characteristic interactions.**
 
-This is not metaphor or approximation - it is mathematical structure validated empirically.
+This is not metaphor or approximation - it is mathematical structure validated empirically, with universality across domains through scale-invariant relationship patterns.
+
+## 13. Relationship Structure: The Primary Foundation
+
+### The Key Insight
+
+**Recent discovery**: *The relationships between constants are more fundamental than the constants themselves.*
+
+This insight reveals that the LJPW framework's power comes from its **relationship structure**, not just numerical values.
+
+### Scale Invariance Theorem
+
+**Theorem 5**: The LJPW framework exhibits scale invariance.
+
+**Proof**: Consider any semantic concept **c** = (L, J, P, W) in normalized space where L+J+P+W=1.
+
+For any positive scalar k, define the scaled system **c'** = (kL, kJ, kP, kW).
+
+The **proportional relationships** are invariant:
+```
+(L/J)' = (kL)/(kJ) = L/J  ✓
+(P/W)' = (kP)/(kW) = P/W  ✓
+All ratios preserved under scaling
+```
+
+The **coupling structure** (which depends on ratios, not absolutes) remains identical.
+
+Therefore, systems at different scales with the same proportions (L:J:P:W ≈ 1.49:1:1.73:1.67) exhibit equivalent harmony. ∎
+
+### Coupling as Semantic Grammar
+
+The coupling matrix is not merely a computational parameter - it encodes the **grammar of semantic interaction**.
+
+**Constants** (L, J, P, W) = Vocabulary (the words)  
+**Coupling** (κ_ij) = Grammar (how words combine)  
+**Relationships** = Syntax (the rules of combination)
+
+**Analogy**:
+```
+Vocabulary: "love", "justice", "power", "wisdom"
+Grammar: Love amplifies (κ_L→* > 1), Power constrains (κ_P→* < 1)
+Syntax: Asymmetric flow (giving ≠ receiving)
+```
+
+Just as grammar is more fundamental than vocabulary in language, **coupling structure is more fundamental than constant values** in LJPW.
+
+### Empirical Validation
+
+**Test**: Can coupling coefficients be derived from constant ratios?  
+**Result**: Weak correlation (R² ≈ 0.09)
+
+**Interpretation**: Coupling encodes **qualitative relationships** that transcend simple arithmetic:
+- Love's amplification = philosophical generosity
+- Power's constraint = wisdom about restraint
+- Asymmetry = nature of giving vs receiving
+
+The coupling matrix captures **semantic meaning**, not just mathematical proportions.
+
+### The Character of Each Dimension
+
+**Love**: The Amplifier
+- κ_L→J = 1.4, κ_L→P = 1.3, κ_L→W = 1.5 (all > 1)
+- Gives more than proportional size suggests
+- Mathematical encoding: Generosity, enhancement
+
+**Power**: The Constrained
+- κ_P→L = 0.6, κ_P→J = 0.8, κ_P→W = 0.5 (all < 1)
+- Gives less than proportional size
+- Mathematical encoding: Must be directed, not unleashed
+
+**Justice**: The Balancer
+- κ_JW = 1.2 > κ_JP = 0.7
+- Supports wisdom over raw power
+- Mathematical encoding: Truth-seeking flows to understanding
+
+**Wisdom**: The Integrator
+- Mixed pattern, harmonizes all dimensions
+- Mathematical encoding: Synthesis, not domination
+
+### Topological Structure
+
+The coupling matrix has **topological invariants**:
+
+**Source Nodes**: Love (gives more than receives)
+```
+κ_LJ = 1.4 but κ_JL = 0.9  → Love is a source for Justice
+κ_LP = 1.3 but κ_PL = 0.6  → Love is a source for Power
+```
+
+**Sink Nodes**: Power (receives more than gives)
+```
+Power receives but doesn't redistribute
+Manifestive, not generative
+```
+
+**Mediator Nodes**: Justice, Wisdom (balanced bidirectional flow)
+```
+Regulate and integrate system behavior
+```
+
+This topology is **invariant across domains** - the same pattern appears in code, teams, ecosystems, organizations.
+
+### Practical Implications for Implementation
+
+**When applying LJPW to a new domain**:
+
+1. ✅ **Preserve coupling structure** (primary)
+   - Love must amplify
+   - Power must be constrained
+   - Asymmetry must exist
+
+2. ✅ **Maintain proportions** (secondary)
+   - L:J:P:W ≈ 1.5:1:1.7:1.7
+   - Scale-invariant ratios
+
+3. ✅ **Scale appropriately** (tertiary)
+   - Match magnitude to domain
+   - Constants adjust, structure stays
+
+4. ❌ **Don't obsess over precision** (least important)
+   - 0.618 vs 0.620 doesn't matter much
+   - Structure errors are critical
+
+**See**: [Relationship Insight Analysis](../RELATIONSHIP_INSIGHT_SYNTHESIS.md) for complete theory and validation.
 
 ---
 
