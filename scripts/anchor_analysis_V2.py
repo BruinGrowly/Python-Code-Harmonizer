@@ -96,9 +96,7 @@ def analyze_anchor_point_v2():
 
     print(f"Distance from origin: {engine.get_distance(anchor, origin):.6f}")
     print(f"Distance from pure Love: {engine.get_distance(anchor, pure_love):.6f}")
-    print(
-        f"Distance from pure Justice: {engine.get_distance(anchor, pure_justice):.6f}"
-    )
+    print(f"Distance from pure Justice: {engine.get_distance(anchor, pure_justice):.6f}")
     print(f"Distance from pure Power: {engine.get_distance(anchor, pure_power):.6f}")
     print(f"Distance from pure Wisdom: {engine.get_distance(anchor, pure_wisdom):.6f}")
     print()
