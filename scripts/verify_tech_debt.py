@@ -38,16 +38,12 @@ def verify_tech_debt():
 
         # Run smell detection for this file
         mapper._detect_architectural_smells()
-        smells = [
-            s for s in mapper.architectural_smells if s.file_path.endswith(filename)
-        ]
+        smells = [s for s in mapper.architectural_smells if s.file_path.endswith(filename)]
 
         if smells:
             print(f"  Detected {len(smells)} Architectural Smells:")
             for smell in smells:
-                print(
-                    f"    - [{smell.severity}] {smell.smell_type}: {smell.description}"
-                )
+                print(f"    - [{smell.severity}] {smell.smell_type}: {smell.description}")
         else:
             print("  No Architectural Smells detected.")
 

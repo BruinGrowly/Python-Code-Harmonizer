@@ -10,24 +10,23 @@ import argparse
 from harmonizer.legacy_mapper import LegacyCodeMapper
 
 
-def check_harmony(
-    target_dir: str = ".", config_path: str = None, verbose: bool = False
-):
+def check_harmony(target_dir: str = ".", config_path: str = None, verbose: bool = False):
     print(f"Running LJPW Harmony Check on: {os.path.abspath(target_dir)}")
     print("=" * 60)
 
     # If analyzing a subdirectory, find project root for config
     # Otherwise use target_dir
     project_root = os.getcwd() if target_dir != "." else target_dir
-    
+
     # Create mapper - it will load config from project_root
     mapper = LegacyCodeMapper(target_dir, quiet=not verbose)
-    
+
     # If we're in project root, use config from there
     if os.path.exists(os.path.join(project_root, "pyproject.toml")):
         from harmonizer.config import ConfigLoader
+
         mapper.config = ConfigLoader.load(project_root)
-    
+
     mapper.analyze_codebase(show_progress=True)
 
     failures = []
@@ -81,13 +80,9 @@ def check_harmony(
 
 def main():
     parser = argparse.ArgumentParser(description="LJPW Harmony Check")
-    parser.add_argument(
-        "target", nargs="?", default=".", help="Target directory to analyze"
-    )
+    parser.add_argument("target", nargs="?", default=".", help="Target directory to analyze")
     parser.add_argument("--config", help="Path to configuration file (optional)")
-    parser.add_argument(
-        "-v", "--verbose", action="store_true", help="Enable verbose output"
-    )
+    parser.add_argument("-v", "--verbose", action="store_true", help="Enable verbose output")
 
     args = parser.parse_args()
 

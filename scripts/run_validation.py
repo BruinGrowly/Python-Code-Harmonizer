@@ -45,9 +45,7 @@ def analyze_and_simulate(file_path, harmonizer):
         execution = ice_components.get("execution")
         if execution:
             coords = execution.coordinates
-            all_coords.append(
-                (coords.love, coords.justice, coords.power, coords.wisdom)
-            )
+            all_coords.append((coords.love, coords.justice, coords.power, coords.wisdom))
             avg_p_sum += coords.power
 
     if not all_coords:
@@ -81,9 +79,7 @@ def analyze_and_simulate(file_path, harmonizer):
     final_w = history["W"][-1]
 
     print(f"  Final State:")
-    print(
-        f"    L: {final_l:.2f} | J: {final_j:.2f} | P: {final_p:.2f} | W: {final_w:.2f}"
-    )
+    print(f"    L: {final_l:.2f} | J: {final_j:.2f} | P: {final_p:.2f} | W: {final_w:.2f}")
 
     # Assessment
     if final_j < 0.3:
