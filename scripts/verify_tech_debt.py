@@ -1,5 +1,4 @@
 import os
-import sys
 from harmonizer.legacy_mapper import LegacyCodeMapper
 
 
@@ -50,7 +49,7 @@ def verify_tech_debt():
         # Run Debt Projection
         projection = mapper.project_debt_trajectory(file_path, months=6)
         if "error" not in projection:
-            print(f"  Future Debt Projection (6 months):")
+            print("  Future Debt Projection (6 months):")
             print(f"    Status: {projection['status']}")
             print(f"    Risk Level: {projection['risk_level']}")
             print(f"    Drift: {projection['drift']:.4f}")

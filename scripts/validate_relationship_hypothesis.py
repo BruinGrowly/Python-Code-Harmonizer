@@ -14,7 +14,7 @@ This script:
 
 import math
 import numpy as np
-from scipy.optimize import curve_fit, minimize
+from scipy.optimize import curve_fit
 import matplotlib.pyplot as plt
 from typing import Dict, Tuple, List
 
@@ -207,9 +207,10 @@ def analyze_diagonal_vs_offdiagonal(ratios, couplings, labels):
     print()
 
     print("DIAGONAL ELEMENTS (self-coupling):")
-    for i, label in enumerate([l for l, d in zip(labels, diagonal_mask) if d]):
+    diagonal_labels = [label for label, is_diagonal in zip(labels, diagonal_mask) if is_diagonal]
+    for i, label in enumerate(diagonal_labels):
         print(f"  {label}: ratio={diag_ratios[i]:.4f}, κ={diag_couplings[i]:.4f}")
-    print(f"  All diagonal couplings = 1.0 (by definition)")
+    print("  All diagonal couplings = 1.0 (by definition)")
     print()
 
     print("OFF-DIAGONAL ELEMENTS (cross-coupling):")
@@ -235,7 +236,7 @@ def find_special_patterns(ratios, couplings, labels):
         mask = [label[0] == source for label in labels]
         source_ratios = ratios[mask]
         source_couplings = couplings[mask]
-        source_labels = [l for l, m in zip(labels, mask) if m]
+        source_labels = [label for label, include in zip(labels, mask) if include]
 
         print(f"Source: {source} (outgoing influence)")
         for i, label in enumerate(source_labels):
@@ -325,7 +326,7 @@ def visualize_results(ratios, couplings, labels, results):
 
     plt.tight_layout()
     plt.savefig("/workspace/coupling_ratio_analysis.png", dpi=150, bbox_inches="tight")
-    print(f"\n✓ Visualization saved to: /workspace/coupling_ratio_analysis.png")
+    print("\n✓ Visualization saved to: /workspace/coupling_ratio_analysis.png")
     plt.close()
 
 

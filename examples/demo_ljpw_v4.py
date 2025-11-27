@@ -11,13 +11,16 @@ import sys
 import os
 import matplotlib.pyplot as plt
 
-# Add parent directory to path to import harmonizer
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from harmonizer.ljpw_baselines import DynamicLJPWv4, ReferencePoints
-
 
 def run_demo():
+    # Import lazily after ensuring the repository root is on sys.path to keep
+    # flake8 happy about module level imports (E402).
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if repo_root not in sys.path:
+        sys.path.insert(0, repo_root)
+
+    from harmonizer.ljpw_baselines import DynamicLJPWv4, ReferencePoints
+
     print("=" * 60)
     print("LJPW v4.0 Dynamic Model Demo")
     print("=" * 60)
@@ -32,7 +35,7 @@ def run_demo():
     # Initial State: High Power (0.9), Low Wisdom (0.2), Low Love (0.2), Moderate Justice (0.5)
     initial_state = (0.2, 0.5, 0.9, 0.2)
 
-    print(f"Initial State:")
+    print("Initial State:")
     print(f"  Love:    {initial_state[0]:.2f}")
     print(f"  Justice: {initial_state[1]:.2f}")
     print(f"  Power:   {initial_state[2]:.2f} (High!)")
@@ -52,7 +55,7 @@ def run_demo():
     final_W = history["W"][-1]
 
     print("-" * 60)
-    print(f"Final State:")
+    print("Final State:")
     print(f"  Love:    {final_L:.2f}")
     print(f"  Justice: {final_J:.2f} (Collapsed?)")
     print(f"  Power:   {final_P:.2f}")

@@ -9,7 +9,6 @@ import ast
 
 from harmonizer.ast_semantic_parser_v2 import AST_Semantic_Parser_V2
 from harmonizer.divine_invitation_engine_V2 import DivineInvitationSemanticEngine
-from harmonizer.semantic_map import SemanticMapGenerator
 
 
 def analyze_function_with_v2(code: str, function_name: str):
@@ -17,7 +16,6 @@ def analyze_function_with_v2(code: str, function_name: str):
     # Initialize components
     engine = DivineInvitationSemanticEngine()
     parser = AST_Semantic_Parser_V2(engine.vocabulary.all_keywords)
-    map_generator = SemanticMapGenerator()
 
     # Parse code
     tree = ast.parse(code)
@@ -70,7 +68,7 @@ def print_analysis_report(result):
     if result["docstring"]:
         print(f"\nDocstring: {result['docstring'][:60]}...")
 
-    print(f"\nINTENT (from function name):")
+    print("\nINTENT (from function name):")
     print(f"  Concepts: {result['intent_concepts']}")
     print(
         f"  Coordinates: L={result['intent_coords'].love:.3f}, "
@@ -79,7 +77,7 @@ def print_analysis_report(result):
         f"W={result['intent_coords'].wisdom:.3f}"
     )
 
-    print(f"\nEXECUTION (from function body):")
+    print("\nEXECUTION (from function body):")
     print(f"  Concepts: {result['exec_concepts']}")
     print(
         f"  Coordinates: L={result['exec_coords'].love:.3f}, "
