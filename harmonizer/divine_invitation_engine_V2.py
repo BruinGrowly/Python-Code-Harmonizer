@@ -76,11 +76,24 @@ class SemanticResult:
 class VocabularyManager:
     """Optimized vocabulary management with caching"""
 
-    def __init__(self, custom_vocabulary: Optional[Dict[str, str]] = None):
-        self._keyword_map: Dict[str, Dimension] = {}
+    _BASE_KEYWORD_MAP: Dict[str, Dimension] = {}
+    _BASE_ICE_DIMENSION_MAP: Dict[Dimension, Dimension] = {}
+
+    def __init__(self, custom_vocabulary: Optional[Dict[str, str]] = None, quiet: bool = True):
+        self._quiet = quiet
         self._word_cache: Dict[str, Tuple[Coordinates, int]] = {}
-        self._ice_dimension_map: Dict[Dimension, Dimension] = {}
-        self._build_complete_vocabulary()
+
+        if VocabularyManager._BASE_KEYWORD_MAP:
+            # Reuse previously built vocabulary to avoid repeated startup cost
+            self._keyword_map = dict(VocabularyManager._BASE_KEYWORD_MAP)
+            self._ice_dimension_map = dict(VocabularyManager._BASE_ICE_DIMENSION_MAP)
+        else:
+            self._keyword_map = {}
+            self._ice_dimension_map = {}
+            self._build_complete_vocabulary()
+            VocabularyManager._BASE_KEYWORD_MAP = dict(self._keyword_map)
+            VocabularyManager._BASE_ICE_DIMENSION_MAP = dict(self._ice_dimension_map)
+
         if custom_vocabulary:
             self._apply_custom_vocabulary(custom_vocabulary)
 
@@ -388,12 +401,13 @@ class VocabularyManager:
                     self._keyword_map[word] = dimension
 
         # Print to stderr to avoid breaking JSON output on stdout
-        import sys
+        if not self._quiet:
+            import sys
 
-        print(
-            f"VocabularyManager: Initialized with {len(self._keyword_map)} unique keywords.",
-            file=sys.stderr,
-        )
+            print(
+                f"VocabularyManager: Initialized with {len(self._keyword_map)} unique keywords.",
+                file=sys.stderr,
+            )
 
     def analyze_text(self, text: str) -> Tuple[Coordinates, int]:
         """Optimized text analysis with caching"""
@@ -899,7 +913,10 @@ class DivineInvitationSemanticEngine:
 
         # Build core components
         custom_vocabulary = self.config.get("custom_vocabulary", {})
-        self.vocabulary = VocabularyManager(custom_vocabulary=custom_vocabulary)
+        verbose_vocab = bool(self.config.get("verbose_vocab"))
+        self.vocabulary = VocabularyManager(
+            custom_vocabulary=custom_vocabulary, quiet=not verbose_vocab
+        )
         self.semantic_analyzer = SemanticAnalyzer(self.vocabulary, self.ANCHOR_POINT)
 
         # Build specialized sub-engines

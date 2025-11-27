@@ -34,46 +34,37 @@ import fnmatch  # noqa: E402
 import json  # noqa: E402
 from typing import Dict, List, Tuple  # noqa: E402
 
-import yaml  # noqa: E402
-
 from harmonizer import divine_invitation_engine_V2 as dive  # noqa: E402
 from harmonizer.ast_semantic_parser import AST_Semantic_Parser  # noqa: E402
 from harmonizer.refactorer import Refactorer  # noqa: E402
 from harmonizer.semantic_map import SemanticMapGenerator  # noqa: E402
 from harmonizer.semantic_naming import SemanticNamingEngine  # noqa: E402
+from harmonizer.config import ConfigLoader  # noqa: E402
 
 # --- CONFIGURATION LOADING ---
 
 
 def load_configuration() -> Dict:
     """
-    Searches for and loads .harmonizer.yml from the current directory
-    up to the root.
+    Load Harmonizer configuration by searching for the nearest YAML/TOML config.
     """
-    current_dir = os.getcwd()
-    while True:
-        config_path = os.path.join(current_dir, ".harmonizer.yml")
-        if os.path.exists(config_path):
-            try:
-                with open(config_path, "r", encoding="utf-8") as f:
-                    config = yaml.safe_load(f)
-                    if config:
-                        # Use stderr to avoid polluting JSON output
-                        print(
-                            f"INFO: Loaded configuration from {config_path}",
-                            file=sys.stderr,
-                        )
-                        return config
-                    return {}
-            except (yaml.YAMLError, IOError) as e:
-                print(f"WARNING: Could not load or parse config: {e}", file=sys.stderr)
-                return {}
-
-        parent_dir = os.path.dirname(current_dir)
-        if parent_dir == current_dir:  # Reached file system root
-            break
-        current_dir = parent_dir
-    return {}
+    config = ConfigLoader.load_nearest(os.getcwd())
+    config_dict = {
+        "exclude": list(config.exclude_patterns),
+        "custom_vocabulary": dict(config.custom_vocabulary),
+        "thresholds": {
+            "max_disharmony": config.max_disharmony,
+            "max_imbalance": config.max_imbalance,
+            "min_density": config.min_density,
+        },
+        "config_root": config.root_dir or os.getcwd(),
+    }
+    if config.source_path:
+        print(
+            f"INFO: Loaded configuration from {config.source_path}",
+            file=sys.stderr,
+        )
+    return config_dict
 
 
 # --- THE HARMONIZER APPLICATION ---
@@ -169,8 +160,9 @@ class PythonCodeHarmonizer:
 
     def _analyze_all_functions(self, tree: ast.AST) -> Dict[str, Dict]:
         harmony_report = {}
+        function_nodes = (ast.FunctionDef, ast.AsyncFunctionDef)
         for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef):
+            if isinstance(node, function_nodes):
                 function_name = node.name
                 docstring = ast.get_docstring(node)
                 intent_concepts = self.parser.get_intent_concepts(function_name, docstring)
@@ -424,8 +416,17 @@ def validate_cli_arguments(args: argparse.Namespace, config: Dict) -> List[str]:
     invalid_files = []
     excluded_files = []
     exclude_patterns = config.get("exclude", [])
+    config_root = config.get("config_root") or os.getcwd()
     for file_path in args.files:
-        if any(fnmatch.fnmatch(file_path, pattern) for pattern in exclude_patterns):
+        normalized_path = os.path.normpath(file_path)
+        rel_path = os.path.normpath(os.path.relpath(normalized_path, config_root))
+        basename = os.path.basename(normalized_path)
+        if any(
+            fnmatch.fnmatch(normalized_path, pattern)
+            or fnmatch.fnmatch(rel_path, pattern)
+            or fnmatch.fnmatch(basename, pattern)
+            for pattern in exclude_patterns
+        ):
             excluded_files.append(file_path)
             continue
         if os.path.exists(file_path):
