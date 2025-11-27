@@ -34,7 +34,7 @@ jobs:
           # Exit codes: 0=harmonious, 1=medium, 2=high, 3=critical
           # Note: Currently informational as source code itself has some disharmony
           # (main.py functions do more than their names suggest - great meta example!)
-          find harmonizer -name "*.py" -type f | xargs harmonizer || {
+          find harmonizer -name "*.py" -type f -print0 | xargs -0 harmonizer || {
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             echo "⚠️ Source code has disharmony (demonstrates tool working!)"
             echo "   This is a great example of semantic issues the tool catches."
@@ -50,7 +50,7 @@ jobs:
           echo "📊 Checking Test Code Harmony (informational only)..."
 
           # For tests, we allow higher disharmony (don't fail the build)
-          find tests -name "*.py" -type f | xargs harmonizer || echo "⚠️ Test code has some disharmony (acceptable)"
+          find tests -name "*.py" -type f -print0 | xargs -0 harmonizer || echo "⚠️ Test code has some disharmony (acceptable)"
         continue-on-error: true
 
   # Job 2: Detailed JSON Report with Artifact
@@ -76,7 +76,7 @@ jobs:
           echo "📋 Generating detailed JSON harmony report..."
 
           # Generate JSON report for all Python files
-          find harmonizer examples tests -name "*.py" -type f | xargs harmonizer --format json > harmony-report.json 2>/dev/null || true
+          find harmonizer examples tests -name "*.py" -type f -print0 | xargs -0 harmonizer --format json > harmony-report.json 2>/dev/null || true
 
           # Display summary if report was generated
           if [ -f harmony-report.json ] && [ -s harmony-report.json ]; then
@@ -170,7 +170,7 @@ jobs:
 
           # Use stricter threshold (0.3 instead of default 0.5)
           # This catches even minor semantic drift
-          if find harmonizer -name "*.py" -type f | xargs harmonizer --threshold 0.3; then
+          if find harmonizer -name "*.py" -type f -print0 | xargs -0 harmonizer --threshold 0.3; then
             echo "✅ Code meets excellent harmony standards!"
           else
             echo ""
