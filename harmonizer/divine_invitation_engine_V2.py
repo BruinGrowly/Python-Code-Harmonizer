@@ -704,6 +704,9 @@ class ICEAnalyzer:
             context_result.coordinates, execution_result.coordinates
         )
 
+        execution_intensity = self._calculate_execution_intensity(execution_result)
+        alignment_pressure = self._calculate_alignment_pressure(intent_result, execution_result)
+
         # Calculate ICE metrics
         avg_disharmony = (intent_context_dist + intent_exec_dist + context_exec_dist) / 3.0
         ice_coherence = max(0.0, 1.0 - (avg_disharmony / 2.0))
@@ -767,6 +770,8 @@ class ICEAnalyzer:
                 "ice_coherence": ice_coherence,
                 "ice_balance": ice_balance,
                 "benevolence_score": benevolence_score,
+                "execution_intensity": execution_intensity,
+                "alignment_pressure": alignment_pressure,
                 "intent_execution_disharmony": intent_exec_dist,
                 # Baseline-enhanced metrics
                 "baseline_disharmony": baseline_disharmony,
@@ -840,6 +845,36 @@ class ICEAnalyzer:
             return "GOOD_ICE_BALANCE"
         else:
             return "POOR_ICE_BALANCE"
+
+    def _calculate_execution_intensity(self, execution_result: SemanticResult) -> float:
+        """
+        Measure how forceful the execution semantics are.
+
+        High concept counts with strong power coordinates produce higher intensity.
+        """
+        coords = execution_result.coordinates
+        base_intensity = coords.power
+        if execution_result.concept_count == 0:
+            return 0.0
+        # Scale up with concept density but clamp to 1.0
+        density_bonus = min(1.0, execution_result.concept_count / 10.0)
+        return min(1.0, base_intensity * 0.6 + density_bonus * 0.4)
+
+    def _calculate_alignment_pressure(
+        self, intent_result: SemanticResult, execution_result: SemanticResult
+    ) -> float:
+        """
+        Determine how much force is required to align execution with intent.
+
+        Larger distances and weak execution intensity increase the pressure score.
+        """
+        distance = self.vocab.get_distance(intent_result.coordinates, execution_result.coordinates)
+        intensity = self._calculate_execution_intensity(execution_result)
+        if intensity == 0.0:
+            return min(1.0, distance)
+        # When execution is already forceful, pressure drops significantly
+        pressure = distance / (1.0 + (intensity * 2.0))
+        return min(1.0, pressure)
 
 
 class PhiOptimizer:
@@ -986,6 +1021,29 @@ class DivineInvitationSemanticEngine:
     def perform_phi_optimization(self, concepts: List[str]) -> Dict:
         """Perform phi-enhanced optimization"""
         return self.phi_optimizer.calculate_phi_optimization(concepts)
+
+    def evaluate_action_gap(
+        self,
+        intent_words: List[str],
+        execution_words: List[str],
+        context_words: Optional[List[str]] = None,
+    ) -> Dict:
+        """
+        Rapid assessment focused on action: quantifies how forcefully code executes intent.
+
+        Returns execution intensity, alignment pressure, and baseline disharmony metrics so that
+        callers can decide whether to refactor the implementation or rename the API surface.
+        """
+        context_words = context_words or []
+        ice_result = self.perform_ice_analysis(intent_words, context_words, execution_words)
+        metrics = ice_result["ice_metrics"]
+        return {
+            "execution_intensity": metrics.get("execution_intensity", 0.0),
+            "alignment_pressure": metrics.get("alignment_pressure", 0.0),
+            "baseline_disharmony": metrics.get("baseline_disharmony", 0.0),
+            "intent_execution_disharmony": metrics.get("intent_execution_disharmony", 0.0),
+            "ice_harmony_level": ice_result.get("ice_harmony_level"),
+        }
 
 
 def run_comprehensive_demo():

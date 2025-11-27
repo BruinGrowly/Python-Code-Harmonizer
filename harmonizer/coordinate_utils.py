@@ -8,9 +8,9 @@ Consolidates duplicate coordinate math operations from across the codebase.
 """
 
 import math
-from typing import Tuple
+from typing import Iterable, Optional, Tuple
 
-from harmonizer.divine_invitation_engine_V2 import Coordinates
+from harmonizer.divine_invitation_engine_V2 import Coordinates, Dimension
 
 
 class CoordinateUtils:
@@ -193,6 +193,157 @@ class CoordinateUtils:
             power=coord_tuple[2],
             wisdom=coord_tuple[3],
         )
+
+    @staticmethod
+    def blend(
+        base: Coordinates,
+        overlay: Coordinates,
+        ratio: float = 0.5,
+    ) -> Coordinates:
+        """
+        Blend two coordinates together with the supplied ratio.
+
+        Args:
+            base: Primary coordinate that receives the overlay.
+            overlay: Secondary coordinate to blend into the base.
+            ratio: Value between 0.0 and 1.0 indicating overlay strength.
+
+        Returns:
+            Blended Coordinates object.
+        """
+        ratio = max(0.0, min(1.0, ratio))
+        inverse = 1.0 - ratio
+        return Coordinates(
+            love=(base.love * inverse) + (overlay.love * ratio),
+            justice=(base.justice * inverse) + (overlay.justice * ratio),
+            power=(base.power * inverse) + (overlay.power * ratio),
+            wisdom=(base.wisdom * inverse) + (overlay.wisdom * ratio),
+        )
+
+    @staticmethod
+    def weighted_average(
+        coords: Iterable[Coordinates],
+        weights: Optional[Iterable[float]] = None,
+    ) -> Coordinates:
+        """
+        Compute a weighted average of coordinates.
+
+        Args:
+            coords: Iterable of Coordinates objects.
+            weights: Optional iterable of weights (defaults to equal weighting).
+
+        Returns:
+            Coordinates representing the weighted average.
+        """
+        coords = list(coords)
+        if not coords:
+            return Coordinates(0.0, 0.0, 0.0, 0.0)
+
+        if weights is None:
+            weights = [1.0] * len(coords)
+        else:
+            weights = list(weights)
+            if len(weights) != len(coords):
+                raise ValueError("weights length must match coords length")
+
+        total_weight = sum(weights)
+        if total_weight == 0.0:
+            return Coordinates(0.0, 0.0, 0.0, 0.0)
+
+        love_sum = justice_sum = power_sum = wisdom_sum = 0.0
+        for coord, weight in zip(coords, weights):
+            love_sum += coord.love * weight
+            justice_sum += coord.justice * weight
+            power_sum += coord.power * weight
+            wisdom_sum += coord.wisdom * weight
+
+        return Coordinates(
+            love=love_sum / total_weight,
+            justice=justice_sum / total_weight,
+            power=power_sum / total_weight,
+            wisdom=wisdom_sum / total_weight,
+        )
+
+    @staticmethod
+    def ensure_power_floor(
+        coord: Tuple[float, float, float, float],
+        minimum_power: float = 0.2,
+    ) -> Tuple[float, float, float, float]:
+        """
+        Ensure that a coordinate tuple has at least ``minimum_power`` in the power dimension.
+
+        If power is already at or above the floor, the coordinate is returned unchanged.
+        Otherwise the deficit is proportionally reallocated from the remaining dimensions.
+        """
+        love, justice, power, wisdom = coord
+        if power >= minimum_power:
+            return coord
+
+        deficit = minimum_power - power
+        remaining = love + justice + wisdom
+        if remaining == 0.0:
+            # Nothing to redistribute, so just set the floor directly.
+            return (0.0, 0.0, minimum_power, 0.0)
+
+        love_ratio = love / remaining
+        justice_ratio = justice / remaining
+        wisdom_ratio = wisdom / remaining
+
+        love -= deficit * love_ratio
+        justice -= deficit * justice_ratio
+        wisdom -= deficit * wisdom_ratio
+        power = minimum_power
+
+        # Normalize to keep the tuple on the unit simplex.
+        total = love + justice + power + wisdom
+        if total == 0.0:
+            return (0.0, 0.0, power, 0.0)
+
+        return (love / total, justice / total, power / total, wisdom / total)
+
+    @staticmethod
+    def prioritize_dimension(
+        coord: Tuple[float, float, float, float],
+        dimension: Dimension,
+        boost: float = 0.05,
+    ) -> Tuple[float, float, float, float]:
+        """
+        Aggressively boosts a selected dimension by reallocating weight from others.
+
+        Args:
+            coord: Original coordinate tuple.
+            dimension: Dimension enum value to prioritize (e.g., Dimension.POWER).
+            boost: Amount to move into the prioritized dimension.
+
+        Returns:
+            Tuple with the prioritized dimension amplified.
+        """
+        index_map = {
+            Dimension.LOVE: 0,
+            Dimension.JUSTICE: 1,
+            Dimension.POWER: 2,
+            Dimension.WISDOM: 3,
+        }
+        if dimension not in index_map:
+            raise ValueError("dimension must be a primary LJPW dimension")
+
+        values = list(coord)
+        idx = index_map[dimension]
+        boost = max(0.0, boost)
+        available_indices = [i for i in range(4) if i != idx]
+        available_total = sum(values[i] for i in available_indices)
+        if available_total == 0.0:
+            values[idx] = min(1.0, values[idx] + boost)
+        else:
+            for i in available_indices:
+                share = boost * (values[i] / available_total)
+                values[i] = max(0.0, values[i] - share)
+            values[idx] = min(1.0, values[idx] + boost)
+
+        total = sum(values)
+        if total == 0.0:
+            return (0.0, 0.0, 0.0, 0.0)
+        return tuple(v / total for v in values)
 
     @staticmethod
     def get_dominant_dimension(coord: Tuple[float, float, float, float]) -> str:
