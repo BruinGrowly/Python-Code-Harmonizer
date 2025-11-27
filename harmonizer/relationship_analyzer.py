@@ -9,7 +9,7 @@ This module provides tools to analyze whether a system exhibits healthy LJPW cou
 regardless of absolute magnitudes.
 """
 
-from typing import Dict, Tuple, List
+from typing import Dict, List
 import math
 from harmonizer.ljpw_baselines import NumericalEquivalents, ReferencePoints
 

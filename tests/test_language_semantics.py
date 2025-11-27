@@ -301,7 +301,7 @@ def test_code_quality_correlation():
 
         print(f"  {intent} → {execution}: distance = {distance:.3f}")
         assert distance < 0.5, f"Good code should have low distance: {intent}"
-        print(f"    ✓ Low disharmony")
+        print("    ✓ Low disharmony")
 
     # Bad code: Intent contradicts execution (using vocabulary words)
     bad_examples = [
@@ -322,7 +322,7 @@ def test_code_quality_correlation():
 
         print(f"  {intent} → {execution}: distance = {distance:.3f}")
         assert distance > 0.5, f"Bad code should have high distance: {intent}"
-        print(f"    ✓ High disharmony detected")
+        print("    ✓ High disharmony detected")
 
     print("\n✓ Code quality correlation confirmed")
 

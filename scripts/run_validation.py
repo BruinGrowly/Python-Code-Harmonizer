@@ -10,20 +10,18 @@ Runs both static analysis (to get L, J, P, W) and dynamic simulation (to see evo
 import sys
 import os
 import glob
-import numpy as np
 from statistics import mean
 
-# Add project root to path
-project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(project_root)
 
-from harmonizer.main import PythonCodeHarmonizer
-from harmonizer.ljpw_baselines import DynamicLJPWv4, LJPWBaselines
-from harmonizer.dependency_engine import DependencyEngine
-from harmonizer.visualizer import HarmonizerVisualizer
+def _ensure_project_root_on_path() -> str:
+    """Add the repository root to sys.path when running as a script."""
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    if project_root not in sys.path:
+        sys.path.insert(0, project_root)
+    return project_root
 
 
-def analyze_and_simulate(file_path, harmonizer):
+def analyze_and_simulate(file_path, harmonizer, simulator_cls):
     print(f"\nAnalyzing: {os.path.basename(file_path)}")
     print("-" * 40)
 
@@ -58,7 +56,7 @@ def analyze_and_simulate(file_path, harmonizer):
     avg_p = mean([c[2] for c in all_coords])
     avg_w = mean([c[3] for c in all_coords])
 
-    print(f"  Static Metrics (Avg):")
+    print("  Static Metrics (Avg):")
     print(f"    L: {avg_l:.2f} | J: {avg_j:.2f} | P: {avg_p:.2f} | W: {avg_w:.2f}")
 
     # 2. Dynamic Simulation
@@ -67,7 +65,7 @@ def analyze_and_simulate(file_path, harmonizer):
     complexity_score = 1.0 + (function_count * 0.2)
     print(f"  Complexity Score: {complexity_score:.2f}")
 
-    simulator = DynamicLJPWv4(complexity_score=complexity_score)
+    simulator = simulator_cls(complexity_score=complexity_score)
 
     print("  Running Dynamic Simulation (50 steps)...")
     initial_state = (avg_l, avg_j, avg_p, avg_w)
@@ -78,7 +76,7 @@ def analyze_and_simulate(file_path, harmonizer):
     final_p = history["P"][-1]
     final_w = history["W"][-1]
 
-    print(f"  Final State:")
+    print("  Final State:")
     print(f"    L: {final_l:.2f} | J: {final_j:.2f} | P: {final_p:.2f} | W: {final_w:.2f}")
 
     # Assessment
@@ -101,6 +99,13 @@ def analyze_and_simulate(file_path, harmonizer):
 
 
 def run_validation():
+    project_root = _ensure_project_root_on_path()
+
+    from harmonizer.main import PythonCodeHarmonizer
+    from harmonizer.ljpw_baselines import DynamicLJPWv4
+    from harmonizer.dependency_engine import DependencyEngine
+    from harmonizer.visualizer import HarmonizerVisualizer
+
     harmonizer = PythonCodeHarmonizer(quiet=True)
 
     test_dir = os.path.join(project_root, "tests", "user_validation")
@@ -111,10 +116,6 @@ def run_validation():
     print("=" * 60)
     print("LJPW v4.0 Validation Run (Visual Analytics)")
     print("=" * 60)
-
-    # 3. Visual Analytics Integration
-    from harmonizer.dependency_engine import DependencyEngine
-    from harmonizer.visualizer import HarmonizerVisualizer
 
     simple_files = glob.glob(os.path.join(test_dir, "simple_*.py"))
     complex_files = glob.glob(os.path.join(test_dir, "complex_*.py"))
@@ -129,7 +130,7 @@ def run_validation():
 
     print("\n--- ANALYZING FILES ---")
     for f in all_files:
-        analysis_data = analyze_and_simulate(f, harmonizer)
+        analysis_data = analyze_and_simulate(f, harmonizer, DynamicLJPWv4)
         if analysis_data:
             results[f] = analysis_data
 

@@ -45,18 +45,18 @@ def analyze_with_v2(code, function_name):
 
 def print_analysis(result):
     """Pretty print analysis results."""
-    print(f"\n{'='*70}")
+    print("\n" + "=" * 70)
     print(f"FUNCTION: {result['function']}")
-    print(f"{'='*70}")
+    print("=" * 70)
 
-    print(f"\nINTENT (what function claims to do):")
+    print("\nINTENT (what function claims to do):")
     print(f"  Concepts: {result['intent_concepts']}")
     print(
         f"  Coordinates: L={result['intent_coords'].love:.3f}, J={result['intent_coords'].justice:.3f}, "
         f"P={result['intent_coords'].power:.3f}, W={result['intent_coords'].wisdom:.3f}"
     )
 
-    print(f"\nEXECUTION (what function actually does):")
+    print("\nEXECUTION (what function actually does):")
     print(f"  Concepts: {result['execution_concepts']}")
     print(
         f"  Coordinates: L={result['execution_coords'].love:.3f}, J={result['execution_coords'].justice:.3f}, "
@@ -133,7 +133,7 @@ def fetch_validate_and_save(data_id):
 result5 = analyze_with_v2(code5, "fetch_validate_and_save")
 print_analysis(result5)
 
-print(f"\n{'='*70}")
+print("\n" + "=" * 70)
 print("DEMONSTRATION COMPLETE")
 print("=" * 70)
 print("\n✅ Enhanced Parser V2 Features:")

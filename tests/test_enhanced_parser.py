@@ -32,9 +32,6 @@ def test_wisdom_operations():
     parser = AST_Semantic_Parser_V2(engine.vocabulary.all_keywords)
 
     for code, func_name in code_samples:
-        tree = ast.parse(code)
-        func_node = tree.body[0]
-
         # Get intent from name
         intent_concepts = parser.get_intent_concepts(func_name, None)
 
@@ -43,7 +40,7 @@ def test_wisdom_operations():
 
         # Verify WISDOM is in intent
         assert "wisdom" in intent_concepts, f"WISDOM should be in intent for {func_name}"
-        print(f"  ✓ WISDOM detected in intent")
+        print("  ✓ WISDOM detected in intent")
 
     print("\n✓ All WISDOM operations validated")
 
@@ -77,9 +74,6 @@ def test_justice_operations():
     parser = AST_Semantic_Parser_V2(engine.vocabulary.all_keywords)
 
     for code, func_name in code_samples:
-        tree = ast.parse(code)
-        func_node = tree.body[0]
-
         # Get intent from name
         intent_concepts = parser.get_intent_concepts(func_name, None)
 
@@ -88,7 +82,7 @@ def test_justice_operations():
 
         # Verify JUSTICE is in intent
         assert "justice" in intent_concepts, f"JUSTICE should be in intent for {func_name}"
-        print(f"  ✓ JUSTICE detected in intent")
+        print("  ✓ JUSTICE detected in intent")
 
     print("\n✓ All JUSTICE operations validated")
 
@@ -121,9 +115,6 @@ def test_power_operations():
     parser = AST_Semantic_Parser_V2(engine.vocabulary.all_keywords)
 
     for code, func_name in code_samples:
-        tree = ast.parse(code)
-        func_node = tree.body[0]
-
         # Get intent from name
         intent_concepts = parser.get_intent_concepts(func_name, None)
 
@@ -132,7 +123,7 @@ def test_power_operations():
 
         # Verify POWER is in intent
         assert "power" in intent_concepts, f"POWER should be in intent for {func_name}"
-        print(f"  ✓ POWER detected in intent")
+        print("  ✓ POWER detected in intent")
 
     print("\n✓ All POWER operations validated")
 
@@ -164,9 +155,6 @@ def test_love_operations():
     parser = AST_Semantic_Parser_V2(engine.vocabulary.all_keywords)
 
     for code, func_name in code_samples:
-        tree = ast.parse(code)
-        func_node = tree.body[0]
-
         # Get intent from name
         intent_concepts = parser.get_intent_concepts(func_name, None)
 
@@ -175,7 +163,7 @@ def test_love_operations():
 
         # Verify LOVE is in intent
         assert "love" in intent_concepts, f"LOVE should be in intent for {func_name}"
-        print(f"  ✓ LOVE detected in intent")
+        print("  ✓ LOVE detected in intent")
 
     print("\n✓ All LOVE operations validated")
 
@@ -229,7 +217,7 @@ def validate_and_save_user(user_data):
     assert "power" in exec_concepts, "POWER should be in execution (assignments)"
     assert "wisdom" in exec_concepts, "WISDOM should be in execution (return)"
 
-    print(f"  ✓ Mixed operations correctly detected")
+    print("  ✓ Mixed operations correctly detected")
     print(f"  ✓ Intent: {len(intent_concepts)} dimensions")
     print(f"  ✓ Execution: {len(exec_concepts)} dimensions")
 
@@ -325,8 +313,6 @@ def test_backward_compatibility():
     print("=" * 70)
 
     from harmonizer.ast_semantic_parser import AST_Semantic_Parser
-
-    code = "def calculate_total(items):\n    return sum(items)"
 
     engine = DivineInvitationSemanticEngine()
 

@@ -3,6 +3,8 @@ Realistic Code Samples for Testing Enhanced Parser
 Demonstrates real-world functions with proper LJPW semantic mapping.
 """
 
+from datetime import datetime
+
 # ============================================================================
 # HARMONIOUS FUNCTIONS (Intent matches Execution)
 # ============================================================================
@@ -52,7 +54,7 @@ def send_welcome_email(user_email):
     EXECUTION: LOVE (email.send = communication operation)
     Expected harmony: EXCELLENT (~0.05)
     """
-    message = f"Welcome to our platform!"
+    message = "Welcome to our platform!"
     email_service.send(to=user_email, body=message)
 
 

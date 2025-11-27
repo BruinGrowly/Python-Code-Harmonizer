@@ -372,7 +372,7 @@ class LJPWBaselines:
             "summary": (
                 "Proportions match Natural Equilibrium (scale-invariant)"
                 if all_pass
-                else f"Proportions deviate from Natural Equilibrium"
+                else "Proportions deviate from Natural Equilibrium"
             ),
         }
 
