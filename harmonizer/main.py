@@ -32,7 +32,7 @@ import argparse  # noqa: E402
 import ast  # noqa: E402
 import fnmatch  # noqa: E402
 import json  # noqa: E402
-from typing import Dict, List, Tuple  # noqa: E402
+from typing import Dict, List, Optional, Tuple  # noqa: E402
 
 from harmonizer import divine_invitation_engine_V2 as dive  # noqa: E402
 from harmonizer.ast_semantic_parser import AST_Semantic_Parser  # noqa: E402
@@ -65,6 +65,88 @@ def load_configuration() -> Dict:
             file=sys.stderr,
         )
     return config_dict
+
+
+def _should_exclude(path: str, rel_path: str, basename: str, patterns: List[str]) -> bool:
+    return any(
+        fnmatch.fnmatch(path, pattern)
+        or fnmatch.fnmatch(rel_path, pattern)
+        or fnmatch.fnmatch(basename, pattern)
+        for pattern in patterns
+    )
+
+
+def discover_python_files(
+    targets: List[str],
+    config: Dict,
+    recursive: bool = False,
+    max_files: Optional[int] = None,
+) -> Tuple[List[str], List[Tuple[str, str]], List[str]]:
+    """
+    Expand CLI targets into actual Python files while respecting exclusion rules.
+
+    Returns:
+        (valid_files, invalid_entries, excluded_files)
+    """
+    exclude_patterns = config.get("exclude", [])
+    config_root = config.get("config_root") or os.getcwd()
+
+    valid_files: List[str] = []
+    invalid_files: List[Tuple[str, str]] = []
+    excluded_files: List[str] = []
+
+    for target in targets:
+        normalized = os.path.normpath(target)
+        rel_path = os.path.normpath(os.path.relpath(normalized, config_root))
+        basename = os.path.basename(normalized)
+
+        if _should_exclude(normalized, rel_path, basename, exclude_patterns):
+            excluded_files.append(target)
+            continue
+
+        if os.path.isdir(normalized):
+            walker = os.walk(normalized)
+            for root, _, files in walker:
+                for file_name in files:
+                    if not file_name.endswith(".py"):
+                        continue
+                    candidate = os.path.join(root, file_name)
+                    rel_candidate = os.path.normpath(os.path.relpath(candidate, config_root))
+                    if _should_exclude(candidate, rel_candidate, file_name, exclude_patterns):
+                        excluded_files.append(candidate)
+                        continue
+                    valid_files.append(candidate)
+                    if max_files and len(valid_files) >= max_files:
+                        return valid_files, invalid_files, excluded_files
+                if not recursive:
+                    break
+        elif os.path.isfile(normalized) and normalized.endswith(".py"):
+            valid_files.append(target)
+        else:
+            error = "File not found"
+            if os.path.exists(normalized) and not normalized.endswith(".py"):
+                error = "Not a Python file"
+            invalid_files.append((target, error))
+
+        if max_files and len(valid_files) >= max_files:
+            break
+
+    return valid_files, invalid_files, excluded_files
+
+
+def save_text_report(blocks: List[str], destination: str) -> None:
+    """Persist textual report blocks to disk."""
+    if not blocks:
+        blocks = ["No analysis output generated."]
+    payload = "\n\n".join(blocks)
+    with open(destination, "w", encoding="utf-8") as handle:
+        handle.write(payload)
+
+
+def save_json_report(payload: Dict, destination: str) -> None:
+    """Persist JSON payload to disk."""
+    with open(destination, "w", encoding="utf-8") as handle:
+        json.dump(payload, handle, indent=2)
 
 
 # --- THE HARMONIZER APPLICATION ---
@@ -318,7 +400,7 @@ class PythonCodeHarmonizer:
     def output_report(self, formatted_report: str):
         print(formatted_report)
 
-    def print_json_report(self, all_reports: Dict[str, Dict[str, Dict]]):
+    def build_json_payload(self, all_reports: Dict[str, Dict[str, Dict]]) -> Dict:
         output = {
             "version": "1.5",
             "threshold": self.disharmony_threshold,
@@ -374,7 +456,11 @@ class PythonCodeHarmonizer:
             "severity_counts": severity_counts,
             "highest_severity": self._get_highest_severity_name(severity_counts),
         }
-        print(json.dumps(output, indent=2))
+        return output
+
+    def print_json_report(self, all_reports: Dict[str, Dict[str, Dict]]):
+        payload = self.build_json_payload(all_reports)
+        print(json.dumps(payload, indent=2))
 
     def _get_highest_severity_name(self, severity_counts: Dict[str, int]) -> str:
         for severity in ["critical", "high", "medium", "low", "excellent"]:
@@ -407,35 +493,42 @@ def parse_cli_arguments() -> argparse.Namespace:
         default=3,
         help="Number of naming suggestions to show (default: 3).",
     )
+    parser.add_argument(
+        "--recursive",
+        action="store_true",
+        help="When targets include directories, walk them recursively to gather .py files.",
+    )
+    parser.add_argument(
+        "--max-files",
+        type=int,
+        help="Limit the number of files analyzed (useful for CI smoke checks).",
+    )
+    parser.add_argument(
+        "--save-text",
+        type=str,
+        help="Write the text report to the specified path in addition to stdout.",
+    )
+    parser.add_argument(
+        "--save-json",
+        type=str,
+        help="Write the JSON payload to the specified path (format must be json).",
+    )
+    parser.add_argument(
+        "--fail-on-attention",
+        action="store_true",
+        help="Exit with code 3 when any function needs immediate attention.",
+    )
     parser.add_argument("--version", action="version", version="Python Code Harmonizer v1.5")
     return parser.parse_args()
 
 
 def validate_cli_arguments(args: argparse.Namespace, config: Dict) -> List[str]:
-    valid_files = []
-    invalid_files = []
-    excluded_files = []
-    exclude_patterns = config.get("exclude", [])
-    config_root = config.get("config_root") or os.getcwd()
-    for file_path in args.files:
-        normalized_path = os.path.normpath(file_path)
-        rel_path = os.path.normpath(os.path.relpath(normalized_path, config_root))
-        basename = os.path.basename(normalized_path)
-        if any(
-            fnmatch.fnmatch(normalized_path, pattern)
-            or fnmatch.fnmatch(rel_path, pattern)
-            or fnmatch.fnmatch(basename, pattern)
-            for pattern in exclude_patterns
-        ):
-            excluded_files.append(file_path)
-            continue
-        if os.path.exists(file_path):
-            if file_path.endswith(".py"):
-                valid_files.append(file_path)
-            else:
-                invalid_files.append((file_path, "Not a Python file"))
-        else:
-            invalid_files.append((file_path, "File not found"))
+    valid_files, invalid_files, excluded_files = discover_python_files(
+        args.files,
+        config,
+        recursive=getattr(args, "recursive", False),
+        max_files=getattr(args, "max_files", None),
+    )
     if (invalid_files or excluded_files) and args.format == "text":
         for file_path, error in invalid_files:
             print(f"\n⚠️  Skipping '{file_path}' - {error}", file=sys.stderr)
@@ -453,9 +546,11 @@ def execute_analysis(
     file_paths: List[str],
     output_format: str,
     suggest_refactor: bool,
-) -> Tuple[Dict, int]:
+    capture_text: bool = False,
+) -> Tuple[Dict, int, List[str]]:
     all_reports = {}
     highest_exit_code = 0
+    text_blocks: List[str] = []
     for file_path in file_paths:
         report = harmonizer.analyze_file(file_path)
         all_reports[file_path] = report
@@ -464,11 +559,19 @@ def execute_analysis(
         if output_format == "text":
             formatted = harmonizer.format_report(report, suggest_refactor=suggest_refactor)
             harmonizer.output_report(formatted)
-    return all_reports, highest_exit_code
+            if capture_text:
+                text_blocks.append(f"# {file_path}\n{formatted}")
+    return all_reports, highest_exit_code, text_blocks
 
 
 def run_cli():
     args = parse_cli_arguments()
+    if args.save_json and args.format != "json":
+        print(
+            "⚠️  --save-json requires --format json so the payload matches the CLI output.",
+            file=sys.stderr,
+        )
+        sys.exit(2)
     config = load_configuration()
     valid_files = validate_cli_arguments(args, config)
     if not valid_files:
@@ -485,12 +588,34 @@ def run_cli():
         top_suggestions=args.top_suggestions,
     )
 
-    all_reports, highest_exit_code = execute_analysis(
-        harmonizer, valid_files, args.format, args.suggest_refactor
+    capture_text = bool(args.save_text)
+    all_reports, highest_exit_code, text_blocks = execute_analysis(
+        harmonizer,
+        valid_files,
+        args.format,
+        args.suggest_refactor,
+        capture_text=capture_text,
     )
 
+    need_json_payload = args.format == "json" or args.save_json or args.fail_on_attention
+    json_payload = None
+    if need_json_payload:
+        json_payload = harmonizer.build_json_payload(all_reports)
+
     if args.format == "json":
-        harmonizer.print_json_report(all_reports)
+        print(json.dumps(json_payload, indent=2))
+
+    if args.save_text:
+        save_text_report(text_blocks, args.save_text)
+
+    if args.save_json and json_payload:
+        save_json_report(json_payload, args.save_json)
+
+    if args.fail_on_attention and json_payload:
+        severity_counts = json_payload.get("summary", {}).get("severity_counts", {})
+        attention_count = severity_counts.get("high", 0) + severity_counts.get("critical", 0)
+        if attention_count > 0:
+            highest_exit_code = max(highest_exit_code, 3)
 
     sys.exit(highest_exit_code)
 
