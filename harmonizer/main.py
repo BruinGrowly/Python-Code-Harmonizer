@@ -435,16 +435,21 @@ class PythonCodeHarmonizer:
                 }
                 # Add LJPW baseline metrics if available
                 ice_metrics = data.get("ice_result", {}).get("ice_metrics", {})
-                if "baseline_disharmony" in ice_metrics:
-                    function_data["ljpw_baselines"] = {
-                        "baseline_disharmony": round(ice_metrics["baseline_disharmony"], 4),
-                        "intent_composite_score": round(
-                            ice_metrics.get("intent_composite_score", 0), 4
-                        ),
-                        "execution_composite_score": round(
-                            ice_metrics.get("execution_composite_score", 0), 4
-                        ),
-                    }
+                baseline_metrics = {}
+                baseline_disharmony = ice_metrics.get("baseline_disharmony")
+                if baseline_disharmony is not None:
+                    baseline_metrics["baseline_disharmony"] = round(baseline_disharmony, 4)
+
+                intent_comp = ice_metrics.get("intent_composite_score")
+                if intent_comp is not None:
+                    baseline_metrics["intent_composite_score"] = round(intent_comp, 4)
+
+                execution_comp = ice_metrics.get("execution_composite_score")
+                if execution_comp is not None:
+                    baseline_metrics["execution_composite_score"] = round(execution_comp, 4)
+
+                if baseline_metrics:
+                    function_data["ljpw_baselines"] = baseline_metrics
                 if self.show_semantic_maps:
                     function_data["semantic_map"] = data["semantic_map"]
                 file_data["functions"].append(function_data)
