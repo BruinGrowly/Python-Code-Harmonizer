@@ -89,12 +89,13 @@ class ResonanceEngine:
 
     # Coupling matrix (asymmetric)
     # Row = source dimension, Column = target influence
+    # L=Cohesion, J=Structure, P=Complexity, W=Abstraction
     COUPLING_MATRIX = np.array(
         [
-            [1.0, 1.4, 1.3, 1.5],  # Love amplifies all, especially Wisdom
-            [0.9, 1.0, 0.7, 1.2],  # Justice moderates
-            [0.6, 0.8, 1.0, 0.5],  # Power absorbs (lowest out-coupling)
-            [1.3, 1.1, 1.0, 1.0],  # Wisdom integrates
+            [1.0, 1.4, 1.3, 1.5],  # Cohesion amplifies all, especially Abstraction
+            [0.9, 1.0, 0.7, 1.2],  # Structure moderates
+            [0.6, 0.8, 1.0, 0.5],  # Complexity absorbs (lowest out-coupling)
+            [1.3, 1.1, 1.0, 1.0],  # Abstraction integrates
         ]
     )
 
@@ -104,11 +105,11 @@ class ResonanceEngine:
     # Anchor Point (perfection)
     ANCHOR_POINT = np.array([1.0, 1.0, 1.0, 1.0])
 
-    # Power erosion parameters (from LJPW Codex v5.1)
+    # Complexity erosion parameters (how complexity degrades structure)
     POWER_EROSION_PARAMS = {
         "gamma_JP": 0.49,  # Erosion rate coefficient
-        "K_JP": 0.71,  # Threshold constant
-        "n_JP": 4.1,  # Hill coefficient (steepness)
+        "K_JP": 0.71,  # Complexity threshold constant
+        "n_JP": 4.1,  # Hill coefficient (steepness of erosion)
     }
 
     def __init__(self, params: Optional[Dict] = None):
@@ -210,13 +211,14 @@ class ResonanceEngine:
     @staticmethod
     def detect_power_erosion(L: float, J: float, P: float, W: float) -> PowerErosionResult:
         """
-        Detect if Power is eroding Justice (lacks Wisdom protection).
+        Detect if high Complexity is eroding Structure (lacks Abstraction protection).
 
-        From LJPW Codex: "Raw Power, unchecked by Wisdom, degrades Justice."
+        High complexity code without proper abstractions will degrade
+        structural integrity over time (validation, contracts, consistency).
 
-        PowerErosion = gamma_JP × (P^n / (K^n + P^n)) × max(0, 1-W)
+        Erosion = gamma × (Complexity^n / (K^n + Complexity^n)) × (1 - Abstraction)
 
-        High Power without Wisdom → Justice degrades over time.
+        High Complexity without Abstraction → Structure degrades over time.
 
         Args:
             L, J, P, W: LJPW coordinates
@@ -245,23 +247,25 @@ class ResonanceEngine:
         if erosion_rate < 0.05:
             severity = "NONE"
             at_risk = False
-            recommendation = "System is balanced."
+            recommendation = "Code is balanced."
         elif erosion_rate < 0.15:
             severity = "LOW"
             at_risk = True
-            recommendation = "Consider increasing Wisdom to protect Justice."
+            recommendation = (
+                "Consider improving Abstraction (documentation, patterns) to protect Structure."
+            )
         elif erosion_rate < 0.30:
             severity = "MEDIUM"
             at_risk = True
-            recommendation = f"Warning: Power ({P:.2f}) eroding Justice without Wisdom ({W:.2f}). Add abstractions, documentation."
+            recommendation = f"Warning: High Complexity ({P:.2f}) eroding Structure without Abstraction ({W:.2f}). Add documentation, extract patterns."
         elif erosion_rate < 0.45:
             severity = "HIGH"
             at_risk = True
-            recommendation = f"Critical: High Power ({P:.2f}) with Low Wisdom ({W:.2f}). Justice will collapse. Refactor urgently."
+            recommendation = f"Critical: High Complexity ({P:.2f}) with low Abstraction ({W:.2f}). Structure will degrade. Refactor urgently."
         else:
             severity = "CRITICAL"
             at_risk = True
-            recommendation = f"Emergency: Reckless Power scenario. System unstable. Immediate intervention required."
+            recommendation = "Emergency: Excessive complexity without abstractions. Code unmaintainable. Immediate refactoring required."
 
         return PowerErosionResult(
             at_risk=at_risk,
@@ -312,10 +316,10 @@ class ResonanceEngine:
         # State-dependent coupling
         kappa_LJ, kappa_LP, kappa_LW = self._calculate_kappa(H)
 
-        # Love equation (Source - gives more than receives)
+        # Cohesion equation (amplifies other dimensions)
         dL_dt = p["alpha_LJ"] * J * kappa_LJ + p["alpha_LW"] * W * kappa_LW - p["beta_L"] * L
 
-        # Justice equation (Mediator - with Power erosion)
+        # Structure equation (with Complexity erosion when Abstraction is low)
         L_effect = p["alpha_JL"] * (L / (p["K_JL"] + L))  # Saturation
         P_erosion = (
             p["gamma_JP"]
@@ -324,10 +328,10 @@ class ResonanceEngine:
         )
         dJ_dt = L_effect + p["alpha_JW"] * W - P_erosion - p["beta_J"] * J
 
-        # Power equation (Sink - receives more than gives)
+        # Complexity equation (tends to accumulate)
         dP_dt = p["alpha_PL"] * L * kappa_LP + p["alpha_PJ"] * J - p["beta_P"] * P
 
-        # Wisdom equation (Integrator - synthesizes all)
+        # Abstraction equation (synthesizes understanding from all dimensions)
         dW_dt = (
             p["alpha_WL"] * L * kappa_LW + p["alpha_WJ"] * J + p["alpha_WP"] * P - p["beta_W"] * W
         )
@@ -512,14 +516,24 @@ class ResonanceEngine:
         # The dimension furthest below its equilibrium is the deficit
         return min(relative, key=relative.get)
 
+    # User-facing dimension names (developer-friendly terminology)
+    DIMENSION_NAMES = {
+        "L": "Cohesion",
+        "J": "Structure",
+        "P": "Complexity",
+        "W": "Abstraction",
+    }
+
+    DIMENSION_DESCRIPTIONS = {
+        "L": "Cohesion (integration, connectivity, module relationships)",
+        "J": "Structure (validation, type safety, contracts, consistency)",
+        "P": "Complexity (execution density, logic, cyclomatic complexity)",
+        "W": "Abstraction (documentation, patterns, architecture, design)",
+    }
+
     def _interpret_deficit(self, primary: str, percentages: Dict[str, float]) -> str:
         """Interpret the deficit analysis."""
-        names = {
-            "L": "Love (relationships, connectivity)",
-            "J": "Justice (structure, validation)",
-            "P": "Power (execution, action)",
-            "W": "Wisdom (abstraction, understanding)",
-        }
+        names = self.DIMENSION_DESCRIPTIONS
 
         dominant_pct = percentages[primary]
 
