@@ -1,8 +1,17 @@
-# Python Code Harmonizer (LJPW v4.0)
+# Python Code Harmonizer (LJPW v5.1)
 
 **The Physics of Software Quality.**
 
-The Python Code Harmonizer is a next-generation static analysis and visualization tool that evaluates codebases using the **LJPW v4.0 Framework** (Love, Justice, Power, Wisdom). It treats code as a dynamic system, using non-linear physics models to predict technical debt, identify architectural smells, and guide refactoring.
+The Python Code Harmonizer is a next-generation static analysis and visualization tool that evaluates codebases across four fundamental dimensions. It treats code as a dynamic system, using non-linear physics models to predict technical debt, identify architectural smells, and guide refactoring.
+
+## The Four Dimensions
+
+| Dimension | What It Measures | Low Score Means | High Score Means |
+|-----------|------------------|-----------------|------------------|
+| **Cohesion** | Integration, connectivity, module relationships | Isolated, fragmented code | Well-connected, communicating modules |
+| **Structure** | Validation, type safety, contracts, consistency | Loose, unvalidated code | Strong contracts, type-safe, tested |
+| **Complexity** | Execution density, logic, cyclomatic complexity | Simple, straightforward code | Dense logic, many branches |
+| **Abstraction** | Documentation, patterns, architecture, design | Raw implementation | Well-documented, patterned code |
 
 ![LJPW Dashboard](examples/ljpw_v4_demo_plot.png)
 
@@ -32,27 +41,47 @@ The Python Code Harmonizer is a next-generation static analysis and visualizatio
 
 ## Key Features
 
-### 1. 🌌 Dynamic Physics Model (LJPW v4.0)
+### 1. 🌌 Dynamic Physics Model (LJPW v5.1)
 Unlike traditional linters that count errors, the Harmonizer simulates your code's "energy state" over time.
--   **Natural Equilibrium (NE)**: Stable state for healthy code (`L=0.62, J=0.41, P=0.72, W=0.69`).
+-   **Natural Equilibrium (NE)**: Stable state for healthy code.
 -   **High-Energy State**: "Thriving" state for complex, well-architected systems.
--   **Entropy Detection**: Predicts "Justice Collapse" (technical debt avalanches) before they happen.
+-   **Complexity Erosion Detection**: Predicts when high complexity without abstraction will degrade structure.
 
-### 2. 📊 Visual Analytics
+### 2. 🔄 Resonance Engine (NEW)
+Advanced dynamic analysis that reveals what your codebase is missing.
+
+```python
+from harmonizer.resonance_engine import ResonanceEngine, detect_power_erosion
+
+engine = ResonanceEngine()
+
+# Full analysis of code coordinates
+result = engine.full_analysis((0.5, 0.4, 0.8, 0.3), cycles=100)
+print(f"Primary deficit: {result['summary']['primary_deficit']}")
+print(f"Erosion risk: {result['summary']['power_erosion_risk']}")
+```
+
+**Key Metrics:**
+-   **Voltage**: Semantic energy of code (`√(L² + J² + P² + W²)`) - measures "aliveness"
+-   **Complexity Erosion**: Detects when high complexity erodes structure without abstraction protection
+-   **Earned Depth**: Tracks refactoring journey - hard paths earn more depth than easy ones
+-   **Deficit Analysis**: Identifies which dimension your codebase is starving for
+
+### 3. 📊 Visual Analytics
 Generate interactive HTML reports to explore your codebase's semantic structure.
--   **Radar Charts**: Visualize the balance of Love (Care), Justice (Structure), Power (Action), and Wisdom (Abstraction).
+-   **Radar Charts**: Visualize the balance of Cohesion, Structure, Complexity, and Abstraction.
 -   **Dependency Galaxy**: A force-directed graph showing the "gravitational pull" of your modules.
--   **Semantic Density**: Identify "Anemic Components" (high complexity, low action).
+-   **Semantic Density**: Identify "Anemic Components" (high complexity, low abstraction).
 
-### 3. 🛡️ CI/CD Integration
+### 4. 🛡️ CI/CD Integration
 Prevent entropy decay with built-in quality gates.
 -   **`check_harmony.py`**: CLI tool for CI pipelines. Fails builds if code drifts too far from equilibrium.
 -   **GitHub Action**: Ready-to-use workflow in `.github/workflows/ljpw_gate.yml`.
 -   **Pre-commit Hook**: Local checks via `.pre-commit-config.yaml`.
 
-### 4. 🔬 Relationship Analysis
-Validate that your system exhibits healthy LJPW coupling patterns.
--   **Pattern Validation**: Check if Love amplifies, Power is constrained
+### 5. 🔬 Relationship Analysis
+Validate that your system exhibits healthy coupling patterns.
+-   **Pattern Validation**: Check if Cohesion amplifies, Complexity is constrained
 -   **Proportion Analysis**: Verify scale-invariant ratios
 -   **Structural Health**: Diagnose relationship issues vs. magnitude issues
 
@@ -64,7 +93,7 @@ print(f"Health: {result['overall_health']:.0%}")
 # Provides actionable recommendations
 ```
 
-### 5. ⚙️ Developer Experience
+### 6. ⚙️ Developer Experience
 -   **Configurable**: Customize thresholds in `pyproject.toml` or `harmonizer.yaml`.
 -   **Ignore System**: Exclude files using `.harmonizerignore`.
 
@@ -120,30 +149,34 @@ exclude = ["venv", "tests"]
 
 ## The LJPW Framework
 
-### The Four Dimensions
+The framework uses internal variable names L, J, P, W (derived from philosophical concepts) which map to practical software metrics:
 
--   **Love (L)**: Care, readability, comments, user-focus.
--   **Justice (J)**: Structure, types, tests, consistency.
--   **Power (P)**: Action, logic, complexity, performance.
--   **Wisdom (W)**: Abstraction, architecture, patterns, insight.
+### Dimension Mapping
+
+| Internal | Developer Term | What It Measures |
+|----------|---------------|------------------|
+| **L** | Cohesion | Integration, connectivity, module relationships |
+| **J** | Structure | Validation, type safety, contracts, consistency |
+| **P** | Complexity | Execution density, logic, cyclomatic complexity |
+| **W** | Abstraction | Documentation, patterns, architecture, design |
 
 ### Scale Invariance & Relationship Structure
 
 **Key Insight**: *The relationships between dimensions are more important than their absolute values.*
 
-The LJPW Framework exhibits **scale invariance** - the same proportional relationships (L:J:P:W ≈ 1.5:1:1.7:1.7) define healthy systems at any scale:
+The framework exhibits **scale invariance** - the same proportional relationships (L:J:P:W ≈ 1.5:1:1.7:1.7) define healthy systems at any scale:
 
--   **Small team**: (6, 4, 7, 7) developers
+-   **Small module**: (6, 4, 7, 7) metrics
 -   **Medium project**: (62, 41, 72, 69) metrics
--   **Large organization**: (618, 414, 718, 693) person-hours
+-   **Large codebase**: (618, 414, 718, 693) metrics
 
 **Coupling Structure** encodes how dimensions interact:
--   **Love amplifies** other dimensions (multiplier effect)
--   **Power must be constrained** (channeled through Love/Wisdom)
--   **Justice supports Wisdom** (truth-seeking flows to understanding)
--   **Asymmetry is fundamental** (giving ≠ receiving)
+-   **Cohesion amplifies** other dimensions (multiplier effect)
+-   **Complexity must be constrained** (channeled through Cohesion/Abstraction)
+-   **Structure supports Abstraction** (validation flows to understanding)
+-   **Asymmetry is fundamental** (dependencies are directional)
 
-This structural universality makes the framework applicable across domains: code quality, team dynamics, organizational health, and ecosystems.
+This structural universality makes the framework applicable across scales: functions, modules, packages, and entire codebases.
 
 **Learn more**: See [Relationship Insight Analysis](RELATIONSHIP_INSIGHT_SYNTHESIS.md)
 
