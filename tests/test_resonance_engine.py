@@ -55,29 +55,20 @@ class TestVoltageCalculation:
     def test_voltage_comparison_preserved(self):
         """Voltage comparison detects preservation"""
         engine = ResonanceEngine()
-        result = engine.compare_voltage(
-            (0.6, 0.4, 0.7, 0.7),
-            (0.62, 0.38, 0.72, 0.68)  # Similar
-        )
+        result = engine.compare_voltage((0.6, 0.4, 0.7, 0.7), (0.62, 0.38, 0.72, 0.68))  # Similar
         assert result["interpretation"] == "PRESERVED"
 
     def test_voltage_comparison_gain(self):
         """Voltage comparison detects gain"""
         engine = ResonanceEngine()
-        result = engine.compare_voltage(
-            (0.5, 0.5, 0.5, 0.5),
-            (0.8, 0.8, 0.8, 0.8)  # Higher
-        )
+        result = engine.compare_voltage((0.5, 0.5, 0.5, 0.5), (0.8, 0.8, 0.8, 0.8))  # Higher
         assert result["interpretation"] == "GAIN"
         assert result["percent_change"] > 0
 
     def test_voltage_comparison_drop(self):
         """Voltage comparison detects drop"""
         engine = ResonanceEngine()
-        result = engine.compare_voltage(
-            (0.8, 0.8, 0.8, 0.8),
-            (0.5, 0.5, 0.5, 0.5)  # Lower
-        )
+        result = engine.compare_voltage((0.8, 0.8, 0.8, 0.8), (0.5, 0.5, 0.5, 0.5))  # Lower
         assert result["interpretation"] == "DROP"
         assert result["percent_change"] < 0
 
@@ -118,7 +109,7 @@ class TestPowerErosionDetection:
         K = 0.71
         n = 4.1
 
-        P_threshold = (P ** n) / (K ** n + P ** n)
+        P_threshold = (P**n) / (K**n + P**n)
         wisdom_gap = max(0, 1 - W)
         expected_rate = gamma * P_threshold * wisdom_gap
 
@@ -290,7 +281,9 @@ class TestEarnedDepth:
 
         comparison = engine.compare_journeys(easy_path, hard_path)
 
-        assert comparison["hard_journey"]["earned_depth"] > comparison["easy_journey"]["earned_depth"]
+        assert (
+            comparison["hard_journey"]["earned_depth"] > comparison["easy_journey"]["earned_depth"]
+        )
         assert comparison["comparison"]["depth_ratio"] > 1.0
 
 
