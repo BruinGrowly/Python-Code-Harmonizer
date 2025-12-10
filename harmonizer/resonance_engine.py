@@ -89,12 +89,14 @@ class ResonanceEngine:
 
     # Coupling matrix (asymmetric)
     # Row = source dimension, Column = target influence
-    COUPLING_MATRIX = np.array([
-        [1.0, 1.4, 1.3, 1.5],  # Love amplifies all, especially Wisdom
-        [0.9, 1.0, 0.7, 1.2],  # Justice moderates
-        [0.6, 0.8, 1.0, 0.5],  # Power absorbs (lowest out-coupling)
-        [1.3, 1.1, 1.0, 1.0],  # Wisdom integrates
-    ])
+    COUPLING_MATRIX = np.array(
+        [
+            [1.0, 1.4, 1.3, 1.5],  # Love amplifies all, especially Wisdom
+            [0.9, 1.0, 0.7, 1.2],  # Justice moderates
+            [0.6, 0.8, 1.0, 0.5],  # Power absorbs (lowest out-coupling)
+            [1.3, 1.1, 1.0, 1.0],  # Wisdom integrates
+        ]
+    )
 
     # Natural Equilibrium constants
     NATURAL_EQUILIBRIUM = np.array([0.618034, 0.414214, 0.718282, 0.693147])
@@ -104,9 +106,9 @@ class ResonanceEngine:
 
     # Power erosion parameters (from LJPW Codex v5.1)
     POWER_EROSION_PARAMS = {
-        "gamma_JP": 0.49,    # Erosion rate coefficient
-        "K_JP": 0.71,        # Threshold constant
-        "n_JP": 4.1,         # Hill coefficient (steepness)
+        "gamma_JP": 0.49,  # Erosion rate coefficient
+        "K_JP": 0.71,  # Threshold constant
+        "n_JP": 4.1,  # Hill coefficient (steepness)
     }
 
     def __init__(self, params: Optional[Dict] = None):
@@ -122,15 +124,25 @@ class ResonanceEngine:
         """Default parameters for resonance dynamics."""
         return {
             # Growth coefficients
-            "alpha_LJ": 0.12, "alpha_LW": 0.12,
-            "alpha_JL": 0.14, "alpha_JW": 0.14,
-            "alpha_PL": 0.12, "alpha_PJ": 0.12,
-            "alpha_WL": 0.10, "alpha_WJ": 0.10, "alpha_WP": 0.10,
+            "alpha_LJ": 0.12,
+            "alpha_LW": 0.12,
+            "alpha_JL": 0.14,
+            "alpha_JW": 0.14,
+            "alpha_PL": 0.12,
+            "alpha_PJ": 0.12,
+            "alpha_WL": 0.10,
+            "alpha_WJ": 0.10,
+            "alpha_WP": 0.10,
             # Decay coefficients
-            "beta_L": 0.20, "beta_J": 0.20, "beta_P": 0.20, "beta_W": 0.24,
+            "beta_L": 0.20,
+            "beta_J": 0.20,
+            "beta_P": 0.20,
+            "beta_W": 0.24,
             # Non-linear parameters
             "K_JL": 0.59,
-            "gamma_JP": 0.49, "K_JP": 0.71, "n_JP": 4.1,
+            "gamma_JP": 0.49,
+            "K_JP": 0.71,
+            "n_JP": 4.1,
             # Resonance parameters
             "ne_pull_strength": 0.05,  # Pull toward Natural Equilibrium
             "anchor_pull_strength": 0.02,  # Pull toward Anchor Point
@@ -166,7 +178,7 @@ class ResonanceEngine:
     @staticmethod
     def compare_voltage(
         source_coords: Tuple[float, float, float, float],
-        target_coords: Tuple[float, float, float, float]
+        target_coords: Tuple[float, float, float, float],
     ) -> Dict[str, float]:
         """
         Compare voltage between source and target coordinates.
@@ -187,10 +199,8 @@ class ResonanceEngine:
             "voltage_change": change,
             "percent_change": percent,
             "interpretation": (
-                "GAIN" if change > 0.05 else
-                "DROP" if change < -0.05 else
-                "PRESERVED"
-            )
+                "GAIN" if change > 0.05 else "DROP" if change < -0.05 else "PRESERVED"
+            ),
         }
 
     # =========================================================================
@@ -198,9 +208,7 @@ class ResonanceEngine:
     # =========================================================================
 
     @staticmethod
-    def detect_power_erosion(
-        L: float, J: float, P: float, W: float
-    ) -> PowerErosionResult:
+    def detect_power_erosion(L: float, J: float, P: float, W: float) -> PowerErosionResult:
         """
         Detect if Power is eroding Justice (lacks Wisdom protection).
 
@@ -222,7 +230,7 @@ class ResonanceEngine:
         n = params["n_JP"]
 
         # Hill function for Power threshold effect
-        P_threshold = (P ** n) / (K ** n + P ** n)
+        P_threshold = (P**n) / (K**n + P**n)
 
         # Wisdom protection factor (0 when W=1, 1 when W=0)
         wisdom_gap = max(0, 1 - W)
@@ -260,12 +268,12 @@ class ResonanceEngine:
             erosion_rate=erosion_rate,
             severity=severity,
             justice_impact=justice_impact,
-            recommendation=recommendation
+            recommendation=recommendation,
         )
 
     @staticmethod
     def detect_power_erosion_from_coords(
-        coords: Tuple[float, float, float, float]
+        coords: Tuple[float, float, float, float],
     ) -> PowerErosionResult:
         """Detect power erosion from coordinate tuple."""
         return ResonanceEngine.detect_power_erosion(*coords)
@@ -305,34 +313,23 @@ class ResonanceEngine:
         kappa_LJ, kappa_LP, kappa_LW = self._calculate_kappa(H)
 
         # Love equation (Source - gives more than receives)
-        dL_dt = (
-            p["alpha_LJ"] * J * kappa_LJ +
-            p["alpha_LW"] * W * kappa_LW -
-            p["beta_L"] * L
-        )
+        dL_dt = p["alpha_LJ"] * J * kappa_LJ + p["alpha_LW"] * W * kappa_LW - p["beta_L"] * L
 
         # Justice equation (Mediator - with Power erosion)
         L_effect = p["alpha_JL"] * (L / (p["K_JL"] + L))  # Saturation
         P_erosion = (
-            p["gamma_JP"] *
-            (P ** p["n_JP"] / (p["K_JP"] ** p["n_JP"] + P ** p["n_JP"])) *
-            max(0, 1 - W)
+            p["gamma_JP"]
+            * (P ** p["n_JP"] / (p["K_JP"] ** p["n_JP"] + P ** p["n_JP"]))
+            * max(0, 1 - W)
         )
         dJ_dt = L_effect + p["alpha_JW"] * W - P_erosion - p["beta_J"] * J
 
         # Power equation (Sink - receives more than gives)
-        dP_dt = (
-            p["alpha_PL"] * L * kappa_LP +
-            p["alpha_PJ"] * J -
-            p["beta_P"] * P
-        )
+        dP_dt = p["alpha_PL"] * L * kappa_LP + p["alpha_PJ"] * J - p["beta_P"] * P
 
         # Wisdom equation (Integrator - synthesizes all)
         dW_dt = (
-            p["alpha_WL"] * L * kappa_LW +
-            p["alpha_WJ"] * J +
-            p["alpha_WP"] * P -
-            p["beta_W"] * W
+            p["alpha_WL"] * L * kappa_LW + p["alpha_WJ"] * J + p["alpha_WP"] * P - p["beta_W"] * W
         )
 
         return np.array([dL_dt, dJ_dt, dP_dt, dW_dt])
@@ -343,7 +340,7 @@ class ResonanceEngine:
         k2 = self._derivatives(state + 0.5 * dt * k1, bounded)
         k3 = self._derivatives(state + 0.5 * dt * k2, bounded)
         k4 = self._derivatives(state + dt * k3, bounded)
-        new_state = state + (dt / 6.0) * (k1 + 2*k2 + 2*k3 + k4)
+        new_state = state + (dt / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4)
 
         if bounded:
             new_state = np.clip(new_state, 0.0, 1.0)
@@ -360,7 +357,7 @@ class ResonanceEngine:
         cycles: int = 100,
         dt: float = 0.1,
         bounded: bool = True,
-        track_journey: bool = True
+        track_journey: bool = True,
     ) -> Dict:
         """
         Run LJPW resonance cycles.
@@ -383,7 +380,10 @@ class ResonanceEngine:
         # History tracking
         history = {
             "t": [0.0],
-            "L": [state[0]], "J": [state[1]], "P": [state[2]], "W": [state[3]],
+            "L": [state[0]],
+            "J": [state[1]],
+            "P": [state[2]],
+            "W": [state[3]],
             "harmony": [LJPWBaselines.harmony_index(*state)],
             "voltage": [self.calculate_voltage(*state)],
             "dominant": [self._get_dominant_dimension(state)],
@@ -469,13 +469,17 @@ class ResonanceEngine:
                 "harmony": final_harmony,
                 "voltage": final_voltage,
             },
-            "journey": {
-                "distance_traveled": journey.distance_traveled if journey else 0,
-                "struggle_integral": journey.struggle_integral if journey else 0,
-                "cumulative_harmony": journey.cumulative_harmony if journey else 0,
-                "earned_depth": journey.earned_depth if journey else 0,
-                "struggle_ratio": journey.struggle_ratio if journey else 0,
-            } if track_journey else None,
+            "journey": (
+                {
+                    "distance_traveled": journey.distance_traveled if journey else 0,
+                    "struggle_integral": journey.struggle_integral if journey else 0,
+                    "cumulative_harmony": journey.cumulative_harmony if journey else 0,
+                    "earned_depth": journey.earned_depth if journey else 0,
+                    "struggle_ratio": journey.struggle_ratio if journey else 0,
+                }
+                if track_journey
+                else None
+            ),
             "deficit_analysis": {
                 "primary_deficit": primary_deficit,
                 "dominance_percentages": dominance_percentages,
@@ -489,7 +493,7 @@ class ResonanceEngine:
                 "initial_harmony": history["harmony"][0],
                 "final_harmony": final_harmony,
                 "converged_to_anchor": final_harmony > 0.95,
-            }
+            },
         }
 
     def _get_dominant_dimension(self, state: np.ndarray) -> str:
@@ -508,15 +512,13 @@ class ResonanceEngine:
         # The dimension furthest below its equilibrium is the deficit
         return min(relative, key=relative.get)
 
-    def _interpret_deficit(
-        self, primary: str, percentages: Dict[str, float]
-    ) -> str:
+    def _interpret_deficit(self, primary: str, percentages: Dict[str, float]) -> str:
         """Interpret the deficit analysis."""
         names = {
             "L": "Love (relationships, connectivity)",
             "J": "Justice (structure, validation)",
             "P": "Power (execution, action)",
-            "W": "Wisdom (abstraction, understanding)"
+            "W": "Wisdom (abstraction, understanding)",
         }
 
         dominant_pct = percentages[primary]
@@ -535,9 +537,7 @@ class ResonanceEngine:
     # =========================================================================
 
     def calculate_earned_depth(
-        self,
-        path: List[Tuple[float, float, float, float]],
-        step_duration: float = 0.1
+        self, path: List[Tuple[float, float, float, float]], step_duration: float = 0.1
     ) -> JourneyMetrics:
         """
         Calculate Earned Depth for a given path through LJPW space.
@@ -560,7 +560,7 @@ class ResonanceEngine:
             return journey
 
         for i in range(1, len(path)):
-            prev = np.array(path[i-1])
+            prev = np.array(path[i - 1])
             curr = np.array(path[i])
 
             # Distance traveled
@@ -585,7 +585,7 @@ class ResonanceEngine:
         self,
         easy_path: List[Tuple[float, float, float, float]],
         hard_path: List[Tuple[float, float, float, float]],
-        step_duration: float = 0.1
+        step_duration: float = 0.1,
     ) -> Dict:
         """
         Compare two journeys through LJPW space.
@@ -602,7 +602,9 @@ class ResonanceEngine:
         easy = self.calculate_earned_depth(easy_path, step_duration)
         hard = self.calculate_earned_depth(hard_path, step_duration)
 
-        depth_ratio = (hard.earned_depth / easy.earned_depth) if easy.earned_depth > 0 else float('inf')
+        depth_ratio = (
+            (hard.earned_depth / easy.earned_depth) if easy.earned_depth > 0 else float("inf")
+        )
 
         return {
             "easy_journey": {
@@ -617,8 +619,8 @@ class ResonanceEngine:
             },
             "comparison": {
                 "depth_ratio": depth_ratio,
-                "interpretation": f"Hard path earned {depth_ratio:.1f}× more depth than easy path"
-            }
+                "interpretation": f"Hard path earned {depth_ratio:.1f}× more depth than easy path",
+            },
         }
 
     # =========================================================================
@@ -629,7 +631,7 @@ class ResonanceEngine:
         self,
         coords1: Tuple[float, float, float, float],
         coords2: Tuple[float, float, float, float],
-        cycles: int = 100
+        cycles: int = 100,
     ) -> Dict:
         """
         Test if two coordinate sets converge to the same attractor.
@@ -648,23 +650,27 @@ class ResonanceEngine:
         result1 = self.resonate(coords1, cycles=cycles, track_journey=False)
         result2 = self.resonate(coords2, cycles=cycles, track_journey=False)
 
-        final1 = np.array([
-            result1["final_state"]["L"],
-            result1["final_state"]["J"],
-            result1["final_state"]["P"],
-            result1["final_state"]["W"]
-        ])
-        final2 = np.array([
-            result2["final_state"]["L"],
-            result2["final_state"]["J"],
-            result2["final_state"]["P"],
-            result2["final_state"]["W"]
-        ])
+        final1 = np.array(
+            [
+                result1["final_state"]["L"],
+                result1["final_state"]["J"],
+                result1["final_state"]["P"],
+                result1["final_state"]["W"],
+            ]
+        )
+        final2 = np.array(
+            [
+                result2["final_state"]["L"],
+                result2["final_state"]["J"],
+                result2["final_state"]["P"],
+                result2["final_state"]["W"],
+            ]
+        )
 
         convergence_distance = np.linalg.norm(final1 - final2)
         same_deficit = (
-            result1["deficit_analysis"]["primary_deficit"] ==
-            result2["deficit_analysis"]["primary_deficit"]
+            result1["deficit_analysis"]["primary_deficit"]
+            == result2["deficit_analysis"]["primary_deficit"]
         )
 
         return {
@@ -677,18 +683,14 @@ class ResonanceEngine:
                 "EQUIVALENT - Same semantic basin"
                 if convergence_distance < 0.10 and same_deficit
                 else "DIFFERENT - Different semantic basins"
-            )
+            ),
         }
 
     # =========================================================================
     # UTILITY METHODS
     # =========================================================================
 
-    def full_analysis(
-        self,
-        coords: Tuple[float, float, float, float],
-        cycles: int = 100
-    ) -> Dict:
+    def full_analysis(self, coords: Tuple[float, float, float, float], cycles: int = 100) -> Dict:
         """
         Complete analysis of LJPW coordinates.
 
@@ -739,7 +741,7 @@ class ResonanceEngine:
                 "earned_depth": resonance["journey"]["earned_depth"] if resonance["journey"] else 0,
                 "primary_deficit": resonance["deficit_analysis"]["primary_deficit"],
                 "power_erosion_risk": erosion.severity,
-            }
+            },
         }
 
 
@@ -747,14 +749,13 @@ class ResonanceEngine:
 # CONVENIENCE FUNCTIONS
 # =========================================================================
 
+
 def calculate_voltage(L: float, J: float, P: float, W: float) -> float:
     """Calculate semantic voltage (energy) from LJPW coordinates."""
     return ResonanceEngine.calculate_voltage(L, J, P, W)
 
 
-def detect_power_erosion(
-    L: float, J: float, P: float, W: float
-) -> PowerErosionResult:
+def detect_power_erosion(L: float, J: float, P: float, W: float) -> PowerErosionResult:
     """Detect if Power is eroding Justice without Wisdom protection."""
     return ResonanceEngine.detect_power_erosion(L, J, P, W)
 
@@ -814,7 +815,9 @@ if __name__ == "__main__":
 
     print(f"   Initial: L={initial[0]}, J={initial[1]}, P={initial[2]}, W={initial[3]}")
     final = result["final_state"]
-    print(f"   Final:   L={final['L']:.3f}, J={final['J']:.3f}, P={final['P']:.3f}, W={final['W']:.3f}")
+    print(
+        f"   Final:   L={final['L']:.3f}, J={final['J']:.3f}, P={final['P']:.3f}, W={final['W']:.3f}"
+    )
     print(f"   Harmony: {result['convergence']['initial_harmony']:.4f} → {final['harmony']:.4f}")
     print(f"   Peak Harmony: {result['peak']['harmony']:.4f} at cycle {result['peak']['cycle']}")
     print()
