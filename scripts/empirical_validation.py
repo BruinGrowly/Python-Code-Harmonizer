@@ -103,9 +103,7 @@ def get_git_metrics(file_path: str) -> Optional[GitMetrics]:
     rel_path = os.path.relpath(file_path, project_root)
 
     # Total commits
-    log_output = run_git_command(
-        ["log", "--oneline", "--follow", "--", rel_path]
-    )
+    log_output = run_git_command(["log", "--oneline", "--follow", "--", rel_path])
     commits = [line for line in log_output.split("\n") if line.strip()]
     total_commits = len(commits)
 
@@ -117,15 +115,11 @@ def get_git_metrics(file_path: str) -> Optional[GitMetrics]:
     fix_commits = sum(1 for c in commits if fix_pattern.search(c))
 
     # Number of authors
-    authors_output = run_git_command(
-        ["log", "--format=%ae", "--follow", "--", rel_path]
-    )
+    authors_output = run_git_command(["log", "--format=%ae", "--follow", "--", rel_path])
     authors = len(set(authors_output.split("\n"))) if authors_output else 1
 
     # Lines changed (rough estimate via numstat)
-    numstat_output = run_git_command(
-        ["log", "--numstat", "--format=", "--follow", "--", rel_path]
-    )
+    numstat_output = run_git_command(["log", "--numstat", "--format=", "--follow", "--", rel_path])
     lines_changed = 0
     for line in numstat_output.split("\n"):
         parts = line.split()
@@ -138,12 +132,8 @@ def get_git_metrics(file_path: str) -> Optional[GitMetrics]:
                 pass
 
     # First and last commit timestamps
-    first_commit = run_git_command(
-        ["log", "--format=%ct", "--follow", "--reverse", "--", rel_path]
-    )
-    last_commit = run_git_command(
-        ["log", "-1", "--format=%ct", "--follow", "--", rel_path]
-    )
+    first_commit = run_git_command(["log", "--format=%ct", "--follow", "--reverse", "--", rel_path])
+    last_commit = run_git_command(["log", "-1", "--format=%ct", "--follow", "--", rel_path])
 
     import time
 
