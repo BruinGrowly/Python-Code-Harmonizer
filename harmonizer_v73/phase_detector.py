@@ -22,6 +22,7 @@ from harmonizer_v73.constants import (
 
 class Phase(Enum):
     """System phase based on V7.3 thresholds."""
+
     ENTROPIC = "ENTROPIC"
     HOMEOSTATIC = "HOMEOSTATIC"
     AUTOPOIETIC = "AUTOPOIETIC"
@@ -30,6 +31,7 @@ class Phase(Enum):
 @dataclass
 class PhaseAnalysis:
     """Complete phase analysis result."""
+
     phase: Phase
     harmony: float
     love: float
@@ -42,26 +44,26 @@ class PhaseAnalysis:
 def detect_phase(H: float, L: float) -> Phase:
     """
     Determine system phase from V7.3 thresholds.
-    
+
     Args:
         H: Harmony value (static or self-referential)
         L: Love value
-    
+
     Returns:
         Phase enum indicating system state
-    
+
     Thresholds:
         - ENTROPIC: H < 0.5
         - HOMEOSTATIC: 0.5 ≤ H < 0.6 OR L < 0.7
         - AUTOPOIETIC: H > 0.6 AND L ≥ 0.7
-    
+
     Examples:
         >>> detect_phase(0.4, 0.6)
         Phase.ENTROPIC
-        
+
         >>> detect_phase(0.55, 0.65)
         Phase.HOMEOSTATIC
-        
+
         >>> detect_phase(0.7, 0.8)
         Phase.AUTOPOIETIC
     """
@@ -76,16 +78,16 @@ def detect_phase(H: float, L: float) -> Phase:
 def analyze_phase(H: float, L: float) -> PhaseAnalysis:
     """
     Provide comprehensive phase analysis.
-    
+
     Args:
         H: Harmony value
         L: Love value
-    
+
     Returns:
         PhaseAnalysis with full details
     """
     phase = detect_phase(H, L)
-    
+
     if phase == Phase.ENTROPIC:
         return PhaseAnalysis(
             phase=Phase.ENTROPIC,
@@ -106,9 +108,9 @@ def analyze_phase(H: float, L: float) -> PhaseAnalysis:
                 "Corrupt systems (high Power, low Justice)",
                 "Legacy codebase with massive tech debt",
                 "Mental breakdown (low integration)",
-            ]
+            ],
         )
-    
+
     elif phase == Phase.HOMEOSTATIC:
         return PhaseAnalysis(
             phase=Phase.HOMEOSTATIC,
@@ -129,9 +131,9 @@ def analyze_phase(H: float, L: float) -> PhaseAnalysis:
                 "Healthy individuals at maintenance",
                 "Well-maintained codebase (stable but not evolving)",
                 "Functioning societies (laws balance freedom)",
-            ]
+            ],
         )
-    
+
     else:  # AUTOPOIETIC
         return PhaseAnalysis(
             phase=Phase.AUTOPOIETIC,
@@ -153,17 +155,17 @@ def analyze_phase(H: float, L: float) -> PhaseAnalysis:
                 "Living organisms (autopoiesis)",
                 "Actively evolving codebase with strong culture",
                 "The LJPW Framework itself (C = 23.2)",
-            ]
+            ],
         )
 
 
 def phase_transition_requirements(current_phase: Phase) -> dict:
     """
     What's needed to transition to a higher phase.
-    
+
     Args:
         current_phase: Current system phase
-    
+
     Returns:
         Dict with transition requirements
     """
@@ -183,9 +185,9 @@ def phase_transition_requirements(current_phase: Phase) -> dict:
                 "Document and understand (increase W)",
                 "Establish fairness (increase J)",
             ],
-            "difficulty": "Hard - requires conscious effort or intervention"
+            "difficulty": "Hard - requires conscious effort or intervention",
         }
-    
+
     elif current_phase == Phase.HOMEOSTATIC:
         return {
             "current": "HOMEOSTATIC (stable)",
@@ -201,9 +203,9 @@ def phase_transition_requirements(current_phase: Phase) -> dict:
                 "Create feedback loops (self-awareness)",
                 "Invest in documentation and learning (W)",
             ],
-            "difficulty": "Moderate - requires sustained investment"
+            "difficulty": "Moderate - requires sustained investment",
         }
-    
+
     else:  # AUTOPOIETIC
         return {
             "current": "AUTOPOIETIC (self-sustaining)",
@@ -219,17 +221,17 @@ def phase_transition_requirements(current_phase: Phase) -> dict:
                 "Balance growth with stability",
                 "Share knowledge and connection",
             ],
-            "difficulty": "Ongoing maintenance - system is self-sustaining"
+            "difficulty": "Ongoing maintenance - system is self-sustaining",
         }
 
 
 def interpret_phase_for_code(phase: Phase) -> str:
     """
     Interpret phase in the context of code/software analysis.
-    
+
     Args:
         phase: Current system phase
-    
+
     Returns:
         Code-focused interpretation string
     """

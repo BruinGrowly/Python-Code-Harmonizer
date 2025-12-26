@@ -21,10 +21,11 @@ from harmonizer_v73.constants import PHI, PHI_INV
 @dataclass
 class BrickAnalysis:
     """Analysis of a code unit as a 'brick' (Justice-crystal)."""
+
     name: str
-    primality: float          # How irreducible/single-responsibility (0-1)
-    justice_score: float      # J dimension
-    is_prime: bool            # Primality > 0.7
+    primality: float  # How irreducible/single-responsibility (0-1)
+    justice_score: float  # J dimension
+    is_prime: bool  # Primality > 0.7
     decomposition_needed: bool
     recommendation: str
 
@@ -32,21 +33,23 @@ class BrickAnalysis:
 @dataclass
 class MortarAnalysis:
     """Analysis of integration quality as 'mortar' (Love-binding)."""
+
     interface_name: str
-    cohesion: float           # How well-defined the interface
-    integration_quality: float # Overall mortar strength
-    love_score: float         # L dimension
-    is_strong: bool           # Integration quality > 0.7
+    cohesion: float  # How well-defined the interface
+    integration_quality: float  # Overall mortar strength
+    love_score: float  # L dimension
+    is_strong: bool  # Integration quality > 0.7
     recommendation: str
 
 
 @dataclass
 class BlueprintAnalysis:
     """Analysis of architectural proportions against φ blueprint."""
+
     component_sizes: Dict[str, int]
     size_ratios: List[float]
-    phi_alignment: float      # How close to golden ratio
-    is_proportional: bool     # Alignment > 0.8
+    phi_alignment: float  # How close to golden ratio
+    is_proportional: bool  # Alignment > 0.8
     recommendation: str
 
 
@@ -59,59 +62,59 @@ def function_primality(
 ) -> BrickAnalysis:
     """
     Evaluate how 'prime-like' (irreducible, Justice-crystal) a function is.
-    
+
     A prime function is:
     - Single responsibility (does one thing well)
     - Low complexity
     - Few dependencies
     - No side effects (pure)
     - Testable in isolation
-    
+
     High primality = high Justice (irreducible truth)
-    
+
     Args:
         complexity: Cyclomatic complexity (1.0 = simple, 10+ = complex)
         dependencies: Number of external dependencies
         lines_of_code: LOC (optional, for size check)
         has_side_effects: Whether function has side effects
         single_responsibility: Whether function does one thing
-    
+
     Returns:
         BrickAnalysis with primality score and recommendations
     """
     # Base primality starts at 1.0 (perfect prime)
     primality = 1.0
-    
+
     # Complexity penalty: each unit of complexity reduces primality
     complexity_penalty = min(complexity * 0.08, 0.4)
     primality -= complexity_penalty
-    
+
     # Dependency penalty: each dependency reduces primality
     dependency_penalty = min(dependencies * 0.1, 0.3)
     primality -= dependency_penalty
-    
+
     # Side effects penalty
     if has_side_effects:
         primality -= 0.15
-    
+
     # Single responsibility bonus/penalty
     if not single_responsibility:
         primality -= 0.2
-    
+
     # LOC penalty for overly large functions
     if lines_of_code > 50:
         loc_penalty = min((lines_of_code - 50) * 0.005, 0.2)
         primality -= loc_penalty
-    
+
     primality = max(0.0, min(1.0, primality))
-    
+
     # Justice score correlates with primality
     justice_score = 0.85 * primality + 0.05
-    
+
     # Determine if prime
     is_prime = primality >= 0.7
     decomposition_needed = primality < 0.5
-    
+
     # Generate recommendation
     if is_prime:
         recommendation = "✓ Good brick: Single-responsibility, low complexity"
@@ -128,7 +131,7 @@ def function_primality(
         recommendation = f"⚠️ Decompose: {', '.join(issues)}"
     else:
         recommendation = "○ Moderate: Consider simplification"
-    
+
     return BrickAnalysis(
         name="function",
         primality=primality,
@@ -147,44 +150,44 @@ def integration_quality(
 ) -> MortarAnalysis:
     """
     Evaluate 'mortar' quality — how well modules bind together.
-    
+
     Good mortar (Love-binding) has:
     - Well-defined interfaces (high cohesion)
     - Appropriate coupling (not too tight, not too loose)
     - Documentation at boundaries
     - Tests at integration points
-    
+
     Args:
         interface_cohesion: How well-defined the interface (0-1)
         coupling_score: Coupling level (0 = none, 1 = very tight)
         documentation_quality: Docs at boundary (0-1)
         test_coverage: Test coverage at integration (0-1)
-    
+
     Returns:
         MortarAnalysis with quality score and recommendations
     """
     # Quality starts with cohesion
     quality = interface_cohesion
-    
+
     # Coupling should be moderate (neither 0 nor 1)
     # Optimal coupling is around φ⁻¹ ≈ 0.618
     coupling_delta = abs(coupling_score - PHI_INV)
     coupling_penalty = coupling_delta * 0.3
     quality -= coupling_penalty
-    
+
     # Documentation bonus
     quality += documentation_quality * 0.15
-    
+
     # Test coverage bonus
     quality += test_coverage * 0.15
-    
+
     quality = max(0.0, min(1.0, quality))
-    
+
     # Love score correlates with integration quality
     love_score = 0.9 * quality + 0.1
-    
+
     is_strong = quality >= 0.7
-    
+
     # Generate recommendation
     if is_strong:
         recommendation = "✓ Strong mortar: Well-integrated with clear interfaces"
@@ -201,7 +204,7 @@ def integration_quality(
         recommendation = f"⚠️ Weak binding: {', '.join(issues)}"
     else:
         recommendation = "○ Moderate: Could strengthen integration"
-    
+
     return MortarAnalysis(
         interface_name="module_interface",
         cohesion=interface_cohesion,
@@ -218,15 +221,15 @@ def architectural_proportions(
 ) -> BlueprintAnalysis:
     """
     Analyze whether component sizes follow φ (golden ratio) proportions.
-    
+
     Well-architected systems often exhibit φ-proportional sizing:
     - Parent:Child ≈ φ:1
     - Core:Utility ≈ φ:1
-    
+
     Args:
         component_sizes: Dict of component names to size (LOC, complexity, etc.)
         expected_ratio: Expected ratio (default φ)
-    
+
     Returns:
         BlueprintAnalysis with φ-alignment score
     """
@@ -236,35 +239,35 @@ def architectural_proportions(
             size_ratios=[],
             phi_alignment=1.0,
             is_proportional=True,
-            recommendation="○ Single component — no ratio analysis"
+            recommendation="○ Single component — no ratio analysis",
         )
-    
+
     # Sort by size
     sorted_sizes = sorted(component_sizes.values(), reverse=True)
-    
+
     # Calculate consecutive ratios
     ratios = []
     for i in range(len(sorted_sizes) - 1):
         if sorted_sizes[i + 1] > 0:
             ratio = sorted_sizes[i] / sorted_sizes[i + 1]
             ratios.append(ratio)
-    
+
     if not ratios:
         return BlueprintAnalysis(
             component_sizes=component_sizes,
             size_ratios=[],
             phi_alignment=0.5,
             is_proportional=False,
-            recommendation="⚠️ Cannot calculate ratios (zero-size components)"
+            recommendation="⚠️ Cannot calculate ratios (zero-size components)",
         )
-    
+
     # Calculate alignment with φ
     phi_deltas = [abs(r - expected_ratio) / expected_ratio for r in ratios]
     avg_delta = sum(phi_deltas) / len(phi_deltas)
     phi_alignment = max(0, 1 - avg_delta)
-    
+
     is_proportional = phi_alignment >= 0.8
-    
+
     # Generate recommendation
     if is_proportional:
         recommendation = "✓ Golden architecture: Components follow φ proportions"
@@ -272,7 +275,7 @@ def architectural_proportions(
         recommendation = f"⚠️ Imbalanced: Size ratios ({', '.join(f'{r:.2f}' for r in ratios[:3])}) deviate from φ={expected_ratio:.3f}"
     else:
         recommendation = f"○ Moderate: Ratios near φ but could be improved"
-    
+
     return BlueprintAnalysis(
         component_sizes=component_sizes,
         size_ratios=ratios,
@@ -289,12 +292,12 @@ def analyze_codebase_architecture(
 ) -> Dict:
     """
     Complete Bricks & Mortar analysis of a codebase.
-    
+
     Args:
         functions: List of function analysis dicts (complexity, deps, etc.)
         modules: List of module integration dicts (cohesion, coupling, etc.)
         module_sizes: Dict of module names to sizes
-    
+
     Returns:
         Complete architectural analysis
     """
@@ -310,7 +313,7 @@ def analyze_codebase_architecture(
         )
         analysis.name = func.get("name", "unknown")
         brick_analyses.append(analysis)
-    
+
     # Analyze mortar (integrations)
     mortar_analyses = []
     for mod in modules:
@@ -322,24 +325,24 @@ def analyze_codebase_architecture(
         )
         analysis.interface_name = mod.get("name", "unknown")
         mortar_analyses.append(analysis)
-    
+
     # Analyze blueprint (proportions)
     blueprint = architectural_proportions(module_sizes)
-    
+
     # Calculate summary metrics
     avg_primality = (
-        sum(b.primality for b in brick_analyses) / len(brick_analyses)
-        if brick_analyses else 0.5
+        sum(b.primality for b in brick_analyses) / len(brick_analyses) if brick_analyses else 0.5
     )
     avg_integration = (
         sum(m.integration_quality for m in mortar_analyses) / len(mortar_analyses)
-        if mortar_analyses else 0.5
+        if mortar_analyses
+        else 0.5
     )
-    
+
     prime_functions = sum(1 for b in brick_analyses if b.is_prime)
     decompose_needed = sum(1 for b in brick_analyses if b.decomposition_needed)
     strong_integrations = sum(1 for m in mortar_analyses if m.is_strong)
-    
+
     return {
         "bricks": {
             "analyses": brick_analyses,
@@ -360,18 +363,16 @@ def analyze_codebase_architecture(
             "recommendation": _generate_summary_recommendation(
                 avg_primality, avg_integration, blueprint.phi_alignment
             ),
-        }
+        },
     }
 
 
 def _generate_summary_recommendation(
-    primality: float,
-    integration: float,
-    proportions: float
+    primality: float, integration: float, proportions: float
 ) -> str:
     """Generate overall architectural recommendation."""
     overall = (primality + integration + proportions) / 3
-    
+
     if overall >= 0.8:
         return "🌟 Excellent architecture: Strong bricks, good mortar, proportional structure"
     elif overall >= 0.6:

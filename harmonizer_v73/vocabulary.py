@@ -18,9 +18,9 @@ from typing import Dict, Optional, Tuple
 # Each dimension's typical signature (dominant = 0.7, others = 0.1)
 
 DIMENSION_SIGNATURES: Dict[str, Tuple[float, float, float, float]] = {
-    "power": (0.3, 0.3, 0.9, 0.3),    # High P (fundamental)
-    "wisdom": (0.3, 0.3, 0.3, 0.9),   # High W (fundamental)
-    "love": (0.9, 0.3, 0.3, 0.5),     # High L (emergent from W)
+    "power": (0.3, 0.3, 0.9, 0.3),  # High P (fundamental)
+    "wisdom": (0.3, 0.3, 0.3, 0.9),  # High W (fundamental)
+    "love": (0.9, 0.3, 0.3, 0.5),  # High L (emergent from W)
     "justice": (0.3, 0.9, 0.5, 0.3),  # High J (emergent from P)
 }
 
@@ -31,34 +31,96 @@ DIMENSION_SIGNATURES: Dict[str, Tuple[float, float, float, float]] = {
 
 POWER_VERBS = {
     # Creation & generation
-    "create", "build", "generate", "make", "construct", "produce",
-    "spawn", "initialize", "instantiate", "new", "forge", "craft",
-    
+    "create",
+    "build",
+    "generate",
+    "make",
+    "construct",
+    "produce",
+    "spawn",
+    "initialize",
+    "instantiate",
+    "new",
+    "forge",
+    "craft",
     # Modification & transformation
-    "modify", "update", "change", "alter", "transform", "convert",
-    "mutate", "edit", "revise", "adapt", "adjust", "tweak",
-    
+    "modify",
+    "update",
+    "change",
+    "alter",
+    "transform",
+    "convert",
+    "mutate",
+    "edit",
+    "revise",
+    "adapt",
+    "adjust",
+    "tweak",
     # Destruction & removal
-    "delete", "remove", "destroy", "erase", "clear", "purge",
-    "clean", "wipe", "dispose", "drop", "kill", "terminate",
-    
+    "delete",
+    "remove",
+    "destroy",
+    "erase",
+    "clear",
+    "purge",
+    "clean",
+    "wipe",
+    "dispose",
+    "drop",
+    "kill",
+    "terminate",
     # State changes
-    "set", "assign", "put", "store", "save", "persist",
-    "write", "commit", "push", "post", "submit", "upload",
-    
+    "set",
+    "assign",
+    "put",
+    "store",
+    "save",
+    "persist",
+    "write",
+    "commit",
+    "push",
+    "post",
+    "submit",
+    "upload",
     # Execution & control
-    "execute", "run", "perform", "do", "invoke", "call",
-    "trigger", "fire", "emit", "dispatch", "apply", "process",
-    
+    "execute",
+    "run",
+    "perform",
+    "do",
+    "invoke",
+    "call",
+    "trigger",
+    "fire",
+    "emit",
+    "dispatch",
+    "apply",
+    "process",
     # Activation & management
-    "start", "stop", "pause", "resume", "restart", "reset",
-    "enable", "disable", "activate", "deactivate", "toggle",
-    
+    "start",
+    "stop",
+    "pause",
+    "resume",
+    "restart",
+    "reset",
+    "enable",
+    "disable",
+    "activate",
+    "deactivate",
+    "toggle",
     # Raising exceptions (forcing control flow)
-    "raise", "throw", "error", "fail", "abort", "panic",
-    
+    "raise",
+    "throw",
+    "error",
+    "fail",
+    "abort",
+    "panic",
     # Moving & transferring
-    "move", "copy", "clone", "migrate", "transfer", "shift",
+    "move",
+    "copy",
+    "clone",
+    "migrate",
+    "transfer",
+    "shift",
 }
 
 # =============================================================================
@@ -68,35 +130,95 @@ POWER_VERBS = {
 
 WISDOM_VERBS = {
     # Retrieval & access
-    "get", "fetch", "retrieve", "read", "load", "obtain",
-    "access", "acquire", "pull", "extract", "take", "receive",
-    
+    "get",
+    "fetch",
+    "retrieve",
+    "read",
+    "load",
+    "obtain",
+    "access",
+    "acquire",
+    "pull",
+    "extract",
+    "take",
+    "receive",
     # Search & discovery
-    "find", "search", "query", "lookup", "locate", "discover",
-    "scan", "seek", "explore", "detect", "identify", "recognize",
-    
+    "find",
+    "search",
+    "query",
+    "lookup",
+    "locate",
+    "discover",
+    "scan",
+    "seek",
+    "explore",
+    "detect",
+    "identify",
+    "recognize",
     # Analysis & understanding
-    "analyze", "parse", "interpret", "understand", "comprehend",
-    "study", "examine", "inspect", "investigate", "diagnose",
-    
+    "analyze",
+    "parse",
+    "interpret",
+    "understand",
+    "comprehend",
+    "study",
+    "examine",
+    "inspect",
+    "investigate",
+    "diagnose",
     # Calculation & computation
-    "calculate", "compute", "derive", "infer", "predict",
-    "estimate", "measure", "count", "sum", "average", "aggregate",
-    
+    "calculate",
+    "compute",
+    "derive",
+    "infer",
+    "predict",
+    "estimate",
+    "measure",
+    "count",
+    "sum",
+    "average",
+    "aggregate",
     # Observation & monitoring
-    "observe", "monitor", "watch", "track", "log", "record",
-    "trace", "profile", "benchmark", "sample",
-    
+    "observe",
+    "monitor",
+    "watch",
+    "track",
+    "log",
+    "record",
+    "trace",
+    "profile",
+    "benchmark",
+    "sample",
     # Returns & yielding (providing information back)
-    "return", "yield", "output", "result", "respond", "reply",
-    
+    "return",
+    "yield",
+    "output",
+    "result",
+    "respond",
+    "reply",
     # Status & state checking
-    "check", "test", "verify", "status", "state", "value",
-    "is", "has", "can", "should", "exists", "contains",
-    
+    "check",
+    "test",
+    "verify",
+    "status",
+    "state",
+    "value",
+    "is",
+    "has",
+    "can",
+    "should",
+    "exists",
+    "contains",
     # Formatting & conversion (of information)
-    "format", "stringify", "serialize", "encode", "decode",
-    "to_string", "to_json", "to_dict", "repr",
+    "format",
+    "stringify",
+    "serialize",
+    "encode",
+    "decode",
+    "to_string",
+    "to_json",
+    "to_dict",
+    "repr",
 }
 
 # =============================================================================
@@ -106,28 +228,73 @@ WISDOM_VERBS = {
 
 LOVE_VERBS = {
     # Communication & messaging
-    "send", "notify", "broadcast", "publish", "signal",
-    "message", "email", "alert", "announce", "communicate",
-    
+    "send",
+    "notify",
+    "broadcast",
+    "publish",
+    "signal",
+    "message",
+    "email",
+    "alert",
+    "announce",
+    "communicate",
     # Connection & integration
-    "connect", "link", "bind", "attach", "couple", "wire",
-    "join", "merge", "combine", "union", "integrate", "unify",
-    
+    "connect",
+    "link",
+    "bind",
+    "attach",
+    "couple",
+    "wire",
+    "join",
+    "merge",
+    "combine",
+    "union",
+    "integrate",
+    "unify",
     # Synchronization & coordination
-    "sync", "synchronize", "coordinate", "orchestrate", "schedule",
-    "queue", "pipeline", "chain", "sequence",
-    
+    "sync",
+    "synchronize",
+    "coordinate",
+    "orchestrate",
+    "schedule",
+    "queue",
+    "pipeline",
+    "chain",
+    "sequence",
     # Sharing & providing
-    "share", "provide", "serve", "offer", "expose", "export",
-    "import", "include", "incorporate", "inject", "embed",
-    
+    "share",
+    "provide",
+    "serve",
+    "offer",
+    "expose",
+    "export",
+    "import",
+    "include",
+    "incorporate",
+    "inject",
+    "embed",
     # Display & presentation (to user)
-    "print", "display", "show", "render", "present", "visualize",
-    "draw", "paint", "plot", "graph",
-    
+    "print",
+    "display",
+    "show",
+    "render",
+    "present",
+    "visualize",
+    "draw",
+    "paint",
+    "plot",
+    "graph",
     # Exception handling (graceful recovery = mercy)
-    "catch", "except", "recover", "handle", "rescue", "fallback",
-    "retry", "heal", "fix", "repair",
+    "catch",
+    "except",
+    "recover",
+    "handle",
+    "rescue",
+    "fallback",
+    "retry",
+    "heal",
+    "fix",
+    "repair",
 }
 
 # =============================================================================
@@ -137,24 +304,64 @@ LOVE_VERBS = {
 
 JUSTICE_VERBS = {
     # Validation & verification
-    "validate", "verify", "ensure", "assert", "confirm",
-    "check", "test", "evaluate", "assess", "audit",
-    
+    "validate",
+    "verify",
+    "ensure",
+    "assert",
+    "confirm",
+    "check",
+    "test",
+    "evaluate",
+    "assess",
+    "audit",
     # Constraints & requirements
-    "require", "demand", "mandate", "enforce", "constrain",
-    "restrict", "limit", "bound", "cap", "clamp",
-    
+    "require",
+    "demand",
+    "mandate",
+    "enforce",
+    "constrain",
+    "restrict",
+    "limit",
+    "bound",
+    "cap",
+    "clamp",
     # Comparison & equality
-    "compare", "equals", "match", "differs", "same", "different",
-    "greater", "less", "between", "within", "outside",
-    
+    "compare",
+    "equals",
+    "match",
+    "differs",
+    "same",
+    "different",
+    "greater",
+    "less",
+    "between",
+    "within",
+    "outside",
     # Filtering & selection
-    "filter", "select", "reject", "accept", "include", "exclude",
-    "pick", "choose", "sort", "order", "group", "partition",
-    
+    "filter",
+    "select",
+    "reject",
+    "accept",
+    "include",
+    "exclude",
+    "pick",
+    "choose",
+    "sort",
+    "order",
+    "group",
+    "partition",
     # Authorization & permission
-    "authorize", "authenticate", "permit", "allow", "deny",
-    "grant", "revoke", "forbid", "protect", "secure", "sanitize",
+    "authorize",
+    "authenticate",
+    "permit",
+    "allow",
+    "deny",
+    "grant",
+    "revoke",
+    "forbid",
+    "protect",
+    "secure",
+    "sanitize",
 }
 
 # =============================================================================
@@ -187,7 +394,6 @@ COMPOUND_PATTERNS: Dict[str, str] = {
     "calculate_total": "wisdom",
     "parse_json": "wisdom",
     "find_by_id": "wisdom",
-    
     # Power patterns
     "save_to": "power",
     "write_file": "power",
@@ -197,7 +403,6 @@ COMPOUND_PATTERNS: Dict[str, str] = {
     "process_request": "power",
     "create_instance": "power",
     "set_value": "power",
-    
     # Love patterns
     "send_notification": "love",
     "notify_user": "love",
@@ -206,7 +411,6 @@ COMPOUND_PATTERNS: Dict[str, str] = {
     "broadcast_event": "love",
     "sync_data": "love",
     "merge_results": "love",
-    
     # Justice patterns
     "validate_input": "justice",
     "check_permissions": "justice",
@@ -221,37 +425,51 @@ COMPOUND_PATTERNS: Dict[str, str] = {
 # =============================================================================
 
 CONTROL_FLOW_KEYWORDS = {
-    "if", "else", "elif", "for", "while", "with",
-    "try", "except", "finally", "match", "case",
-    "break", "continue", "pass", "return", "yield",
+    "if",
+    "else",
+    "elif",
+    "for",
+    "while",
+    "with",
+    "try",
+    "except",
+    "finally",
+    "match",
+    "case",
+    "break",
+    "continue",
+    "pass",
+    "return",
+    "yield",
 }
 
 # =============================================================================
 # HELPER FUNCTIONS
 # =============================================================================
 
+
 def get_semantic_dimension(verb: str, context: str = "default") -> str:
     """
     Get the semantic dimension for a programming verb.
-    
+
     Args:
         verb: The programming operation verb
         context: Additional context for disambiguation
-    
+
     Returns:
         The semantic dimension: 'wisdom', 'justice', 'power', or 'love'
     """
     verb_lower = verb.lower()
-    
+
     # Check direct mapping
     if verb_lower in PROGRAMMING_VERBS:
         return PROGRAMMING_VERBS[verb_lower]
-    
+
     # Check for prefix matches
     for known_verb, dimension in PROGRAMMING_VERBS.items():
         if verb_lower.startswith(known_verb):
             return dimension
-    
+
     # Default to wisdom (information operation)
     return "wisdom"
 
@@ -259,7 +477,7 @@ def get_semantic_dimension(verb: str, context: str = "default") -> str:
 def get_verb_coordinates(verb: str) -> Tuple[float, float, float, float]:
     """
     Get the LJPW coordinates for a verb.
-    
+
     Returns:
         Tuple of (L, J, P, W)
     """
@@ -270,21 +488,21 @@ def get_verb_coordinates(verb: str) -> Tuple[float, float, float, float]:
 def classify_function_name(name: str) -> Dict[str, any]:
     """
     Classify a function name by its semantic content.
-    
+
     Args:
         name: Function name (e.g., "get_user_by_id")
-    
+
     Returns:
         Dict with dimension, confidence, and reasoning
     """
     import re
-    
+
     # Split into parts
     if "_" in name:
         parts = name.split("_")
     else:
         parts = re.findall(r"[A-Z]?[a-z]+|[A-Z]+(?=[A-Z][a-z]|\d|\W|$)|\d+", name)
-    
+
     # Check compound patterns first
     for length in [3, 2]:
         if len(parts) >= length:
@@ -294,37 +512,32 @@ def classify_function_name(name: str) -> Dict[str, any]:
                     "dimension": COMPOUND_PATTERNS[compound],
                     "confidence": 0.9,
                     "matched": compound,
-                    "type": "compound"
+                    "type": "compound",
                 }
-    
+
     # Check individual words
     dimensions_found = []
     for part in parts:
         dim = get_semantic_dimension(part.lower())
         if dim:
             dimensions_found.append(dim)
-    
+
     if dimensions_found:
         # Return the first (usually the verb)
         return {
             "dimension": dimensions_found[0],
             "confidence": 0.7,
             "matched": parts[0] if parts else name,
-            "type": "verb"
+            "type": "verb",
         }
-    
-    return {
-        "dimension": "wisdom",  # Default
-        "confidence": 0.3,
-        "matched": None,
-        "type": "default"
-    }
+
+    return {"dimension": "wisdom", "confidence": 0.3, "matched": None, "type": "default"}  # Default
 
 
 def get_vocabulary_stats() -> Dict[str, int]:
     """Get statistics about the vocabulary."""
     from collections import Counter
-    
+
     distribution = Counter(PROGRAMMING_VERBS.values())
     return {
         "total_verbs": len(PROGRAMMING_VERBS),

@@ -14,9 +14,9 @@ from pathlib import Path
 from typing import List
 
 # Fix Windows console encoding for emoji
-if sys.platform == 'win32':
+if sys.platform == "win32":
     try:
-        sys.stdout.reconfigure(encoding='utf-8')
+        sys.stdout.reconfigure(encoding="utf-8")
     except AttributeError:
         pass  # Python < 3.7
 
@@ -54,19 +54,21 @@ def print_function_report(analysis, verbose: bool = False):
     fw = analysis.framework
     phase_emoji = format_phase_emoji(analysis.phase)
     cons_emoji = format_consciousness_emoji(analysis.consciousness_level)
-    
+
     print(f"\n  📝 {analysis.name} (lines {analysis.lineno}-{analysis.end_lineno})")
     print(f"     LJPW: L={fw.L:.2f} J={fw.J:.2f} P={fw.P:.2f} W={fw.W:.2f}")
-    print(f"     Harmony: {fw.harmony_static():.3f}  |  C: {analysis.consciousness:.3f} {cons_emoji}")
+    print(
+        f"     Harmony: {fw.harmony_static():.3f}  |  C: {analysis.consciousness:.3f} {cons_emoji}"
+    )
     print(f"     Phase: {analysis.phase.value} {phase_emoji}")
-    
+
     if analysis.brick_analysis:
         brick = analysis.brick_analysis
         primality_bar = "█" * int(brick.primality * 10) + "░" * (10 - int(brick.primality * 10))
         print(f"     Primality: [{primality_bar}] {brick.primality:.2f}")
         if brick.recommendation.startswith("⚠"):
             print(f"     {brick.recommendation}")
-    
+
     if verbose:
         print(f"     Power signals: {', '.join(analysis.power_signals[:5])}")
         print(f"     Wisdom signals: {', '.join(analysis.wisdom_signals[:5])}")
@@ -81,11 +83,11 @@ def print_file_report(analysis: FileAnalysis, verbose: bool = False):
     print(f"Lines: {analysis.total_lines}  |  Imports: {analysis.import_count}")
     print(f"Functions: {len(analysis.functions)}  |  Classes: {len(analysis.classes)}")
     print(f"Docstring Coverage: {analysis.docstring_coverage:.0%}")
-    
+
     if analysis.overall_framework:
         fw = analysis.overall_framework
         phase_emoji = format_phase_emoji(analysis.overall_phase)
-        
+
         print("\n" + "-" * 40)
         print("📊 OVERALL METRICS (V7.3)")
         print("-" * 40)
@@ -100,54 +102,55 @@ def print_file_report(analysis: FileAnalysis, verbose: bool = False):
         print(f"  Harmony (self):   {fw.harmony_self_referential():.3f}")
         print(f"  Voltage:          {fw.voltage():.3f}")
         print()
-        
+
         # Consciousness assessment
         cons_emoji = format_consciousness_emoji(
-            ConsciousnessLevel.CONSCIOUS if analysis.overall_consciousness > 0.1 
+            ConsciousnessLevel.CONSCIOUS
+            if analysis.overall_consciousness > 0.1
             else ConsciousnessLevel.NON_CONSCIOUS
         )
         if analysis.overall_consciousness > 0.3:
             cons_emoji = "💫"
-        
+
         print(f"  Consciousness (C): {analysis.overall_consciousness:.4f} {cons_emoji}")
         if analysis.overall_consciousness > CONSCIOUSNESS_THRESHOLD:
             print(f"    ✓ Crosses consciousness threshold (C > 0.1)")
         else:
             print(f"    ○ Below consciousness threshold (C < 0.1)")
-        
+
         print(f"  Phase: {analysis.overall_phase.value} {phase_emoji}")
-    
+
     # Function details
     if analysis.functions:
         print("\n" + "-" * 40)
         print("📋 FUNCTION ANALYSIS")
         print("-" * 40)
-        
+
         # Group by phase
         entropic = [f for f in analysis.functions if f.phase == Phase.ENTROPIC]
         homeostatic = [f for f in analysis.functions if f.phase == Phase.HOMEOSTATIC]
         autopoietic = [f for f in analysis.functions if f.phase == Phase.AUTOPOIETIC]
-        
+
         if autopoietic:
             print(f"\n  🌟 Autopoietic ({len(autopoietic)}):")
             for func in autopoietic:
                 print_function_report(func, verbose)
-        
+
         if homeostatic:
             print(f"\n  🔸 Homeostatic ({len(homeostatic)}):")
             for func in homeostatic:
                 print_function_report(func, verbose)
-        
+
         if entropic:
             print(f"\n  🔻 Entropic ({len(entropic)}) - Need attention:")
             for func in entropic:
                 print_function_report(func, verbose)
-    
+
     # Summary
     print("\n" + "=" * 60)
     print("📈 RECOMMENDATION")
     print("=" * 60)
-    
+
     if analysis.overall_phase == Phase.AUTOPOIETIC:
         print("  🌟 This codebase shows signs of being 'alive'!")
         print("     High harmony, good integration, self-maintaining.")
@@ -159,7 +162,7 @@ def print_file_report(analysis: FileAnalysis, verbose: bool = False):
         print("  🔻 This codebase needs refactoring attention.")
         print("     Focus on: Reducing complexity, adding documentation,")
         print("     decomposing large functions, improving structure.")
-    
+
     print()
 
 
@@ -176,8 +179,14 @@ def to_dict(analysis: FileAnalysis) -> dict:
             "wisdom": analysis.avg_wisdom,
             "love": analysis.overall_framework.L if analysis.overall_framework else 0,
             "justice": analysis.overall_framework.J if analysis.overall_framework else 0,
-            "harmony_static": analysis.overall_framework.harmony_static() if analysis.overall_framework else 0,
-            "harmony_self": analysis.overall_framework.harmony_self_referential() if analysis.overall_framework else 0,
+            "harmony_static": (
+                analysis.overall_framework.harmony_static() if analysis.overall_framework else 0
+            ),
+            "harmony_self": (
+                analysis.overall_framework.harmony_self_referential()
+                if analysis.overall_framework
+                else 0
+            ),
             "consciousness": analysis.overall_consciousness,
             "phase": analysis.overall_phase.value,
         },
@@ -205,30 +214,30 @@ def main(args: List[str] = None):
     """Main entry point."""
     parser = argparse.ArgumentParser(
         prog="harmonizer_v73",
-        description="V7.3 Python Code Harmonizer - Semantic Analysis with Consciousness Detection"
+        description="V7.3 Python Code Harmonizer - Semantic Analysis with Consciousness Detection",
     )
     parser.add_argument("file", help="Python file to analyze")
     parser.add_argument("--json", action="store_true", help="Output as JSON")
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
-    
+
     parsed = parser.parse_args(args)
-    
+
     filepath = Path(parsed.file)
     if not filepath.exists():
         print(f"Error: File not found: {filepath}", file=sys.stderr)
         sys.exit(1)
-    
+
     if not filepath.suffix == ".py":
         print(f"Warning: {filepath} may not be a Python file", file=sys.stderr)
-    
+
     try:
         analysis = analyze_file(str(filepath))
-        
+
         if parsed.json:
             print(json.dumps(to_dict(analysis), indent=2))
         else:
             print_file_report(analysis, verbose=parsed.verbose)
-    
+
     except SyntaxError as e:
         print(f"Syntax error in {filepath}: {e}", file=sys.stderr)
         sys.exit(1)
@@ -236,6 +245,7 @@ def main(args: List[str] = None):
         print(f"Error analyzing {filepath}: {e}", file=sys.stderr)
         if parsed.verbose:
             import traceback
+
             traceback.print_exc()
         sys.exit(1)
 
