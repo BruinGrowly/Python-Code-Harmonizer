@@ -284,18 +284,21 @@ class V73CodeAnalyzer(ast.NodeVisitor):
     # =========================================================================
 
     def visit_Assign(self, node: ast.Assign):
+        """Track assignment as Power signal (state modification)."""
         self.assignment_count += 1
         self.power_signals.append("assign")
         self.total_nodes += 1
         self.generic_visit(node)
 
     def visit_AugAssign(self, node: ast.AugAssign):
+        """Track augmented assignment (+=, -=) as Power signal."""
         self.assignment_count += 1
         self.power_signals.append("aug_assign")
         self.total_nodes += 1
         self.generic_visit(node)
 
     def visit_AnnAssign(self, node: ast.AnnAssign):
+        """Track annotated assignment as Power + Wisdom (type info)."""
         self.assignment_count += 1
         self.type_hints_count += 1
         self.power_signals.append("ann_assign")
@@ -303,6 +306,7 @@ class V73CodeAnalyzer(ast.NodeVisitor):
         self.generic_visit(node)
 
     def visit_Call(self, node: ast.Call):
+        """Track function call - dimension depends on verb semantics."""
         self.call_count += 1
 
         # Check if call name suggests P or W
@@ -318,24 +322,28 @@ class V73CodeAnalyzer(ast.NodeVisitor):
         self.generic_visit(node)
 
     def visit_Raise(self, node: ast.Raise):
+        """Track exception raising as Power signal (forcing control flow)."""
         self.raise_count += 1
         self.power_signals.append("raise")
         self.total_nodes += 1
         self.generic_visit(node)
 
     def visit_Delete(self, node: ast.Delete):
+        """Track deletion as Power signal (destruction operation)."""
         self.delete_count += 1
         self.power_signals.append("delete")
         self.total_nodes += 1
         self.generic_visit(node)
 
     def visit_For(self, node: ast.For):
+        """Track for-loop - adds complexity, indicates iteration."""
         self.loop_count += 1
         self.complexity += 1
         self.total_nodes += 1
         self.generic_visit(node)
 
     def visit_While(self, node: ast.While):
+        """Track while-loop - adds complexity, conditional iteration."""
         self.loop_count += 1
         self.complexity += 1
         self.total_nodes += 1
@@ -346,23 +354,27 @@ class V73CodeAnalyzer(ast.NodeVisitor):
     # =========================================================================
 
     def visit_Return(self, node: ast.Return):
+        """Track return as Wisdom signal (providing information back)."""
         self.return_count += 1
         self.wisdom_signals.append("return")
         self.total_nodes += 1
         self.generic_visit(node)
 
     def visit_If(self, node: ast.If):
+        """Track conditional as complexity + understanding indicator."""
         self.conditional_count += 1
         self.complexity += 1
         self.total_nodes += 1
         self.generic_visit(node)
 
     def visit_Assert(self, node: ast.Assert):
+        """Track assertion as Wisdom signal (validation, correctness)."""
         self.wisdom_signals.append("assert")
         self.total_nodes += 1
         self.generic_visit(node)
 
     def visit_Try(self, node: ast.Try):
+        """Track try-block as Wisdom signal (error handling awareness)."""
         self.complexity += 1
         self.wisdom_signals.append("try_block")
         self.total_nodes += 1

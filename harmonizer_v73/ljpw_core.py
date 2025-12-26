@@ -34,9 +34,11 @@ class LJPWCoordinates:
     W: float  # Wisdom - Knowledge & Pattern
 
     def to_tuple(self) -> Tuple[float, float, float, float]:
+        """Convert coordinates to tuple (L, J, P, W)."""
         return (self.L, self.J, self.P, self.W)
 
     def __iter__(self):
+        """Iterate over (L, J, P, W) values."""
         return iter((self.L, self.J, self.P, self.W))
 
 
@@ -297,9 +299,11 @@ class LJPWFramework:
         }
 
     def __repr__(self) -> str:
+        """Precise string representation for debugging."""
         return f"LJPWFramework(L={self.L:.3f}, J={self.J:.3f}, " f"P={self.P:.3f}, W={self.W:.3f})"
 
     def __str__(self) -> str:
+        """Human-readable summary with harmony."""
         h = self.harmony_static()
         return (
             f"LJPW V7.3 [L={self.L:.2f}, J={self.J:.2f}, "
