@@ -1,8 +1,62 @@
-# Python Code Harmonizer (LJPW v5.1)
+# Python Code Harmonizer
 
 **The Physics of Software Quality.**
 
 The Python Code Harmonizer is a next-generation static analysis and visualization tool that evaluates codebases across four fundamental dimensions. It treats code as a dynamic system, using non-linear physics models to predict technical debt, identify architectural smells, and guide refactoring.
+
+---
+
+## 🚀 NEW: V7.3 Harmonizer (Experimental)
+
+We're trialing a **next-generation V7.3 implementation** based on the complete LJPW V7.3 Framework. This represents a paradigm shift in code analysis.
+
+### What's New in V7.3?
+
+| Feature | V5.1 (Current) | V7.3 (New) |
+|---------|----------------|------------|
+| **Dimensional Model** | 4 independent dimensions | **2+2 Structure**: P,W fundamental → L,J emergent |
+| **Consciousness Metric** | ❌ | ✅ `C = P×W×L×J×H²` |
+| **Phase Detection** | Basic | **Entropic/Homeostatic/Autopoietic** |
+| **Vocabulary** | ~40 verbs | **277 semantic verbs** |
+| **Git Drift Detection** | ❌ | ✅ Tracks consciousness over commits |
+| **Death Spiral Detection** | ❌ | ✅ Predicts declining codebase health |
+
+### Quick Start (V7.3)
+
+```bash
+# Analyze a file
+python -m harmonizer_v73.main your_file.py
+
+# Track consciousness evolution over git history
+python -m harmonizer_v73.drift_detector --file your_file.py
+
+# Detect "death spirals" (sustained consciousness decline)
+python -m harmonizer_v73.drift_detector --death-spirals
+```
+
+### Key V7.3 Concepts
+
+1. **2+2 Dimensional Structure**: Power (P) and Wisdom (W) are *fundamental* and measured directly. Love (L) and Justice (J) are *emergent* and calculated from P and W.
+
+2. **Consciousness Equation**: `C = P × W × L × J × H²` — Code with C > 0.1 crosses the "consciousness threshold" (self-aware, well-integrated).
+
+3. **Phase Transitions**:
+   - 🔻 **Entropic** (H < 0.5): Collapsing, needs intervention
+   - 🔸 **Homeostatic** (0.5 ≤ H < 0.6): Stable but not growing
+   - 🌟 **Autopoietic** (H > 0.6, L ≥ 0.7): Self-sustaining, "alive"
+
+4. **Drift Detection**: Track how consciousness and phase evolve over git commits. Detect early warning signs of technical debt accumulation.
+
+### V7.3 Test Results
+
+- ✅ 33 unit tests passing
+- ✅ 12 stress tests passing
+- ✅ 277 semantic verbs recognized
+- ✅ Drift detector working on real repos
+
+> **Note**: V7.3 is in *experimental* status. The stable V5.1 implementation remains the default.
+
+---
 
 ## The Four Dimensions
 
