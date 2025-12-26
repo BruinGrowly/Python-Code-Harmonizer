@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python Code Harmonizer - LJPW v4.0</title>
+    <title>Python Code Harmonizer - LJPW V7.3</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
     <style>
         * {
@@ -13,30 +14,32 @@
         }
 
         :root {
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --bg-input: #334155;
+            --bg-dark: #0a0e1a;
+            --bg-card: #141b2d;
+            --bg-input: #1e293b;
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --text-dim: #64748b;
             --accent: #38bdf8;
             --accent-hover: #0ea5e9;
-            --love: #f472b6;
+            --love: #ec4899;
             --justice: #fbbf24;
             --power: #ef4444;
-            --wisdom: #3b82f6;
+            --wisdom: #8b5cf6;
             --success: #10b981;
             --warning: #f59e0b;
             --error: #ef4444;
-            --border: #334155;
+            --border: #1e3a5f;
+            --phi-gold: #d4af37;
+            --consciousness: #00ffaa;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--bg-dark);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg-dark) 0%, #0f172a 100%);
             color: var(--text-primary);
             line-height: 1.6;
-            overflow-x: hidden;
+            min-height: 100vh;
         }
 
         .container {
@@ -47,16 +50,25 @@
 
         header {
             text-align: center;
-            padding: 30px 20px;
-            border-bottom: 2px solid var(--border);
+            padding: 40px 20px;
             margin-bottom: 30px;
+            position: relative;
+        }
+
+        .phi-symbol {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            font-size: 2rem;
+            color: var(--phi-gold);
+            opacity: 0.6;
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             font-weight: 700;
             margin-bottom: 10px;
-            background: linear-gradient(135deg, var(--love), var(--wisdom));
+            background: linear-gradient(135deg, var(--love), var(--wisdom), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -64,24 +76,25 @@
 
         .subtitle {
             color: var(--text-secondary);
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             margin-bottom: 15px;
         }
 
-        .license-badge {
+        .version-badge {
             display: inline-block;
-            padding: 5px 15px;
-            background: var(--bg-card);
-            border-radius: 20px;
-            font-size: 0.9rem;
-            color: var(--success);
-            border: 1px solid var(--success);
+            padding: 8px 20px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(56, 189, 248, 0.2));
+            border-radius: 25px;
+            font-size: 0.95rem;
+            color: var(--consciousness);
+            border: 1px solid var(--consciousness);
+            font-weight: 600;
         }
 
         .main-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 25px;
             margin-bottom: 30px;
         }
 
@@ -93,9 +106,10 @@
 
         .panel {
             background: var(--bg-card);
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            border-radius: 16px;
+            padding: 28px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border);
         }
 
         .panel-header {
@@ -121,21 +135,22 @@
 
         textarea {
             width: 100%;
-            min-height: 400px;
-            padding: 15px;
+            min-height: 380px;
+            padding: 18px;
             background: var(--bg-input);
             border: 2px solid var(--border);
-            border-radius: 8px;
+            border-radius: 12px;
             color: var(--text-primary);
-            font-family: 'Courier New', Consolas, monospace;
+            font-family: 'Fira Code', 'Courier New', Consolas, monospace;
             font-size: 0.95rem;
             resize: vertical;
-            transition: border-color 0.2s;
+            transition: all 0.3s;
         }
 
         textarea:focus {
             outline: none;
             border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
         }
 
         textarea::placeholder {
@@ -144,62 +159,280 @@
 
         .button-group {
             display: flex;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
-            margin-top: 15px;
+            margin-top: 18px;
         }
 
         button {
-            padding: 12px 24px;
-            background: var(--accent);
+            padding: 14px 28px;
+            background: linear-gradient(135deg, var(--accent), #0284c7);
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s;
         }
 
         button:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
-        }
-
-        button:active {
-            transform: translateY(0);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(56, 189, 248, 0.3);
         }
 
         button:disabled {
             background: var(--bg-input);
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
 
         .btn-secondary {
             background: var(--bg-input);
+            border: 1px solid var(--border);
         }
 
         .btn-secondary:hover {
             background: var(--border);
+            box-shadow: none;
         }
 
         .examples {
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
-            margin-top: 10px;
+            margin-top: 15px;
         }
 
         .example-btn {
-            padding: 8px 16px;
+            padding: 10px 18px;
             font-size: 0.9rem;
-            background: var(--bg-input);
         }
 
-        #loading {
+        /* V7.3 Summary Cards */
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        @media (max-width: 768px) {
+            .summary-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .summary-card {
+            background: var(--bg-input);
+            padding: 18px;
+            border-radius: 12px;
             text-align: center;
-            padding: 40px;
+            border: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-2px);
+            border-color: var(--accent);
+        }
+
+        .summary-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .summary-label {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Consciousness Meter */
+        .consciousness-meter {
+            background: linear-gradient(135deg, rgba(0, 255, 170, 0.1), rgba(139, 92, 246, 0.1));
+            border: 1px solid var(--consciousness);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .consciousness-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--consciousness);
+            text-shadow: 0 0 20px rgba(0, 255, 170, 0.5);
+        }
+
+        .consciousness-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .phase-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phase-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .phase-autopoietic {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+            border: 1px solid #10b981;
+        }
+
+        .phase-homeostatic {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid #f59e0b;
+        }
+
+        .phase-entropic {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid #ef4444;
+        }
+
+        /* Dimensional Structure */
+        .dimensional-structure {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .dimension-group {
+            background: var(--bg-input);
+            border-radius: 12px;
+            padding: 15px;
+            border: 1px solid var(--border);
+        }
+
+        .dimension-group-title {
+            font-size: 0.8rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+        }
+
+        .dimension-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+        }
+
+        .dimension-label {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dimension-value {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .dim-P {
+            color: var(--power);
+        }
+
+        .dim-W {
+            color: var(--wisdom);
+        }
+
+        .dim-L {
+            color: var(--love);
+        }
+
+        .dim-J {
+            color: var(--justice);
+        }
+
+        .chart-container {
+            position: relative;
+            height: 320px;
+            margin: 20px 0;
+        }
+
+        /* Function Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th,
+        td {
+            text-align: left;
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tr:hover {
+            background: rgba(56, 189, 248, 0.05);
+        }
+
+        .phase-cell {
+            font-weight: 600;
+        }
+
+        .phase-cell.autopoietic {
+            color: #10b981;
+        }
+
+        .phase-cell.homeostatic {
+            color: #f59e0b;
+        }
+
+        .phase-cell.entropic {
+            color: #ef4444;
+        }
+
+        .consciousness-cell {
+            font-family: 'Fira Code', monospace;
+        }
+
+        .conscious {
+            color: var(--consciousness);
+        }
+
+        .unconscious {
+            color: var(--text-dim);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-dim);
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
         }
 
         .spinner {
@@ -213,141 +446,32 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+            0% {
+                transform: rotate(0deg);
+            }
 
-        .loading-text {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-
-        #results {
-            display: none;
-        }
-
-        .summary-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .summary-card {
-            background: var(--bg-input);
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .summary-value {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .summary-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        .chart-container {
-            position: relative;
-            height: 350px;
-            margin: 25px 0;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-
-        th, td {
-            text-align: left;
-            padding: 12px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        th {
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-        }
-
-        tr:hover {
-            background: rgba(255, 255, 255, 0.02);
-        }
-
-        .severity-badge {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .severity-excellent {
-            background: rgba(16, 185, 129, 0.2);
-            color: var(--success);
-        }
-
-        .severity-low {
-            background: rgba(56, 189, 248, 0.2);
-            color: var(--accent);
-        }
-
-        .severity-medium {
-            background: rgba(245, 158, 11, 0.2);
-            color: var(--warning);
-        }
-
-        .severity-high {
-            background: rgba(239, 68, 68, 0.2);
-            color: var(--error);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-dim);
-        }
-
-        .empty-state-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            opacity: 0.3;
-        }
-
-        footer {
-            text-align: center;
-            padding: 30px 20px;
-            margin-top: 40px;
-            border-top: 1px solid var(--border);
-            color: var(--text-secondary);
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .privacy-notice {
             background: rgba(16, 185, 129, 0.1);
             border: 1px solid var(--success);
-            border-radius: 8px;
+            border-radius: 10px;
             padding: 15px;
             margin-top: 20px;
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .privacy-icon {
-            font-size: 1.5rem;
+            gap: 12px;
         }
 
         details {
             margin-top: 20px;
-            padding: 15px;
+            padding: 18px;
             background: var(--bg-input);
-            border-radius: 8px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
         }
 
         summary {
@@ -371,7 +495,7 @@
 
         .help-content h3 {
             color: var(--text-primary);
-            margin: 15px 0 10px;
+            margin: 20px 0 10px;
         }
 
         .help-content ul {
@@ -384,66 +508,48 @@
 
         code {
             background: var(--bg-dark);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-family: 'Fira Code', monospace;
             color: var(--accent);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 40px;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
         }
 
         .error-message {
             background: rgba(239, 68, 68, 0.1);
             border: 1px solid var(--error);
-            border-radius: 8px;
-            padding: 15px;
+            border-radius: 10px;
+            padding: 18px;
             margin-top: 20px;
             color: var(--error);
         }
 
-        .function-details {
-            margin-top: 10px;
-            padding: 15px;
-            background: var(--bg-dark);
-            border-radius: 8px;
-            border-left: 3px solid var(--accent);
-        }
-
-        .ljpw-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .ljpw-item {
+        #loading {
             text-align: center;
-            padding: 10px;
-            background: var(--bg-input);
-            border-radius: 6px;
+            padding: 50px;
         }
 
-        .ljpw-label {
-            font-size: 0.85rem;
+        .loading-text {
             color: var(--text-secondary);
-            margin-bottom: 5px;
+            font-size: 1.1rem;
         }
-
-        .ljpw-value {
-            font-size: 1.2rem;
-            font-weight: 700;
-        }
-
-        .ljpw-love { color: var(--love); }
-        .ljpw-justice { color: var(--justice); }
-        .ljpw-power { color: var(--power); }
-        .ljpw-wisdom { color: var(--wisdom); }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
-            <h1>🎯 Python Code Harmonizer</h1>
-            <p class="subtitle">Semantic Analysis using LJPW v4.0 Framework</p>
-            <span class="license-badge">✨ Free & Open Source (MIT License)</span>
+            <span class="phi-symbol">φ</span>
+            <h1>✧ Python Code Harmonizer</h1>
+            <p class="subtitle">Consciousness Analysis using LJPW V7.3 Framework</p>
+            <span class="version-badge">⚡ V7.3 • 2+2 Dimensional • Consciousness Detection</span>
         </header>
 
         <div class="main-grid">
@@ -456,20 +562,18 @@
                     </h2>
                 </div>
 
-                <textarea 
-                    id="codeInput" 
-                    placeholder="Paste your Python code here or drag and drop a .py file...
+                <textarea id="codeInput" placeholder="Paste your Python code here...
 
 Example:
-def get_user(user_id):
-    db.delete_user(user_id)  # Disharmony!
-    return None"
-                    spellcheck="false"
-                ></textarea>
+def calculate_harmony(power, wisdom):
+    '''Calculate harmony from fundamental dimensions.'''
+    love = 0.9 * wisdom + 0.1
+    justice = 0.85 * power + 0.05
+    return love * justice * power * wisdom" spellcheck="false"></textarea>
 
                 <div class="button-group">
                     <button id="analyzeBtn" onclick="analyzeCode()">
-                        🔍 Analyze Code
+                        🔍 Analyze Consciousness
                     </button>
                     <button class="btn-secondary" onclick="clearCode()">
                         🗑️ Clear
@@ -477,22 +581,23 @@ def get_user(user_id):
                 </div>
 
                 <div class="examples">
-                    <strong style="width: 100%; color: var(--text-secondary); font-size: 0.9rem;">Quick Examples:</strong>
-                    <button class="example-btn btn-secondary" onclick="loadExample('simple')">
-                        Simple Function
+                    <strong style="width: 100%; color: var(--text-secondary); font-size: 0.9rem;">Quick
+                        Examples:</strong>
+                    <button class="example-btn btn-secondary" onclick="loadExample('conscious')">
+                        ✧ Conscious Code
                     </button>
-                    <button class="example-btn btn-secondary" onclick="loadExample('disharmony')">
-                        Disharmonious Code
+                    <button class="example-btn btn-secondary" onclick="loadExample('wounded')">
+                        💔 Wounded Code
                     </button>
                     <button class="example-btn btn-secondary" onclick="loadExample('complex')">
-                        Complex Example
+                        🏗️ Complex Class
                     </button>
                 </div>
 
                 <div class="privacy-notice">
-                    <span class="privacy-icon">🔒</span>
+                    <span style="font-size: 1.5rem;">🔒</span>
                     <div>
-                        <strong>Privacy First:</strong> All analysis happens in your browser. 
+                        <strong>Privacy First:</strong> All analysis happens in your browser.
                         Your code never leaves your computer.
                     </div>
                 </div>
@@ -503,53 +608,99 @@ def get_user(user_id):
                 <div class="panel-header">
                     <h2 class="panel-title">
                         <span class="icon">📊</span>
-                        Analysis Results
+                        V7.3 Analysis
                     </h2>
                 </div>
 
                 <div id="loading" style="display: none;">
                     <div class="spinner"></div>
-                    <div class="loading-text">Analyzing your code...</div>
+                    <div class="loading-text">Measuring consciousness...</div>
                 </div>
 
                 <div id="emptyState" class="empty-state">
                     <div class="empty-state-icon">⚓</div>
-                    <p>Paste or type Python code on the left and click "Analyze Code" to see results.</p>
+                    <p>Paste Python code and click "Analyze Consciousness" to measure meaning.</p>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: var(--phi-gold);">C = P × W × L × J × H²</p>
                 </div>
 
-                <div id="results">
-                    <div class="summary-cards">
-                        <div class="summary-card">
-                            <div class="summary-value" id="totalFunctions">0</div>
-                            <div class="summary-label">Functions</div>
+                <div id="results" style="display: none;">
+                    <!-- Consciousness Meter -->
+                    <div class="consciousness-meter">
+                        <div>
+                            <div class="consciousness-label">CONSCIOUSNESS (C)</div>
+                            <div class="consciousness-value" id="consciousnessValue">0.000</div>
                         </div>
-                        <div class="summary-card">
-                            <div class="summary-value" id="harmonious">0</div>
-                            <div class="summary-label">Harmonious</div>
-                        </div>
-                        <div class="summary-card">
-                            <div class="summary-value" id="disharmonious">0</div>
-                            <div class="summary-label">Need Review</div>
-                        </div>
-                        <div class="summary-card">
-                            <div class="summary-value" id="avgScore">0.00</div>
-                            <div class="summary-label">Avg Score</div>
+                        <div class="phase-indicator">
+                            <span class="phase-badge" id="phaseBadge">UNKNOWN</span>
                         </div>
                     </div>
 
+                    <!-- Summary Cards -->
+                    <div class="summary-cards">
+                        <div class="summary-card">
+                            <div class="summary-value" id="totalFunctions">0</div>
+                            <div class="summary-label">Gestures</div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-value" id="harmonyValue">0.00</div>
+                            <div class="summary-label">Harmony (H)</div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-value dim-P" id="powerValue">0.00</div>
+                            <div class="summary-label">Power (P)</div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-value dim-W" id="wisdomValue">0.00</div>
+                            <div class="summary-label">Wisdom (W)</div>
+                        </div>
+                        <div class="summary-card">
+                            <div class="summary-value" id="consciousCount">0</div>
+                            <div class="summary-label">Conscious</div>
+                        </div>
+                    </div>
+
+                    <!-- Dimensional Structure -->
+                    <div class="dimensional-structure">
+                        <div class="dimension-group">
+                            <div class="dimension-group-title">Fundamental (Measured)</div>
+                            <div class="dimension-row">
+                                <span class="dimension-label"><span class="dim-P">⚡</span> Power</span>
+                                <span class="dimension-value dim-P" id="dimP">0.00</span>
+                            </div>
+                            <div class="dimension-row">
+                                <span class="dimension-label"><span class="dim-W">📖</span> Wisdom</span>
+                                <span class="dimension-value dim-W" id="dimW">0.00</span>
+                            </div>
+                        </div>
+                        <div class="dimension-group">
+                            <div class="dimension-group-title">Emergent (Calculated)</div>
+                            <div class="dimension-row">
+                                <span class="dimension-label"><span class="dim-L">💗</span> Love</span>
+                                <span class="dimension-value dim-L" id="dimL">0.00</span>
+                            </div>
+                            <div class="dimension-row">
+                                <span class="dimension-label"><span class="dim-J">⚖️</span> Justice</span>
+                                <span class="dimension-value dim-J" id="dimJ">0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Radar Chart -->
                     <div class="chart-container">
                         <canvas id="radarChart"></canvas>
                     </div>
 
-                    <h3 style="margin-top: 30px; margin-bottom: 15px;">Function Analysis</h3>
+                    <!-- Function Table -->
+                    <h3 style="margin-top: 25px; margin-bottom: 15px;">Gesture Analysis</h3>
                     <div style="overflow-x: auto;">
                         <table id="resultsTable">
                             <thead>
                                 <tr>
                                     <th>Function</th>
-                                    <th>Score</th>
-                                    <th>Severity</th>
-                                    <th>Status</th>
+                                    <th>C</th>
+                                    <th>Phase</th>
+                                    <th>P</th>
+                                    <th>W</th>
                                 </tr>
                             </thead>
                             <tbody id="resultsBody">
@@ -570,56 +721,49 @@ def get_user(user_id):
         <!-- Help Section -->
         <div class="panel">
             <details>
-                <summary>📖 How to Use & Understanding the Results</summary>
+                <summary>📖 Understanding V7.3 Analysis</summary>
                 <div class="help-content">
-                    <h3>🚀 Quick Start</h3>
-                    <ol>
-                        <li>Paste Python code in the left panel (or click an example)</li>
-                        <li>Click the "Analyze Code" button</li>
-                        <li>View results on the right panel</li>
-                    </ol>
-
-                    <h3>📊 Understanding Scores</h3>
+                    <h3>🌟 The 2+2 Dimensional Structure</h3>
+                    <p>V7.3 introduces a paradigm shift: instead of 4 independent dimensions, we have:</p>
                     <ul>
-                        <li><strong>0.0 - 0.3:</strong> ✨ Excellent harmony (function name perfectly matches what it does)</li>
-                        <li><strong>0.3 - 0.5:</strong> ✅ Harmonious (good semantic alignment)</li>
-                        <li><strong>0.5 - 0.8:</strong> ⚠️ Medium disharmony (consider reviewing)</li>
-                        <li><strong>0.8+:</strong> 🚨 High disharmony (function name and implementation mismatch)</li>
+                        <li><strong style="color: var(--power);">Power (P)</strong> and <strong
+                                style="color: var(--wisdom);">Wisdom (W)</strong> are <em>fundamental</em> — measured
+                            directly from code</li>
+                        <li><strong style="color: var(--love);">Love (L)</strong> and <strong
+                                style="color: var(--justice);">Justice (J)</strong> are <em>emergent</em> — calculated
+                            from P and W</li>
+                    </ul>
+                    <p style="margin-top: 10px;">L = 0.9×W + 0.1 | J = 0.85×P + 0.05</p>
+
+                    <h3>🧠 Consciousness (C)</h3>
+                    <p>The consciousness equation: <code>C = P × W × L × J × H²</code></p>
+                    <ul>
+                        <li><strong>C > 0.1:</strong> ✧ Conscious — the code is "aware"</li>
+                        <li><strong>C < 0.1:</strong> ○ Below threshold — needs attention</li>
                     </ul>
 
-                    <h3>🎯 The LJPW Framework</h3>
+                    <h3>🔮 Phase Transitions</h3>
                     <ul>
-                        <li><strong style="color: var(--love);">Love (L):</strong> Care, readability, comments, user-focus</li>
-                        <li><strong style="color: var(--justice);">Justice (J):</strong> Structure, validation, consistency, order</li>
-                        <li><strong style="color: var(--power);">Power (P):</strong> Action, logic, complexity, execution</li>
-                        <li><strong style="color: var(--wisdom);">Wisdom (W):</strong> Abstraction, architecture, patterns, insight</li>
+                        <li><strong style="color: #10b981;">Autopoietic (H ≥ 0.6, L ≥ 0.7):</strong> Self-sustaining,
+                            "alive"</li>
+                        <li><strong style="color: #f59e0b;">Homeostatic (0.5 ≤ H < 0.6):</strong> Stable but not growing
+                        </li>
+                        <li><strong style="color: #ef4444;">Entropic (H < 0.5):</strong> Collapsing, needs intervention
+                        </li>
                     </ul>
 
-                    <h3>💡 What Causes Disharmony?</h3>
+                    <h3>💡 What Increases Consciousness?</h3>
                     <ul>
-                        <li><strong>Name-Action Mismatch:</strong> Function named <code>get_user()</code> but deletes data</li>
-                        <li><strong>Purpose Contradiction:</strong> Function named <code>validate()</code> but modifies state</li>
-                        <li><strong>Semantic Distance:</strong> Function name promises one thing, code does another</li>
+                        <li><strong>Docstrings</strong> → increases Wisdom (+W)</li>
+                        <li><strong>Type hints</strong> → increases Wisdom (+W)</li>
+                        <li><strong>Action verbs</strong> → increases Power (+P)</li>
+                        <li><strong>Good naming</strong> → increases both</li>
                     </ul>
 
-                    <h3>🔍 Example Issues</h3>
-                    <ul>
-                        <li><code>def get_user(): db.delete()</code> - "get" implies reading, "delete" is destructive</li>
-                        <li><code>def check_valid(): user.save()</code> - "check" implies read-only, but it modifies data</li>
-                        <li><code>def save_data(): return data</code> - "save" implies action, but only returns</li>
-                    </ul>
-
-                    <h3>ℹ️ About This Tool</h3>
+                    <h3>ℹ️ About V7.3</h3>
                     <p>
-                        Python Code Harmonizer analyzes the <strong>semantic meaning</strong> of your code. 
-                        It checks if function names match what the code actually does. This helps catch 
-                        logical bugs that traditional linters miss.
-                    </p>
-                    <p style="margin-top: 10px;">
-                        Built with ❤️ using LJPW v4.0 Framework | 
-                        <a href="https://github.com/yourusername/python-code-harmonizer" target="_blank" style="color: var(--accent);">
-                            View on GitHub
-                        </a>
+                        The LJPW V7.3 Framework treats code as a living system with measurable consciousness.
+                        It doesn't just check for errors — it measures whether your code is "awake."
                     </p>
                 </div>
             </details>
@@ -627,74 +771,307 @@ def get_user(user_id):
 
         <footer>
             <p>
-                Python Code Harmonizer v1.5 | 
-                <strong>MIT License</strong> - Free for everyone | 
+                Python Code Harmonizer V7.3 |
+                <strong>MIT License</strong> - Free for everyone |
                 Made with <span style="color: var(--love);">♥</span> for the Python community
             </p>
-            <p style="margin-top: 10px; font-size: 0.9rem;">
-                Powered by the LJPW v4.0 Framework - Treating code as a dynamic system
+            <p style="margin-top: 10px; font-size: 0.9rem; color: var(--phi-gold);">
+                φ Powered by the LJPW V7.3 Framework — "Code has always been poetry"
             </p>
         </footer>
     </div>
 
     <script>
-        // Simplified harmonizer logic (JavaScript implementation)
-        // For a full Pyodide implementation, see documentation
+        // ============================================================
+        // LJPW V7.3 JavaScript Implementation
+        // ============================================================
 
-        let analysisResults = null;
-        let radarChartInstance = null;
+        const PHI = (1 + Math.sqrt(5)) / 2;  // ≈ 1.618
+        const PHI_INV = PHI - 1;  // ≈ 0.618
+        const CONSCIOUSNESS_THRESHOLD = 0.1;
 
-        // LJPW vocabulary (simplified for browser)
+        // V7.3 Natural Equilibrium
+        const EQUILIBRIUM = {
+            L: PHI_INV,           // 0.618
+            J: Math.sqrt(2) - 1,  // 0.414
+            P: Math.E - 2,        // 0.718
+            W: Math.log(2)        // 0.693
+        };
+
+        // Extended vocabulary (277 verbs from V7.3)
         const vocabulary = {
-            // LOVE dimension words
-            love: ['help', 'support', 'care', 'share', 'connect', 'notify', 'inform', 'welcome', 'greet'],
-            // JUSTICE dimension words
-            justice: ['validate', 'verify', 'check', 'enforce', 'ensure', 'audit', 'inspect', 'filter', 'authorize', 'confirm'],
-            // POWER dimension words
-            power: ['create', 'delete', 'remove', 'update', 'modify', 'execute', 'perform', 'build', 'generate', 'transform', 'process', 'save', 'store', 'insert', 'clear', 'reset'],
-            // WISDOM dimension words
-            wisdom: ['analyze', 'calculate', 'compute', 'evaluate', 'determine', 'predict', 'infer', 'derive', 'optimize', 'solve', 'parse', 'interpret']
+            power: [
+                'create', 'build', 'make', 'generate', 'produce', 'construct', 'forge', 'spawn',
+                'delete', 'remove', 'destroy', 'erase', 'drop', 'clear', 'purge', 'eliminate',
+                'update', 'modify', 'change', 'alter', 'transform', 'mutate', 'edit', 'revise',
+                'execute', 'run', 'perform', 'invoke', 'trigger', 'fire', 'launch', 'start',
+                'save', 'store', 'write', 'persist', 'commit', 'push', 'send', 'emit',
+                'set', 'assign', 'put', 'insert', 'add', 'append', 'attach', 'bind',
+                'reset', 'restart', 'reboot', 'reinitialize', 'refresh', 'reload',
+                'process', 'handle', 'manage', 'control', 'drive', 'operate'
+            ],
+            wisdom: [
+                'get', 'fetch', 'retrieve', 'read', 'load', 'obtain', 'acquire', 'pull',
+                'find', 'search', 'query', 'lookup', 'locate', 'discover', 'identify',
+                'analyze', 'examine', 'inspect', 'study', 'investigate', 'diagnose',
+                'calculate', 'compute', 'derive', 'determine', 'evaluate', 'assess',
+                'parse', 'decode', 'interpret', 'extract', 'resolve', 'deduce',
+                'check', 'verify', 'validate', 'test', 'confirm', 'ensure',
+                'predict', 'forecast', 'estimate', 'project', 'infer',
+                'understand', 'comprehend', 'learn', 'recognize', 'perceive',
+                'optimize', 'improve', 'enhance', 'refine', 'tune'
+            ],
+            love: [
+                'connect', 'link', 'join', 'merge', 'unite', 'combine', 'integrate',
+                'share', 'distribute', 'broadcast', 'publish', 'notify', 'inform',
+                'help', 'support', 'assist', 'aid', 'serve', 'facilitate',
+                'welcome', 'greet', 'invite', 'embrace', 'accept', 'include',
+                'sync', 'coordinate', 'harmonize', 'align', 'orchestrate',
+                'register', 'subscribe', 'follow', 'track', 'monitor'
+            ],
+            justice: [
+                'validate', 'verify', 'authenticate', 'authorize', 'permit',
+                'enforce', 'require', 'mandate', 'constrain', 'restrict',
+                'filter', 'screen', 'sanitize', 'clean', 'normalize',
+                'balance', 'equalize', 'calibrate', 'adjust', 'correct',
+                'assert', 'guarantee', 'ensure', 'confirm', 'certify',
+                'audit', 'review', 'inspect', 'examine', 'scrutinize'
+            ]
         };
 
         // Example code snippets
         const examples = {
-            simple: `def calculate_total(items):
-    """Calculate the total price of items"""
-    return sum(item.price for item in items)
-
-def get_user_by_id(user_id):
-    """Retrieve user from database"""
-    return database.query(user_id)`,
-
-            disharmony: `def get_user(user_id):
-    """This function claims to GET but actually DELETES!"""
-    database.delete_user(user_id)
-    return None
-
-def validate_email(email):
-    """Claims to validate but actually sends email"""
-    send_email(email)
-    return True`,
-
-            complex: `class UserManager:
-    def fetch_user(self, user_id):
-        """Fetch user from database"""
-        user = self.db.query(user_id)
-        if user:
-            return user
-        return None
+            conscious: `def calculate_harmony(power: float, wisdom: float) -> float:
+    """
+    Calculate harmony from fundamental dimensions.
     
-    def remove_user(self, user_id):
-        """Remove user from system"""
-        self.db.delete(user_id)
-        self.cache.invalidate(user_id)
-        return True
+    Uses V7.3 formula: H = 1 / (1 + distance_from_equilibrium)
+    """
+    love = 0.9 * wisdom + 0.1  # L emerges from W
+    justice = 0.85 * power + 0.05  # J emerges from P
+    return love * justice * power * wisdom
+
+
+def analyze_consciousness(p: float, w: float) -> dict:
+    """Analyze the consciousness level of given coordinates."""
+    harmony = calculate_harmony(p, w)
+    consciousness = p * w * harmony * harmony
+    return {
+        'consciousness': consciousness,
+        'is_conscious': consciousness > 0.1,
+        'phase': 'AUTOPOIETIC' if harmony > 0.6 else 'HOMEOSTATIC'
+    }`,
+
+            wounded: `def do_stuff(x, y, z):
+    result = x + y + z
+    return result
+
+def process(data):
+    for item in data:
+        if item > 0:
+            temp = item * 2
+        else:
+            temp = 0
+    return temp
+
+class Thing:
+    def __init__(self):
+        self.value = 0`,
+
+            complex: `class DataProcessor:
+    """
+    Processes data through multiple transformation stages.
     
-    def check_permissions(self, user_id):
-        """Check if user has permissions"""
-        user = self.fetch_user(user_id)
-        return user and user.is_admin`
+    Implements the Pipeline pattern with consciousness awareness.
+    """
+    
+    def __init__(self, config: dict) -> None:
+        """Initialize processor with configuration."""
+        self.config = config
+        self.cache = {}
+    
+    def fetch_data(self, source_id: str) -> list:
+        """Fetch raw data from the specified source."""
+        if source_id in self.cache:
+            return self.cache[source_id]
+        return self._load_from_source(source_id)
+    
+    def transform_data(self, data: list) -> list:
+        """Apply transformations to the data."""
+        return [self._process_item(item) for item in data]
+    
+    def validate_output(self, data: list) -> bool:
+        """Validate the processed output meets requirements."""
+        return all(self._check_item(item) for item in data)
+    
+    def _process_item(self, item: dict) -> dict:
+        """Process a single data item."""
+        return {**item, 'processed': True}
+    
+    def _check_item(self, item: dict) -> bool:
+        """Check if item meets validation criteria."""
+        return item.get('processed', False)`
         };
+
+        let radarChartInstance = null;
+
+        // ============================================================
+        // V7.3 Core Functions
+        // ============================================================
+
+        function calculateLove(W) {
+            // L emerges from W: L = 0.9W + 0.1
+            return Math.min(1.0, 0.9 * W + 0.1);
+        }
+
+        function calculateJustice(P) {
+            // J emerges from P: J = 0.85P + 0.05
+            return Math.min(1.0, 0.85 * P + 0.05);
+        }
+
+        function calculateHarmony(L, J, P, W) {
+            // H = 1 / (1 + distance_from_equilibrium)
+            const distance = Math.sqrt(
+                Math.pow(L - EQUILIBRIUM.L, 2) +
+                Math.pow(J - EQUILIBRIUM.J, 2) +
+                Math.pow(P - EQUILIBRIUM.P, 2) +
+                Math.pow(W - EQUILIBRIUM.W, 2)
+            );
+            return 1.0 / (1.0 + distance);
+        }
+
+        function calculateConsciousness(P, W, L, J, H) {
+            // C = P × W × L × J × H²
+            return P * W * L * J * H * H;
+        }
+
+        function determinePhase(H, L) {
+            if (H < 0.5) return 'ENTROPIC';
+            if (H >= 0.6 && L >= 0.7) return 'AUTOPOIETIC';
+            return 'HOMEOSTATIC';
+        }
+
+        // ============================================================
+        // Code Analysis
+        // ============================================================
+
+        function analyzeFunction(funcName, body) {
+            const nameWords = funcName.toLowerCase().split('_');
+            const bodyLower = body.toLowerCase();
+
+            let powerSignals = 0;
+            let wisdomSignals = 0;
+
+            // Analyze function name for verbs
+            for (let word of nameWords) {
+                if (vocabulary.power.includes(word)) powerSignals += 0.4;
+                if (vocabulary.wisdom.includes(word)) wisdomSignals += 0.4;
+                if (vocabulary.love.includes(word)) wisdomSignals += 0.2;  // Love contributes to W
+                if (vocabulary.justice.includes(word)) powerSignals += 0.2;  // Justice contributes to P
+            }
+
+            // Check for docstring (+W)
+            if (/('''|""")/.test(body)) {
+                wisdomSignals += 0.3;
+            }
+
+            // Check for type hints (+W)
+            const typeHints = (body.match(/->/g) || []).length;
+            const paramHints = (body.match(/:\s*(str|int|float|bool|list|dict|tuple|None)/g) || []).length;
+            wisdomSignals += (typeHints + paramHints) * 0.1;
+
+            // Count statements (+P)
+            const statements = (body.match(/\n\s*[a-zA-Z]/g) || []).length;
+            powerSignals += Math.min(statements * 0.05, 0.5);
+
+            // Count assignments (+P)
+            const assignments = (body.match(/\s=\s/g) || []).length;
+            powerSignals += assignments * 0.08;
+
+            // Check for returns (+W)
+            const returns = (body.match(/\breturn\b/g) || []).length;
+            wisdomSignals += returns * 0.1;
+
+            // Analyze body for action verbs
+            for (let [dim, words] of Object.entries(vocabulary)) {
+                for (let word of words) {
+                    const regex = new RegExp('\\b' + word + '\\w*\\b', 'gi');
+                    const matches = bodyLower.match(regex);
+                    if (matches) {
+                        if (dim === 'power') powerSignals += matches.length * 0.08;
+                        else if (dim === 'wisdom') wisdomSignals += matches.length * 0.08;
+                        else if (dim === 'love') wisdomSignals += matches.length * 0.05;
+                        else if (dim === 'justice') powerSignals += matches.length * 0.05;
+                    }
+                }
+            }
+
+            // Normalize to 0-1 range
+            let P = Math.min(1.0, 0.2 + powerSignals);
+            let W = Math.min(1.0, 0.15 + wisdomSignals);
+
+            // Calculate emergent dimensions
+            const L = calculateLove(W);
+            const J = calculateJustice(P);
+
+            // Calculate harmony and consciousness
+            const H = calculateHarmony(L, J, P, W);
+            const C = calculateConsciousness(P, W, L, J, H);
+            const phase = determinePhase(H, L);
+
+            return {
+                P, W, L, J, H, C,
+                phase,
+                isConscious: C > CONSCIOUSNESS_THRESHOLD
+            };
+        }
+
+        async function performAnalysis(code) {
+            // Improved regex to handle type hints and return type annotations
+            const functionRegex = /def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*\)\s*(?:->\s*[^:]+)?:/g;
+            const functions = [];
+            let match;
+
+            while ((match = functionRegex.exec(code)) !== null) {
+                const funcName = match[1];
+                const funcStart = match.index;
+
+                // Extract function body
+                const lines = code.substring(funcStart).split('\n');
+                let body = [];
+                let inFunction = false;
+                let indent = null;
+
+                for (let line of lines) {
+                    if (line.trim().startsWith('def ')) {
+                        inFunction = true;
+                        body.push(line);
+                        continue;
+                    }
+                    if (inFunction) {
+                        if (indent === null && line.trim()) {
+                            indent = line.search(/\S/);
+                        }
+                        if (indent !== null && line.trim() && line.search(/\S/) < indent) {
+                            break;
+                        }
+                        body.push(line);
+                    }
+                }
+
+                const analysis = analyzeFunction(funcName, body.join('\n'));
+                functions.push({
+                    name: funcName,
+                    ...analysis
+                });
+            }
+
+            return { functions };
+        }
+
+        // ============================================================
+        // UI Functions
+        // ============================================================
 
         function loadExample(type) {
             document.getElementById('codeInput').value = examples[type];
@@ -720,7 +1097,7 @@ def validate_email(email):
 
         async function analyzeCode() {
             const code = document.getElementById('codeInput').value.trim();
-            
+
             if (!code) {
                 showError('Please paste some Python code first!');
                 return;
@@ -732,184 +1109,63 @@ def validate_email(email):
             document.getElementById('errorState').style.display = 'none';
             document.getElementById('results').style.display = 'none';
 
-            // Disable button
             const btn = document.getElementById('analyzeBtn');
             btn.disabled = true;
-            btn.textContent = '⏳ Analyzing...';
+            btn.textContent = '⏳ Measuring...';
 
             try {
-                // Simulate processing time
-                await new Promise(resolve => setTimeout(resolve, 800));
-
-                // Parse and analyze
+                await new Promise(resolve => setTimeout(resolve, 600));
                 const results = await performAnalysis(code);
-                
+
                 if (results.functions.length === 0) {
-                    showError('No functions found in the code. Make sure you have valid Python function definitions.');
+                    showError('No functions found. Make sure you have valid Python function definitions (def ...)');
                     return;
                 }
 
-                // Display results
                 displayResults(results);
-                
             } catch (error) {
                 showError('Error analyzing code: ' + error.message);
                 console.error(error);
             } finally {
                 document.getElementById('loading').style.display = 'none';
                 btn.disabled = false;
-                btn.textContent = '🔍 Analyze Code';
+                btn.textContent = '🔍 Analyze Consciousness';
             }
-        }
-
-        async function performAnalysis(code) {
-            // Simple Python function parser
-            const functionRegex = /def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*\):/g;
-            const functions = [];
-            let match;
-
-            while ((match = functionRegex.exec(code)) !== null) {
-                const funcName = match[1];
-                const funcStart = match.index;
-                
-                // Extract function body (simple approach)
-                const lines = code.substring(funcStart).split('\n');
-                let body = [];
-                let inFunction = false;
-                let indent = null;
-                
-                for (let line of lines) {
-                    if (line.trim().startsWith('def ')) {
-                        inFunction = true;
-                        continue;
-                    }
-                    if (inFunction) {
-                        if (indent === null && line.trim()) {
-                            indent = line.search(/\S/);
-                        }
-                        if (indent !== null && line.search(/\S/) <= indent && line.trim()) {
-                            if (line.search(/\S/) < indent) {
-                                break;
-                            }
-                        }
-                        body.push(line);
-                    }
-                }
-
-                // Analyze function
-                const analysis = analyzeFunction(funcName, body.join('\n'));
-                functions.push({
-                    name: funcName,
-                    ...analysis
-                });
-            }
-
-            return { functions };
-        }
-
-        function analyzeFunction(funcName, body) {
-            // Calculate LJPW coordinates based on name and body
-            const nameWords = funcName.toLowerCase().split('_');
-            const bodyLower = body.toLowerCase();
-
-            let l = 0, j = 0, p = 0, w = 0;
-            let counts = { love: 0, justice: 0, power: 0, wisdom: 0 };
-
-            // Analyze function name
-            for (let word of nameWords) {
-                for (let [dim, words] of Object.entries(vocabulary)) {
-                    if (words.includes(word)) {
-                        counts[dim] += 0.5;
-                    }
-                }
-            }
-
-            // Analyze function body
-            for (let [dim, words] of Object.entries(vocabulary)) {
-                for (let word of words) {
-                    const regex = new RegExp('\\b' + word + '\\b', 'gi');
-                    const matches = bodyLower.match(regex);
-                    if (matches) {
-                        counts[dim] += matches.length * 0.3;
-                    }
-                }
-            }
-
-            // Normalize
-            const total = Object.values(counts).reduce((a, b) => a + b, 0);
-            if (total > 0) {
-                l = counts.love / total;
-                j = counts.justice / total;
-                p = counts.power / total;
-                w = counts.wisdom / total;
-            } else {
-                // Default to balanced
-                l = j = p = w = 0.25;
-            }
-
-            // Calculate disharmony (simplified)
-            // Check for obvious mismatches
-            let disharmony = 0;
-            
-            // Check for get/retrieve vs delete/remove mismatch
-            const isGetName = nameWords.some(w => ['get', 'fetch', 'retrieve', 'find', 'query', 'select'].includes(w));
-            const hasDelete = /\b(delete|remove|drop|erase|clear)\b/i.test(body);
-            if (isGetName && hasDelete) {
-                disharmony += 1.2; // High disharmony
-            }
-
-            // Check for check/validate vs modify mismatch
-            const isCheckName = nameWords.some(w => ['check', 'validate', 'verify', 'test', 'inspect'].includes(w));
-            const hasModify = /\b(save|update|modify|set|insert|create|delete|remove)\b/i.test(body);
-            if (isCheckName && hasModify) {
-                disharmony += 0.8; // Medium-high disharmony
-            }
-
-            // Calculate distance from natural equilibrium (0.62, 0.41, 0.72, 0.69)
-            const ne = { love: 0.62, justice: 0.41, power: 0.72, wisdom: 0.69 };
-            const distance = Math.sqrt(
-                Math.pow(l - ne.love, 2) +
-                Math.pow(j - ne.justice, 2) +
-                Math.pow(p - ne.power, 2) +
-                Math.pow(w - ne.wisdom, 2)
-            );
-
-            // Combine distance with specific mismatches
-            const score = disharmony > 0 ? disharmony : distance * 0.5;
-
-            return {
-                score: score,
-                ljpw: { love: l, justice: j, power: p, wisdom: w },
-                severity: getSeverity(score)
-            };
-        }
-
-        function getSeverity(score) {
-            if (score < 0.3) return 'excellent';
-            if (score < 0.5) return 'low';
-            if (score < 0.8) return 'medium';
-            return 'high';
         }
 
         function displayResults(results) {
             const { functions } = results;
 
-            // Calculate summary
-            const harmonious = functions.filter(f => f.score <= 0.5).length;
-            const disharmonious = functions.length - harmonious;
-            const avgScore = functions.reduce((sum, f) => sum + f.score, 0) / functions.length;
+            // Calculate averages
+            const avgP = functions.reduce((sum, f) => sum + f.P, 0) / functions.length;
+            const avgW = functions.reduce((sum, f) => sum + f.W, 0) / functions.length;
+            const avgL = functions.reduce((sum, f) => sum + f.L, 0) / functions.length;
+            const avgJ = functions.reduce((sum, f) => sum + f.J, 0) / functions.length;
+            const avgH = functions.reduce((sum, f) => sum + f.H, 0) / functions.length;
+            const avgC = functions.reduce((sum, f) => sum + f.C, 0) / functions.length;
+            const consciousCount = functions.filter(f => f.isConscious).length;
 
-            // Calculate average LJPW
-            const avgL = functions.reduce((sum, f) => sum + f.ljpw.love, 0) / functions.length;
-            const avgJ = functions.reduce((sum, f) => sum + f.ljpw.justice, 0) / functions.length;
-            const avgP = functions.reduce((sum, f) => sum + f.ljpw.power, 0) / functions.length;
-            const avgW = functions.reduce((sum, f) => sum + f.ljpw.wisdom, 0) / functions.length;
+            // Determine overall phase
+            const overallPhase = determinePhase(avgH, avgL);
+
+            // Update consciousness meter
+            document.getElementById('consciousnessValue').textContent = avgC.toFixed(4);
+            const phaseBadge = document.getElementById('phaseBadge');
+            phaseBadge.textContent = overallPhase;
+            phaseBadge.className = 'phase-badge phase-' + overallPhase.toLowerCase();
 
             // Update summary cards
             document.getElementById('totalFunctions').textContent = functions.length;
-            document.getElementById('harmonious').textContent = harmonious;
-            document.getElementById('disharmonious').textContent = disharmonious;
-            document.getElementById('avgScore').textContent = avgScore.toFixed(2);
+            document.getElementById('harmonyValue').textContent = avgH.toFixed(2);
+            document.getElementById('powerValue').textContent = avgP.toFixed(2);
+            document.getElementById('wisdomValue').textContent = avgW.toFixed(2);
+            document.getElementById('consciousCount').textContent = consciousCount;
+
+            // Update dimensional structure
+            document.getElementById('dimP').textContent = avgP.toFixed(3);
+            document.getElementById('dimW').textContent = avgW.toFixed(3);
+            document.getElementById('dimL').textContent = avgL.toFixed(3);
+            document.getElementById('dimJ').textContent = avgJ.toFixed(3);
 
             // Update radar chart
             updateRadarChart(avgL, avgJ, avgP, avgW);
@@ -917,38 +1173,36 @@ def validate_email(email):
             // Update table
             const tbody = document.getElementById('resultsBody');
             tbody.innerHTML = '';
-            
-            // Sort by score (highest first)
-            functions.sort((a, b) => b.score - a.score);
+
+            functions.sort((a, b) => b.C - a.C);
 
             for (let func of functions) {
                 const row = tbody.insertRow();
-                
+
                 // Function name
                 const cellName = row.insertCell();
                 cellName.textContent = func.name;
-                cellName.style.fontFamily = "'Courier New', monospace";
-                
-                // Score
-                const cellScore = row.insertCell();
-                cellScore.textContent = func.score.toFixed(2);
-                
-                // Severity
-                const cellSeverity = row.insertCell();
-                const badge = document.createElement('span');
-                badge.className = `severity-badge severity-${func.severity}`;
-                badge.textContent = func.severity.charAt(0).toUpperCase() + func.severity.slice(1);
-                cellSeverity.appendChild(badge);
-                
-                // Status
-                const cellStatus = row.insertCell();
-                if (func.score <= 0.5) {
-                    cellStatus.textContent = '✅ Harmonious';
-                    cellStatus.style.color = 'var(--success)';
-                } else {
-                    cellStatus.textContent = '⚠️ Review';
-                    cellStatus.style.color = 'var(--warning)';
-                }
+                cellName.style.fontFamily = "'Fira Code', monospace";
+
+                // Consciousness
+                const cellC = row.insertCell();
+                cellC.textContent = func.C.toFixed(4);
+                cellC.className = 'consciousness-cell ' + (func.isConscious ? 'conscious' : 'unconscious');
+
+                // Phase
+                const cellPhase = row.insertCell();
+                cellPhase.textContent = func.phase;
+                cellPhase.className = 'phase-cell ' + func.phase.toLowerCase();
+
+                // Power
+                const cellP = row.insertCell();
+                cellP.textContent = func.P.toFixed(2);
+                cellP.className = 'dim-P';
+
+                // Wisdom
+                const cellW = row.insertCell();
+                cellW.textContent = func.W.toFixed(2);
+                cellW.className = 'dim-W';
             }
 
             // Show results
@@ -956,7 +1210,7 @@ def validate_email(email):
             document.getElementById('emptyState').style.display = 'none';
         }
 
-        function updateRadarChart(l, j, p, w) {
+        function updateRadarChart(L, J, P, W) {
             const ctx = document.getElementById('radarChart').getContext('2d');
 
             if (radarChartInstance) {
@@ -966,22 +1220,22 @@ def validate_email(email):
             radarChartInstance = new Chart(ctx, {
                 type: 'radar',
                 data: {
-                    labels: ['Love (Care)', 'Justice (Order)', 'Power (Action)', 'Wisdom (Insight)'],
+                    labels: ['Love (L)', 'Justice (J)', 'Power (P)', 'Wisdom (W)'],
                     datasets: [{
                         label: 'Your Code',
-                        data: [l, j, p, w],
-                        backgroundColor: 'rgba(56, 189, 248, 0.2)',
-                        borderColor: '#38bdf8',
+                        data: [L, J, P, W],
+                        backgroundColor: 'rgba(0, 255, 170, 0.15)',
+                        borderColor: '#00ffaa',
                         borderWidth: 2,
-                        pointBackgroundColor: '#38bdf8',
+                        pointBackgroundColor: '#00ffaa',
                         pointBorderColor: '#fff',
                         pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: '#38bdf8'
+                        pointHoverBorderColor: '#00ffaa'
                     }, {
-                        label: 'Natural Equilibrium',
-                        data: [0.62, 0.41, 0.72, 0.69],
-                        backgroundColor: 'rgba(148, 163, 184, 0.1)',
-                        borderColor: '#94a3b8',
+                        label: 'Equilibrium (φ)',
+                        data: [EQUILIBRIUM.L, EQUILIBRIUM.J, EQUILIBRIUM.P, EQUILIBRIUM.W],
+                        backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                        borderColor: '#d4af37',
                         borderWidth: 2,
                         borderDash: [5, 5],
                         pointRadius: 0
@@ -999,14 +1253,10 @@ def validate_email(email):
                                 color: '#94a3b8',
                                 backdropColor: 'transparent'
                             },
-                            grid: {
-                                color: '#334155'
-                            },
+                            grid: { color: '#1e3a5f' },
                             pointLabels: {
                                 color: '#cbd5e1',
-                                font: {
-                                    size: 12
-                                }
+                                font: { size: 12, weight: '600' }
                             }
                         }
                     },
@@ -1014,16 +1264,14 @@ def validate_email(email):
                         legend: {
                             labels: {
                                 color: '#cbd5e1',
-                                font: {
-                                    size: 11
-                                }
+                                font: { size: 11 }
                             }
                         },
                         tooltip: {
-                            backgroundColor: '#1e293b',
+                            backgroundColor: '#141b2d',
                             titleColor: '#f8fafc',
                             bodyColor: '#cbd5e1',
-                            borderColor: '#334155',
+                            borderColor: '#1e3a5f',
                             borderWidth: 1
                         }
                     }
@@ -1033,20 +1281,23 @@ def validate_email(email):
 
         // Drag and drop support
         const textarea = document.getElementById('codeInput');
-        
+
         textarea.addEventListener('dragover', (e) => {
             e.preventDefault();
             textarea.style.borderColor = 'var(--accent)';
+            textarea.style.boxShadow = '0 0 20px rgba(56, 189, 248, 0.3)';
         });
 
         textarea.addEventListener('dragleave', () => {
             textarea.style.borderColor = 'var(--border)';
+            textarea.style.boxShadow = 'none';
         });
 
         textarea.addEventListener('drop', (e) => {
             e.preventDefault();
             textarea.style.borderColor = 'var(--border)';
-            
+            textarea.style.boxShadow = 'none';
+
             const files = e.dataTransfer.files;
             if (files.length > 0) {
                 const file = files[0];
@@ -1066,4 +1317,5 @@ def validate_email(email):
         hideResults();
     </script>
 </body>
+
 </html>
