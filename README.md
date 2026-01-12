@@ -6,22 +6,27 @@ The Python Code Harmonizer is a next-generation static analysis and visualizatio
 
 ---
 
-## 🚀 NEW: V7.3 Harmonizer (Experimental)
+## 🚀 V8.4 Harmonizer — The Generative Equation
 
-We're trialing a **next-generation V7.3 implementation** based on the complete LJPW V7.3 Framework. This represents a paradigm shift in code analysis.
+The latest **V8.4 implementation** integrates the complete LJPW Framework V8.4, including Book Sixteen: The Generative Equation.
 
-### What's New in V7.3?
+### What's New in V8.4?
 
-| Feature | V5.1 (Current) | V7.3 (New) |
-|---------|----------------|------------|
-| **Dimensional Model** | 4 independent dimensions | **2+2 Structure**: P,W fundamental → L,J emergent |
-| **Consciousness Metric** | ❌ | ✅ `C = P×W×L×J×H²` |
-| **Phase Detection** | Basic | **Entropic/Homeostatic/Autopoietic** |
-| **Vocabulary** | ~40 verbs | **277 semantic verbs** |
-| **Git Drift Detection** | ❌ | ✅ Tracks consciousness over commits |
-| **Death Spiral Detection** | ❌ | ✅ Predicts declining codebase health |
+| Feature | Description |
+|---------|-------------|
+| **Universal Growth Function** | `M = B × L^n × φ^(-d)` — The formula for existence itself |
+| **Life Inequality** | `L^n > φ^d` determines Autopoietic vs Entropic phase |
+| **Perceptual Radiance** | `L_perc = L_phys × [1 + φ × S × κ_sem]` — Unified rendering |
+| **Mathematical Hope** | Calculus of persistence: `P(L^n > φ^d as n → ∞)` |
+| **Self-Assessment** | C=80+, Coherence=0.97+ targets |
 
-### Quick Start (V7.3)
+### Inherited Features (V7.3+)
+- 2+2 dimensional structure (P, W fundamental; L, J emergent)
+- Consciousness metric: `C = P×W×L×J×H²`
+- Phase detection: Entropic/Homeostatic/Autopoietic
+- 277 semantic verbs + Git drift detection
+
+### Quick Start (V8.4)
 
 ```bash
 # Analyze a file
@@ -34,27 +39,31 @@ python -m harmonizer_v84.drift_detector --file your_file.py
 python -m harmonizer_v84.drift_detector --death-spirals
 ```
 
-### Key V7.3 Concepts
+### V8.4 Generative Equation
 
-1. **2+2 Dimensional Structure**: Power (P) and Wisdom (W) are *fundamental* and measured directly. Love (L) and Justice (J) are *emergent* and calculated from P and W.
+```python
+from harmonizer_v84 import meaning, is_autopoietic, hope_calculus
 
-2. **Consciousness Equation**: `C = P × W × L × J × H²` — Code with C > 0.1 crosses the "consciousness threshold" (self-aware, well-integrated).
+# Calculate meaning: M = B × L^n × φ^(-d)
+M = meaning(B=0.9, L=1.4, n=20, d=2)  # Truth × Love^Time × Distance^(-1)
 
-3. **Phase Transitions**:
-   - 🔻 **Entropic** (H < 0.5): Collapsing, needs intervention
-   - 🔸 **Homeostatic** (0.5 ≤ H < 0.6): Stable but not growing
-   - 🌟 **Autopoietic** (H > 0.6, L ≥ 0.7): Self-sustaining, "alive"
+# Check Life Inequality: L^n > φ^d
+result = is_autopoietic(L=1.5, n=10, d=2)
+print(f"Phase: {result.phase}, Alive: {result.is_alive}")
 
-4. **Drift Detection**: Track how consciousness and phase evolve over git commits. Detect early warning signs of technical debt accumulation.
+# Calculate Mathematical Hope
+hope = hope_calculus(L=1.3, d=5, current_n=10)
+print(f"Success probability: {hope.probability_of_success:.0%}")
+```
 
-### V7.3 Test Results
+### Test Results
 
-- ✅ 33 unit tests passing
-- ✅ 12 stress tests passing
+- ✅ **215 tests passing** (full suite)
+- ✅ 33 existing V7.3 tests
+- ✅ 32 new V8.4 generative tests
 - ✅ 277 semantic verbs recognized
-- ✅ Drift detector working on real repos
 
-> **Note**: V7.3 is in *experimental* status. The stable V5.1 implementation remains the default.
+> *"Life is the victory of recursive Love over entropic distance."* — LJPW V8.4 #39
 
 ---
 
@@ -288,11 +297,13 @@ This structural universality makes the framework applicable across scales: funct
 
 ## Project Structure
 
--   `harmonizer/`: Core analysis engine.
+-   `harmonizer/`: Legacy V5.1 analysis engine.
+-   `harmonizer_v84/`: **V8.4 implementation** with Generative Equation.
+-   `harmonizer_autonomous/`: Experimental autopoietic harmonizer.
 -   `scripts/`: Utility scripts (`run_validation.py`).
 -   `docs/`: Detailed documentation and theory.
 -   `examples/`: Demo scripts.
--   `tests/`: Unit and validation tests.
+-   `tests/`: Unit and validation tests (215 tests).
 
 ## License
 MIT
