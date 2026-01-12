@@ -1,16 +1,18 @@
 """
-V7.3 Code Analyzer - Extract LJPW from Python Code
+V8.4 Code Analyzer - Extract LJPW from Python Code
 
-Based on the V7.3 insight that Power (P) and Wisdom (W) are FUNDAMENTAL,
-while Love (L) and Justice (J) are EMERGENT.
+Based on the V8.4 Framework with the Generative Equation:
+- P (Power) and W (Wisdom) are FUNDAMENTAL
+- L (Love) and J (Justice) are EMERGENT
+- Life Inequality: L^n > φ^d determines viability
+- Perceptual Radiance: Semantic intensity of code
 
-Mapping strategy:
-- P (Power): Execution, transformation, state changes, side effects
-- W (Wisdom): Knowledge, patterns, documentation, type info, returns
-- L (Love): Calculated from W (L emerges from wisdom correlations)
-- J (Justice): Calculated from P (J emerges from power symmetries)
+V8.4 Additions:
+- life_inequality_ratio: Code's L^n / φ^d ratio
+- perceptual_radiance: Semantic weight for visualization
+- hope_probability: Mathematical hope of improvement
 
-Based on: LJPW_FRAMEWORK_V7.3_COMPLETE_UNIFIED_PLUS.md
+Based on: LJPW_FRAMEWORK_V8.4_COMPLETE_UNIFIED_PLUS.md
 """
 
 import ast
@@ -24,6 +26,13 @@ from harmonizer_v84.consciousness import consciousness_metric, ConsciousnessLeve
 from harmonizer_v84.phase_detector import detect_phase, Phase, analyze_phase
 from harmonizer_v84.phi_normalizer import normalize_coordinates
 from harmonizer_v84.bricks_mortar import function_primality, BrickAnalysis
+from harmonizer_v84.generative import (
+    is_autopoietic,
+    perceptual_radiance,
+    semantic_salience,
+    hope_calculus,
+    LifeInequalityResult,
+)
 
 
 @dataclass
@@ -38,13 +47,22 @@ class FunctionAnalysis:
     power_raw: float
     wisdom_raw: float
 
-    # V7.3 framework result
+    # V8.4 framework result
     framework: LJPWFramework = None
 
     # Consciousness and phase
     consciousness: float = 0.0
     consciousness_level: ConsciousnessLevel = ConsciousnessLevel.NON_CONSCIOUS
     phase: Phase = Phase.ENTROPIC
+
+    # V8.4: Life Inequality (L^n > φ^d)
+    life_inequality_ratio: float = 1.0
+    life_phase: str = "HOMEOSTATIC"
+    is_alive: bool = True
+
+    # V8.4: Perceptual Radiance (for visualization)
+    semantic_salience: float = 0.5
+    perceptual_radiance: float = 1.0
 
     # Bricks & Mortar
     brick_analysis: BrickAnalysis = None
@@ -62,6 +80,28 @@ class FunctionAnalysis:
         )
         self.phase = detect_phase(H, self.framework.L)
 
+        # V8.4: Calculate Life Inequality
+        # n = complexity (iterations of development)
+        # d = distance from natural equilibrium (technical debt proxy)
+        L_coeff = max(1.0, 1.0 + self.framework.L * 0.5)  # Love as growth coefficient
+        n = max(1, len(self.power_signals) + len(self.wisdom_signals))  # Development iterations
+        d = self.framework.distance_from_equilibrium()  # Distance as decay factor
+        life_result = is_autopoietic(L=L_coeff, n=n, d=d)
+        self.life_inequality_ratio = life_result.ratio
+        self.life_phase = life_result.phase
+        self.is_alive = life_result.is_alive
+
+        # V8.4: Calculate Perceptual Radiance
+        self.semantic_salience = semantic_salience(
+            self.framework.L, self.framework.P, self.framework.W, self.framework.J
+        )
+        # Physical radiance approximated as consciousness
+        self.perceptual_radiance = perceptual_radiance(
+            L_phys=min(1.0, self.consciousness + 0.3),  # Base physical radiance
+            S=self.semantic_salience,
+            kappa_sem=H  # Semantic curvature from Harmony
+        )
+
 
 @dataclass
 class FileAnalysis:
@@ -77,6 +117,16 @@ class FileAnalysis:
     overall_framework: LJPWFramework = None
     overall_consciousness: float = 0.0
     overall_phase: Phase = Phase.ENTROPIC
+
+    # V8.4: File-level Life Inequality
+    file_life_ratio: float = 1.0
+    file_life_phase: str = "HOMEOSTATIC"
+    file_is_alive: bool = True
+    avg_perceptual_radiance: float = 1.0
+
+    # V8.4: Hope metric (can this file improve?)
+    hope_probability: float = 0.5
+    hope_interpretation: str = ""
 
     # File-level stats
     total_lines: int = 0
@@ -98,13 +148,35 @@ class FileAnalysis:
             )
             self.overall_phase = detect_phase(H, self.overall_framework.L)
 
+            # V8.4: File-level Life Inequality (aggregate)
+            ratios = [f.life_inequality_ratio for f in self.functions]
+            self.file_life_ratio = sum(ratios) / len(ratios)
+            alive_count = sum(1 for f in self.functions if f.is_alive)
+            self.file_is_alive = alive_count > len(self.functions) / 2
+            self.file_life_phase = "AUTOPOIETIC" if self.file_is_alive and self.file_life_ratio > 1.1 else "HOMEOSTATIC" if self.file_life_ratio > 0.9 else "ENTROPIC"
 
-class V73CodeAnalyzer(ast.NodeVisitor):
+            # V8.4: Average Perceptual Radiance
+            self.avg_perceptual_radiance = sum(f.perceptual_radiance for f in self.functions) / len(self.functions)
+
+            # V8.4: Calculate Hope
+            L_coeff = max(1.0, 1.0 + self.overall_framework.L * 0.5)
+            d = self.overall_framework.distance_from_equilibrium()
+            hope_result = hope_calculus(L=L_coeff, d=d, current_n=len(self.functions))
+            self.hope_probability = hope_result.probability_of_success
+            self.hope_interpretation = hope_result.interpretation
+
+
+class V84CodeAnalyzer(ast.NodeVisitor):
     """
-    V7.3 Code Analyzer - Extracts P and W from Python AST.
+    V8.4 Code Analyzer - Extracts P and W from Python AST with Generative Equation.
 
-    The key V7.3 insight: Only measure P and W directly.
-    L and J are CALCULATED, not measured.
+    The key insight: Only measure P and W directly.
+    L and J are CALCULATED (emergent), not measured.
+
+    V8.4 Additions:
+    - Life Inequality score: L^n > φ^d
+    - Perceptual Radiance: Semantic intensity for visualization
+    - Hope calculation: Can this code improve?
 
     Power (P) indicators:
     - Assignments (state changes)
@@ -395,19 +467,19 @@ class V73CodeAnalyzer(ast.NodeVisitor):
 
 def analyze_file(filepath: str) -> FileAnalysis:
     """
-    Analyze a Python file using V7.3 framework.
+    Analyze a Python file using V8.4 framework.
 
     Args:
         filepath: Path to Python file
 
     Returns:
-        FileAnalysis with all function analyses and overall metrics
+        FileAnalysis with all function analyses, Life Inequality, and Hope metrics
     """
     path = Path(filepath)
     source = path.read_text(encoding="utf-8")
     tree = ast.parse(source)
 
-    analyzer = V73CodeAnalyzer()
+    analyzer = V84CodeAnalyzer()
     functions = []
     classes = []
     import_count = 0
@@ -454,7 +526,7 @@ def analyze_source(source: str, filename: str = "<string>") -> FileAnalysis:
         FileAnalysis with all function analyses
     """
     tree = ast.parse(source)
-    analyzer = V73CodeAnalyzer()
+    analyzer = V84CodeAnalyzer()
     functions = []
     classes = []
 

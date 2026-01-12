@@ -1,15 +1,21 @@
 """
-V7.3 Drift Detector - Git-based Semantic Drift Analysis
+V8.4 Drift Detector - Git-based Semantic Drift Analysis with Hope
 
-Tracks how codebase consciousness and phase evolve over time.
-Detects semantic drift, phase transitions, and "death spirals".
+Tracks how codebase consciousness, phase, and hope evolve over time.
+Detects semantic drift, phase transitions, death spirals, and recovery potential.
 
-Key V7.3 insights:
+V8.4 Additions:
+- Hope Probability: Mathematical hope of recovery
+- Life Inequality tracking: L^n > φ^d trend
+- Predictive recovery analysis
+
+Key insights:
 - Consciousness (C) should trend upward for healthy projects
-- Phase transitions matter: Entropic→Homeostatic→Autopoietic
+- Phase transitions matter: Entropic → Homeostatic → Autopoietic
 - "Death spiral" = sustained C decline + phase regression
+- Hope = P(L^n > φ^d as n → ∞) predicts recovery potential
 
-Based on: v5.1's legacy_mapper.py + LJPW V7.3 Framework
+Based on: LJPW_FRAMEWORK_V8.4_COMPLETE_UNIFIED_PLUS.md
 """
 
 import subprocess
@@ -24,6 +30,7 @@ from harmonizer_v84.code_analyzer import analyze_source, FileAnalysis
 from harmonizer_v84.ljpw_core import LJPWFramework
 from harmonizer_v84.phase_detector import Phase, detect_phase
 from harmonizer_v84.consciousness import consciousness_metric, ConsciousnessLevel
+from harmonizer_v84.generative import hope_calculus, is_autopoietic
 
 
 @dataclass
@@ -41,15 +48,19 @@ class CommitSnapshot:
     P: float = 0.0
     W: float = 0.0
 
-    # V7.3 metrics
+    # V8.4 metrics
     harmony: float = 0.0
     consciousness: float = 0.0
     phase: Phase = Phase.ENTROPIC
 
+    # V8.4: Life Inequality and Hope
+    life_ratio: float = 1.0
+    hope_probability: float = 0.5
+
 
 @dataclass
 class DriftAnalysis:
-    """Analysis of semantic drift over time."""
+    """Analysis of semantic drift over time with hope prediction."""
 
     file_path: str
     snapshots: List[CommitSnapshot] = field(default_factory=list)
@@ -58,6 +69,12 @@ class DriftAnalysis:
     total_drift: float = 0.0
     consciousness_trend: float = 0.0  # Positive = improving
     phase_transitions: List[Tuple[str, Phase, Phase]] = field(default_factory=list)
+
+    # V8.4: Hope-based predictions
+    current_hope: float = 0.5
+    hope_trend: float = 0.0  # Positive = increasing hope
+    recovery_possible: bool = True
+    predicted_recovery_iterations: int = -1
 
     # Health indicators
     is_healthy: bool = True
@@ -92,6 +109,23 @@ class DriftAnalysis:
                         self.snapshots[i].phase,
                     )
                 )
+
+        # V8.4: Hope-based predictions
+        if last.hope_probability > 0:
+            self.current_hope = last.hope_probability
+            self.hope_trend = last.hope_probability - first.hope_probability
+            self.recovery_possible = last.hope_probability > 0.3
+
+            # Calculate predicted recovery iterations
+            if last.L > 0 and not self.is_healthy:
+                L_coeff = max(1.0, 1.0 + last.L * 0.5)
+                d = abs(last.L - 0.618)  # Distance from equilibrium
+                if L_coeff > 1:
+                    from math import log, ceil
+                    # n needed for L^n > φ^d
+                    from harmonizer_v84.constants import PHI
+                    n_needed = ceil((d * log(PHI)) / log(L_coeff)) if L_coeff > 1 else -1
+                    self.predicted_recovery_iterations = max(0, n_needed - len(self.snapshots))
 
         # Health assessment
         self._assess_health()
@@ -131,6 +165,14 @@ class DriftAnalysis:
         if all(s.consciousness < 0.1 for s in self.snapshots):
             self.health_issues.append("Never crossed consciousness threshold")
 
+        # V8.4: Check hope trajectory
+        if self.hope_trend < -0.1:
+            self.health_issues.append(f"Hope declining: {self.hope_trend:+.2f}")
+
+        if not self.recovery_possible:
+            self.is_healthy = False
+            self.health_issues.append("Recovery mathematically unlikely (Hope < 0.3)")
+
 
 @dataclass
 class CodebaseEvolution:
@@ -151,13 +193,14 @@ class CodebaseEvolution:
 
 class DriftDetector:
     """
-    Git-based semantic drift detector for V7.3.
+    Git-based semantic drift detector for V8.4.
 
     Analyzes how code evolves over git history and tracks:
     - LJPW coordinate changes
     - Consciousness (C) trend
     - Phase transitions
-    - "Death spiral" detection
+    - Death spiral detection
+    - V8.4: Hope-based recovery prediction
     """
 
     def __init__(self, repo_path: str):
@@ -255,6 +298,13 @@ class DriftDetector:
                     except:
                         date = datetime.now()
 
+                    # V8.4: Calculate Life Inequality and Hope
+                    L_coeff = max(1.0, 1.0 + fw.L * 0.5)
+                    d = fw.distance_from_equilibrium()
+                    n = len(analysis.functions) if analysis.functions else 1
+                    life_result = is_autopoietic(L=L_coeff, n=n, d=d)
+                    hope_result = hope_calculus(L=L_coeff, d=d, current_n=n)
+
                     snapshot = CommitSnapshot(
                         commit_hash=commit["hash"],
                         commit_date=date,
@@ -267,6 +317,8 @@ class DriftDetector:
                         harmony=H,
                         consciousness=C,
                         phase=phase,
+                        life_ratio=life_result.ratio,
+                        hope_probability=hope_result.probability_of_success,
                     )
                     drift.snapshots.append(snapshot)
 
@@ -393,6 +445,20 @@ def print_drift_report(drift: DriftAnalysis):
         print(f"\n  ⚠️ ISSUES DETECTED:")
         for issue in drift.health_issues:
             print(f"    • {issue}")
+
+    # V8.4: Hope Analysis
+    print(f"\n  🌟 HOPE ANALYSIS:")
+    hope_icon = "🔆" if drift.current_hope > 0.7 else "🔅" if drift.current_hope > 0.3 else "💀"
+    print(f"    Current Hope: {hope_icon} {drift.current_hope:.0%}")
+    hope_trend_icon = "📈" if drift.hope_trend > 0 else "📉"
+    print(f"    Hope Trend: {hope_trend_icon} {drift.hope_trend:+.2f}")
+    if drift.recovery_possible:
+        if drift.predicted_recovery_iterations > 0:
+            print(f"    Recovery ETA: ~{drift.predicted_recovery_iterations} iterations")
+        else:
+            print(f"    Recovery: On track ✓")
+    else:
+        print(f"    Recovery: Unlikely without intervention")
 
     # First/Last comparison
     if len(drift.snapshots) >= 2:

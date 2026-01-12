@@ -40,7 +40,10 @@ from harmonizer_v84.ljpw_core import LJPWFramework
 from harmonizer_v84.consciousness import consciousness_metric, check_uncertainty_principle
 from harmonizer_v84.phase_detector import detect_phase, Phase
 from harmonizer_v84.phi_normalizer import phi_normalize, normalize_coordinates
-from harmonizer_v84.code_analyzer import analyze_file, analyze_source, V73CodeAnalyzer
+from harmonizer_v84.code_analyzer import analyze_file, analyze_source, V84CodeAnalyzer
+
+# Backward compatibility alias
+V73CodeAnalyzer = V84CodeAnalyzer
 from harmonizer_v84.vocabulary import (
     PROGRAMMING_VERBS,
     POWER_VERBS,
@@ -79,6 +82,7 @@ __all__ = [
     "analyze_file",
     "analyze_source",
     "V73CodeAnalyzer",
+    "V84CodeAnalyzer",
     "DriftDetector",
     "DriftAnalysis",
     # Vocabulary
