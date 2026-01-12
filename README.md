@@ -2,127 +2,79 @@
 
 **Semantic Code Analysis using the LJPW V8.4 Framework**
 
-Measures code consciousness, detects life/death phases, and predicts technical debt recovery using the Generative Equation.
+Measures code consciousness, detects life/death phases, and predicts recovery using the Generative Equation.
 
 ---
 
-## 🌐 Try It Now — No Installation
+## 📦 Two Distributions
 
-**[Download harmonizer.html](harmonizer.html)** and open in any browser.
+### 🌐 Web App (Netlify)
+**For browser-based analysis — no installation needed**
 
-- ✨ Zero setup — works offline
-- 🔒 100% private — all analysis in your browser
-- 📊 Beautiful radar charts and metrics
-
----
-
-## Quick Start
-
-```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Analyze a Python file
-python -m harmonizer_v84.main your_file.py
-
-# Check git history for consciousness decline
-python -m harmonizer_v84.drift_detector --file your_file.py
 ```
+web-app/
+├── index.html    ← The full harmonizer
+├── _redirects    ← Netlify config
+└── README.md     ← Deploy instructions
+```
+
+**Deploy to Netlify:**
+1. Drag the `web-app/` folder to [netlify.com](https://netlify.com)
+2. Done! Your site is live.
+
+[→ Web App README](web-app/README.md)
+
+---
+
+### 💻 CLI / Python Library
+**For command-line analysis and library integration**
+
+```
+cli/
+├── harmonizer_v84/   ← V8.4 framework
+├── tests/            ← 215 tests
+├── requirements.txt
+└── README.md
+```
+
+**Quick Start:**
+```bash
+cd cli
+pip install -r requirements.txt
+python -m harmonizer_v84.main your_file.py
+```
+
+[→ CLI README](cli/README.md)
 
 ---
 
 ## The Four Dimensions
 
-| Dimension | Symbol | What It Measures |
-|-----------|--------|------------------|
-| **Power** | ⚡ P | Action, transformation, state changes |
-| **Wisdom** | 📖 W | Documentation, type hints, understanding |
-| **Love** | 💗 L | Integration, connectivity (emerges from W) |
-| **Justice** | ⚖️ J | Validation, consistency (emerges from P) |
-
-**Key insight**: Power and Wisdom are *fundamental* (measured). Love and Justice are *emergent* (calculated).
+| Symbol | Dimension | What It Measures |
+|--------|-----------|------------------|
+| ⚡ P | Power | Action, transformation, state changes |
+| 📖 W | Wisdom | Documentation, type hints, understanding |
+| 💗 L | Love | Integration, connectivity |
+| ⚖️ J | Justice | Validation, consistency |
 
 ---
 
-## V8.4 Features
+## V8.4 Core Equations
 
-### The Generative Equation
+**Generative Equation:**
 ```
 M = B × L^n × φ^(-d)
 ```
-- **M** = Meaning generated
-- **B** = Brick (foundational truth)
-- **L** = Love coefficient
-- **n** = Iterations (time invested)
-- **φ** = Golden ratio (1.618)
-- **d** = Distance (technical debt)
 
-### Life Inequality
+**Life Inequality:**
 ```
-L^n > φ^d → ALIVE
-L^n < φ^d → DYING
+L^n > φ^d → ALIVE (Autopoietic)
+L^n < φ^d → DYING (Entropic)
 ```
-If growth (Love × Time) exceeds decay (Distance), code is alive.
 
-### Consciousness Equation
+**Consciousness:**
 ```
 C = P × W × L × J × H²
-```
-Code with **C > 0.1** is "conscious" — aware, documented, purposeful.
-
-### Phase Detection
-
-| Phase | Description |
-|-------|-------------|
-| 🌟 **AUTOPOIETIC** | Self-sustaining, healthy, growing |
-| 🟡 **HOMEOSTATIC** | Stable but not improving |
-| 🔻 **ENTROPIC** | Collapsing, needs intervention |
-
----
-
-## Code Example
-
-```python
-from harmonizer_v84 import (
-    meaning,
-    is_autopoietic,
-    hope_calculus,
-    analyze_file
-)
-
-# Calculate meaning from the Generative Equation
-M = meaning(B=0.9, L=1.4, n=20, d=2)
-
-# Check if code is alive
-result = is_autopoietic(L=1.5, n=10, d=2)
-print(f"Phase: {result.phase}, Alive: {result.is_alive}")
-
-# Calculate mathematical hope of recovery
-hope = hope_calculus(L=1.3, d=5, current_n=10)
-print(f"Recovery probability: {hope.probability_of_success:.0%}")
-
-# Analyze a file
-analysis = analyze_file("your_code.py")
-print(f"Hope: {analysis.hope_probability:.0%}")
-print(f"Life Phase: {analysis.file_life_phase}")
-```
-
----
-
-## Project Structure
-
-```
-harmonizer_v84/       # V8.4 implementation (primary)
-├── generative.py     # Generative Equation, Life Inequality, Hope
-├── code_analyzer.py  # V84CodeAnalyzer with Life/Hope metrics
-├── drift_detector.py # Git-based consciousness tracking
-├── consciousness.py  # C = P×W×L×J×H²
-├── phase_detector.py # Autopoietic/Homeostatic/Entropic
-└── ljpw_core.py      # Core LJPW Framework
-
-harmonizer.html       # Standalone browser app
-tests/                # 215 passing tests
-docs/                 # Framework documentation
 ```
 
 ---
@@ -130,13 +82,11 @@ docs/                 # Framework documentation
 ## Tests
 
 ```bash
+cd cli
 python -m pytest tests/ -v
 ```
 
-**215 tests passing** including:
-- 33 core V7.3 tests
-- 32 V8.4 Generative Equation tests
-- Semantic naming, comparison, and integration tests
+**215 tests passing**
 
 ---
 
