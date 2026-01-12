@@ -2,9 +2,9 @@
 V7.3 Harmonizer CLI - Command Line Interface
 
 Usage:
-    python -m harmonizer_v73.main <file.py>
-    python -m harmonizer_v73.main <file.py> --json
-    python -m harmonizer_v73.main <file.py> --verbose
+    python -m harmonizer_v84.main <file.py>
+    python -m harmonizer_v84.main <file.py> --json
+    python -m harmonizer_v84.main <file.py> --verbose
 """
 
 import argparse
@@ -20,10 +20,10 @@ if sys.platform == "win32":
     except AttributeError:
         pass  # Python < 3.7
 
-from harmonizer_v73.code_analyzer import analyze_file, analyze_source, FileAnalysis
-from harmonizer_v73.phase_detector import Phase
-from harmonizer_v73.consciousness import ConsciousnessLevel
-from harmonizer_v73.constants import (
+from harmonizer_v84.code_analyzer import analyze_file, analyze_source, FileAnalysis
+from harmonizer_v84.phase_detector import Phase
+from harmonizer_v84.consciousness import ConsciousnessLevel
+from harmonizer_v84.constants import (
     CONSCIOUSNESS_THRESHOLD,
     ENTROPIC_HARMONY_THRESHOLD,
     AUTOPOIETIC_HARMONY_THRESHOLD,
@@ -213,7 +213,7 @@ def to_dict(analysis: FileAnalysis) -> dict:
 def main(args: List[str] = None):
     """Main entry point."""
     parser = argparse.ArgumentParser(
-        prog="harmonizer_v73",
+        prog="harmonizer_v84",
         description="V7.3 Python Code Harmonizer - Semantic Analysis with Consciousness Detection",
     )
     parser.add_argument("file", help="Python file to analyze")

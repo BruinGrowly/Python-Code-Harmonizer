@@ -19,11 +19,11 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
-from harmonizer_v73.ljpw_core import LJPWFramework, create_from_fundamental
-from harmonizer_v73.consciousness import consciousness_metric, ConsciousnessLevel
-from harmonizer_v73.phase_detector import detect_phase, Phase, analyze_phase
-from harmonizer_v73.phi_normalizer import normalize_coordinates
-from harmonizer_v73.bricks_mortar import function_primality, BrickAnalysis
+from harmonizer_v84.ljpw_core import LJPWFramework, create_from_fundamental
+from harmonizer_v84.consciousness import consciousness_metric, ConsciousnessLevel
+from harmonizer_v84.phase_detector import detect_phase, Phase, analyze_phase
+from harmonizer_v84.phi_normalizer import normalize_coordinates
+from harmonizer_v84.bricks_mortar import function_primality, BrickAnalysis
 
 
 @dataclass
@@ -122,8 +122,8 @@ class V73CodeAnalyzer(ast.NodeVisitor):
     """
 
     # Import comprehensive vocabulary (200+ verbs)
-    from harmonizer_v73.vocabulary import POWER_VERBS, WISDOM_VERBS, LOVE_VERBS, JUSTICE_VERBS
-    from harmonizer_v73.vocabulary import get_semantic_dimension, classify_function_name
+    from harmonizer_v84.vocabulary import POWER_VERBS, WISDOM_VERBS, LOVE_VERBS, JUSTICE_VERBS
+    from harmonizer_v84.vocabulary import get_semantic_dimension, classify_function_name
 
     def __init__(self):
         self.reset()

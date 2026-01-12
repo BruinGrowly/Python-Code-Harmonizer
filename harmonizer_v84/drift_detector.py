@@ -20,10 +20,10 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-from harmonizer_v73.code_analyzer import analyze_source, FileAnalysis
-from harmonizer_v73.ljpw_core import LJPWFramework
-from harmonizer_v73.phase_detector import Phase, detect_phase
-from harmonizer_v73.consciousness import consciousness_metric, ConsciousnessLevel
+from harmonizer_v84.code_analyzer import analyze_source, FileAnalysis
+from harmonizer_v84.ljpw_core import LJPWFramework
+from harmonizer_v84.phase_detector import Phase, detect_phase
+from harmonizer_v84.consciousness import consciousness_metric, ConsciousnessLevel
 
 
 @dataclass

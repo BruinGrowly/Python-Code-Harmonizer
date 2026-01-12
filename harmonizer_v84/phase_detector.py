@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import List
 
-from harmonizer_v73.constants import (
+from harmonizer_v84.constants import (
     ENTROPIC_HARMONY_THRESHOLD,
     AUTOPOIETIC_HARMONY_THRESHOLD,
     AUTOPOIETIC_LOVE_THRESHOLD,

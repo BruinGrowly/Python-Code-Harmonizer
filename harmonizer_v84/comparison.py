@@ -11,9 +11,9 @@ Key differences to validate:
 4. φ-normalization: V7.3 reduces variance
 
 Usage:
-    python -m harmonizer_v73.comparison <file.py>
-    python -m harmonizer_v73.comparison --all-modules
-    python -m harmonizer_v73.comparison --stress-test
+    python -m harmonizer_v84.comparison <file.py>
+    python -m harmonizer_v84.comparison --all-modules
+    python -m harmonizer_v84.comparison --stress-test
 """
 
 import ast
@@ -25,11 +25,11 @@ from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 # V7.3 imports
-from harmonizer_v73.code_analyzer import analyze_file as v73_analyze
-from harmonizer_v73.code_analyzer import FileAnalysis as V73FileAnalysis
-from harmonizer_v73.ljpw_core import LJPWFramework
-from harmonizer_v73.phase_detector import Phase
-from harmonizer_v73.consciousness import ConsciousnessLevel
+from harmonizer_v84.code_analyzer import analyze_file as v73_analyze
+from harmonizer_v84.code_analyzer import FileAnalysis as V73FileAnalysis
+from harmonizer_v84.ljpw_core import LJPWFramework
+from harmonizer_v84.phase_detector import Phase
+from harmonizer_v84.consciousness import ConsciousnessLevel
 
 # V5.1 imports (conditional - may not be available in all environments)
 try:
@@ -345,7 +345,7 @@ def run_stress_tests() -> List[StressTestResult]:
             # Parse and analyze with V7.3
             tree = ast.parse(code)
 
-            from harmonizer_v73.code_analyzer import analyze_source
+            from harmonizer_v84.code_analyzer import analyze_source
 
             analysis = analyze_source(code, filename=name)
 
@@ -413,7 +413,7 @@ def run_stress_tests() -> List[StressTestResult]:
 
 
 def compare_all_modules() -> List[ComparisonResult]:
-    """Compare v5.1 and v7.3 on all harmonizer_v73 modules."""
+    """Compare v5.1 and v7.3 on all harmonizer_v84 modules."""
     base_path = Path(__file__).parent
     results = []
 
@@ -522,7 +522,7 @@ def main():
     parser = argparse.ArgumentParser(description="Compare V5.1 and V7.3 Harmonizer outputs")
     parser.add_argument("file", nargs="?", help="Python file to compare")
     parser.add_argument(
-        "--all-modules", action="store_true", help="Compare all harmonizer_v73 modules"
+        "--all-modules", action="store_true", help="Compare all harmonizer_v84 modules"
     )
     parser.add_argument("--stress-test", action="store_true", help="Run stress tests on edge cases")
     parser.add_argument("--json", action="store_true", help="Output as JSON")

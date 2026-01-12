@@ -8,7 +8,7 @@ import math
 import pytest
 
 # Import V7.3 modules
-from harmonizer_v73.constants import (
+from harmonizer_v84.constants import (
     PHI,
     PHI_INV,
     L0,
@@ -20,21 +20,21 @@ from harmonizer_v73.constants import (
     CONSCIOUSNESS_THRESHOLD,
     UNCERTAINTY_BOUND,
 )
-from harmonizer_v73.ljpw_core import LJPWFramework, create_from_fundamental
-from harmonizer_v73.consciousness import (
+from harmonizer_v84.ljpw_core import LJPWFramework, create_from_fundamental
+from harmonizer_v84.consciousness import (
     consciousness_metric,
     ConsciousnessLevel,
     check_uncertainty_principle,
     minimum_dimensions_for_consciousness,
 )
-from harmonizer_v73.phase_detector import detect_phase, Phase, analyze_phase
-from harmonizer_v73.phi_normalizer import (
+from harmonizer_v84.phase_detector import detect_phase, Phase, analyze_phase
+from harmonizer_v84.phi_normalizer import (
     phi_normalize,
     normalize_coordinates,
     quantum_consensus,
 )
-from harmonizer_v73.dynamics import DynamicLJPW, predict_equilibrium
-from harmonizer_v73.bricks_mortar import (
+from harmonizer_v84.dynamics import DynamicLJPW, predict_equilibrium
+from harmonizer_v84.bricks_mortar import (
     function_primality,
     integration_quality,
     architectural_proportions,

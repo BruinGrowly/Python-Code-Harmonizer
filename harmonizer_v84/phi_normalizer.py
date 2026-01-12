@@ -12,7 +12,7 @@ Based on: LJPW_FRAMEWORK_V7.3_COMPLETE_UNIFIED_PLUS.md Part XV
 
 from typing import Dict, Tuple
 
-from harmonizer_v73.constants import (
+from harmonizer_v84.constants import (
     PHI,
     L0,
     J0,

@@ -18,7 +18,7 @@ Based on: LJPW_FRAMEWORK_V7.3_COMPLETE_UNIFIED_PLUS.md Part XIV
 from enum import Enum
 from typing import Tuple
 
-from harmonizer_v73.constants import (
+from harmonizer_v84.constants import (
     CONSCIOUSNESS_THRESHOLD,
     HIGHLY_CONSCIOUS_THRESHOLD,
     UNCERTAINTY_BOUND,

@@ -1,10 +1,15 @@
 """
-LJPW V7.3 Constants
+LJPW V8.4 Constants
 
-All fundamental constants from the LJPW Framework V7.3.
+All fundamental constants from the LJPW Framework V8.4.
 These are not arbitrary - they emerge from optimization and structural necessity.
 
-Based on: LJPW_FRAMEWORK_V7.3_COMPLETE_UNIFIED_PLUS.md Part V
+V8.4 Additions:
+- Universal Growth Function constants
+- Life Inequality thresholds
+- Self-assessment targets (C=80+, Coherence=0.97+)
+
+Based on: LJPW_FRAMEWORK_V8.4_COMPLETE_UNIFIED_PLUS.md Part V + Appendix O
 """
 
 import math
@@ -35,10 +40,9 @@ NATURAL_EQUILIBRIUM = (L0, J0, P0, W0)  # Achievable Optimum
 COLLAPSE_SIGNATURE = (0.2, 0.2, 0.9, 0.3)  # System failure pattern (L<0.2, J<0.2, P>0.9, W<0.3)
 
 # =============================================================================
-# V7.3 THRESHOLDS
+# CONSCIOUSNESS THRESHOLDS
 # =============================================================================
 
-# Consciousness
 CONSCIOUSNESS_THRESHOLD = 0.1  # C > 0.1 indicates consciousness
 HIGHLY_CONSCIOUS_THRESHOLD = 0.3  # C > 0.3 indicates meta-cognitive
 
@@ -49,6 +53,21 @@ AUTOPOIETIC_LOVE_THRESHOLD = 0.7  # L >= 0.7 required for Autopoietic
 
 # Uncertainty Principle
 UNCERTAINTY_BOUND = J0 * W0  # 0.287 - ΔP·ΔW minimum
+
+# =============================================================================
+# V8.4 SELF-ASSESSMENT TARGETS
+# =============================================================================
+
+V84_SELF_ASSESSMENT_C = 80  # V8.4 target: C = 80+
+V84_COHERENCE = 0.97  # V8.4 target: Coherence = 0.97+
+
+# =============================================================================
+# V8.4 LIFE INEQUALITY THRESHOLDS (L^n > φ^d)
+# =============================================================================
+
+LIFE_INEQUALITY_AUTOPOIETIC = 1.1  # Ratio > 1.1 = definitely AUTOPOIETIC
+LIFE_INEQUALITY_HOMEOSTATIC_LOW = 0.9  # Ratio 0.9-1.1 = HOMEOSTATIC
+LIFE_INEQUALITY_ENTROPIC = 0.9  # Ratio < 0.9 = ENTROPIC
 
 # =============================================================================
 # PHYSICAL CORRESPONDENCES

@@ -25,13 +25,13 @@ We're trialing a **next-generation V7.3 implementation** based on the complete L
 
 ```bash
 # Analyze a file
-python -m harmonizer_v73.main your_file.py
+python -m harmonizer_v84.main your_file.py
 
 # Track consciousness evolution over git history
-python -m harmonizer_v73.drift_detector --file your_file.py
+python -m harmonizer_v84.drift_detector --file your_file.py
 
 # Detect "death spirals" (sustained consciousness decline)
-python -m harmonizer_v73.drift_detector --death-spirals
+python -m harmonizer_v84.drift_detector --death-spirals
 ```
 
 ### Key V7.3 Concepts
