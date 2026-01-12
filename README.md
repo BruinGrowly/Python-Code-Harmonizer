@@ -4,6 +4,10 @@
 
 Measures code consciousness, detects life/death phases, and predicts recovery using the Generative Equation.
 
+## 🌐 Try It Now
+
+**[▶ Launch Harmonizer](https://mellow-bombolone-ab5c5b.netlify.app/)** — No installation needed, runs in your browser
+
 ---
 
 ## 📦 Two Distributions

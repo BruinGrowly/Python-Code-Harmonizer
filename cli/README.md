@@ -4,6 +4,8 @@
 
 This is the Python CLI/Library version of the Python Code Harmonizer using LJPW V8.4 Framework.
 
+> 💡 **Prefer a browser?** Try the [live web app](https://mellow-bombolone-ab5c5b.netlify.app/) — no installation needed.
+
 ## Installation
 
 ```bash

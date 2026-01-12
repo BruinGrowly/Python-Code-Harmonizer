@@ -2,6 +2,12 @@
 
 **Semantic Code Analysis in Your Browser**
 
+## 🌐 Live Site
+
+**[▶ https://mellow-bombolone-ab5c5b.netlify.app/](https://mellow-bombolone-ab5c5b.netlify.app/)**
+
+---
+
 This is the Netlify-deployable version of the Python Code Harmonizer using LJPW V8.4 Framework.
 
 ## Deploy to Netlify
